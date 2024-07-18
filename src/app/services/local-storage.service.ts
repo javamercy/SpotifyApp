@@ -1,10 +1,12 @@
 import { Injectable } from "@angular/core";
+import { AccessToken } from "../models/access-token.model";
+import { Constants } from "../shared/constants/Constants";
 
 @Injectable({
   providedIn: "root",
 })
 export class LocalStorageService {
-  get(key: string): unknown {
+  get(key: string) {
     return JSON.parse(localStorage.getItem(key));
   }
 
@@ -22,5 +24,21 @@ export class LocalStorageService {
 
   has(key: string): boolean {
     return !!localStorage.getItem(key);
+  }
+
+  getAccessToken(): AccessToken | null {
+    const accessToken = this.get(Constants.ACCESS_TOKEN) as AccessToken;
+
+    if (!accessToken) return null;
+
+    if (this.isAccessTokenExpired(accessToken.expiration)) {
+      this.delete(Constants.ACCESS_TOKEN);
+      return null;
+    }
+    return accessToken;
+  }
+
+  isAccessTokenExpired(expiration: Date): boolean {
+    return expiration < new Date();
   }
 }
