@@ -3,8 +3,8 @@ import { environment } from "./../../environments/environment.development";
 import { Injectable } from "@angular/core";
 import { SpotifyToken } from "../models/spotify-token.model";
 import { HttpClient } from "@angular/common/http";
-import { CookieService } from "ngx-cookie-service";
 import { Constants } from "../shared/constants/Constants";
+import { LocalStorageService } from "./local-storage.service";
 
 @Injectable({
   providedIn: "root",
@@ -12,7 +12,7 @@ import { Constants } from "../shared/constants/Constants";
 export class SpotifyService {
   constructor(
     private http: HttpClient,
-    private cookieService: CookieService
+    private localStorageService: LocalStorageService
   ) {}
   login(): void {
     const directUrl = `${environment.spotify.AuthorizeOptions.url}?client_id=${environment.spotify.AuthorizeOptions.clientId}&response_type=${environment.spotify.AuthorizeOptions.responseType}&redirect_uri=${environment.spotify.AuthorizeOptions.redirectUri}&scope=${environment.spotify.AuthorizeOptions.scope}`;
@@ -40,7 +40,7 @@ export class SpotifyService {
   }
 
   isAuthenticated(): Observable<boolean> {
-    const token = this.cookieService.get(Constants.ACCESS_TOKEN);
+    const token = this.localStorageService.get(Constants.ACCESS_TOKEN);
 
     if (!token) return of(false);
 
