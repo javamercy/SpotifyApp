@@ -2,8 +2,9 @@ import { Component, OnInit } from "@angular/core";
 import { SpotifyService } from "../../services/spotify.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
-import { CookieService } from "ngx-cookie-service";
 import { Constants } from "../../shared/constants/Constants";
+import { LocalStorageService } from "../../services/local-storage.service";
+import { AccessToken } from "../../models/access-token.model";
 
 @Component({
   selector: "app-spotify-callback",
@@ -18,7 +19,7 @@ export class SpotifyCallbackComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService,
-    private cookieService: CookieService
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit(): void {
@@ -33,20 +34,12 @@ export class SpotifyCallbackComponent implements OnInit {
         const code = params["code"];
         if (code) {
           this.spotifyService.getToken(code).subscribe(data => {
-            const expiration: Date = new Date(
-              Date.now() + data.expires_in * 1000
-            );
-            this.cookieService.set(
-              Constants.ACCESS_TOKEN,
-              data.access_token,
-              expiration,
-              "/",
-              "",
-              true,
-              "Strict"
-            );
-            this.toastr.success("You have successfully logged in to Spotify.");
-            this.router.navigate(["/home"]);
+            const accessToken: AccessToken = {
+              token: data.access_token,
+              expiration: new Date(Date.now() + data.expires_in * 1000),
+            };
+
+            this.localStorageService.set(Constants.ACCESS_TOKEN, accessToken);
           });
         }
       }
