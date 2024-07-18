@@ -1,0 +1,12 @@
+{
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "scope": "comment",
+        "settings": {
+          "foreground": "#ff0000"
+        }
+      }
+    ]
+  }
+}

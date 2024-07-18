@@ -1,1 +1,78 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  /* green */
+  --lime-green: #32cd32;
+  --spring-green: #00ff7f;
+  --forest-green: #228b22;
+  --dark-green: #006400;
+
+  /* blue */
+  --light-blue: #add8e6;
+  --sky-blue: #87ceeb;
+  --deep-sky-blue: #00bfff;
+  --dodger-blue: #1e90ff;
+
+  /* white */
+  --white: #ffffff;
+}
+
+.ek-text-lime-green {
+  color: var(--lime-green) !important;
+}
+
+.ek-bg-lime-green {
+  background-color: var(--lime-green) !important;
+}
+
+.ek-bg-spring-green {
+  background-color: var(--spring-green) !important;
+}
+
+.ek-bg-forest-green {
+  background-color: var(--forest-green) !important;
+}
+
+.ek-bg-dark-green {
+  background-color: var(--dark-green) !important;
+}
+
+.ek-link-gradient {
+  font-weight: bold;
+  background: linear-gradient(to right, var(--lime-green), var(--white));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 100%;
+  transition: background-position 0.5s ease; /* Transition background-position */
+  text-decoration: none; /* To remove underline from the link */
+}
+
+.ek-link-gradient:hover {
+  background-position: 100% 0;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #16222a; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to top left,
+    #3a6073,
+    #16222a
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to top left,
+    #3a6073,
+    #16222a
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
