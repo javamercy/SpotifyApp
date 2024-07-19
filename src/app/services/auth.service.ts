@@ -1,19 +1,29 @@
-import { map, Observable, of } from "rxjs";
+import { BehaviorSubject, map, Observable, of } from "rxjs";
 import { environment } from "./../../environments/environment.development";
 import { Injectable } from "@angular/core";
 import { SpotifyToken } from "../models/spotify-token.model";
 import { HttpClient } from "@angular/common/http";
 import { Constants } from "../shared/constants/Constants";
 import { LocalStorageService } from "./local-storage.service";
+import { User } from "../models/user.model";
+import { UserService } from "./user.service";
 
 @Injectable({
   providedIn: "root",
 })
-export class SpotifyService {
+export class AuthService {
+  private userSubject: BehaviorSubject<User | null>;
+  user$: Observable<User | null>;
+
   constructor(
     private http: HttpClient,
+    private userService: UserService,
     private localStorageService: LocalStorageService
-  ) {}
+  ) {
+    this.userSubject = new BehaviorSubject<User | null>(null);
+    this.user$ = this.userSubject.asObservable();
+  }
+
   login(): void {
     const directUrl = `${environment.spotify.AuthorizeOptions.url}?client_id=${environment.spotify.AuthorizeOptions.clientId}&response_type=${environment.spotify.AuthorizeOptions.responseType}&redirect_uri=${environment.spotify.AuthorizeOptions.redirectUri}&scope=${environment.spotify.AuthorizeOptions.scope}`;
 
@@ -44,8 +54,15 @@ export class SpotifyService {
 
     if (!token) return of(false);
 
-    const newUrl = `${environment.spotify.apiUrl}/me`;
+    if (this.userSubject.value) {
+      return of(true);
+    }
 
-    return this.http.get<boolean>(newUrl).pipe(map(() => true));
+    return this.userService.getUser().pipe(
+      map(user => {
+        this.userSubject.next(user);
+        return true;
+      })
+    );
   }
 }

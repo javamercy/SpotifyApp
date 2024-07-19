@@ -1,15 +1,54 @@
 <nav class="navbar bg-transparent navbar-expand">
-  <div class="container-fluid p-3">
-    <a class="navbar-brand fw-bolder fs-2 text-white">Magic Spotify</a>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <button
-            class="btn btn-md text-white rounded-5 px-3 ek-bg-forest-green">
-            Sign In With Spotify
-          </button>
-        </li>
-      </ul>
+  <div class="container-fluid py-3 px-5">
+    <a
+      class="navbar-brand fw-bolder fs-2 text-white"
+      routerLink="/home"
+      role="button"
+      >Magic Spotify</a
+    >
+    <div
+      class="collapse navbar-collapse justify-content-center"
+      id="navbarSupportedContent">
+      @if (user) {
+        <ul class="navbar-nav gap-2">
+          <li class="nav-item">
+            <a
+              class="nav-link text-white"
+              routerLink="/home"
+              routerLinkActive="active"
+              >Top Artists</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link text-white"
+              routerLink="/search"
+              routerLinkActive="active"
+              >Top Musics</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link text-white"
+              routerLink="/search"
+              routerLinkActive="active"
+              >Top Genres</a
+            >
+          </li>
+        </ul>
+      }
+    </div>
+    <div>
+      @if (user) {
+        <button class="btn btn-md btn-outline-success d-flex gap-2">
+          <span>{{ user.display_name }}</span>
+          <i class="bi bi-spotify"></i>
+        </button>
+      } @else {
+        <button class="btn btn-md text-white rounded-5 px-3 ek-bg-forest-green">
+          Sign In With Spotify
+        </button>
+      }
     </div>
   </div>
 </nav>

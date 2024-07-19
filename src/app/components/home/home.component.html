@@ -1,29 +1,69 @@
-<main class="text-white">
+<main class="text-white pt-5">
   <section>
-    <div class="container pt-5">
-      <div class="row justify-content-evenly align-items-center">
-        <div class="col-md-6 text-center">
-          <h1 class="">Spotify Stats</h1>
-          <h3 class="mb-5">& Music Discovery</h3>
-          <div>
-            <p class="opacity-75">
-              <a
-                class="fw-bolder ek-link-gradient"
-                role="button"
-                (click)="login()"
-                >Sign in with Spotify</a
-              >
-              to see your stats and more!
-            </p>
-          </div>
-        </div>
-        <div class="col-md-4 rounded-50 overflow-hidden">
-          <img
-            src="spotify_music.jpg"
-            class="img-fluid img-thumbnail"
-            alt="Home Icon" />
+    <div class="container">
+      @if (isAuthenticated | async) {
+        <ng-container *ngTemplateOutlet="authenticated"></ng-container>
+        @if (topArtists) {
+          <ng-container *ngTemplateOutlet="topArtistsSection"></ng-container>
+        }
+      } @else {
+        <ng-container *ngTemplateOutlet="unauthenticated"></ng-container>
+      }
+    </div>
+  </section>
+</main>
+
+<ng-template #unauthenticated>
+  <section>
+    <div class="row justify-content-evenly align-items-center">
+      <div class="col-md-6 text-center">
+        <h1>Welcome to Magic Spotify</h1>
+        <h3 class="mb-5">
+          <a class="link text-white" (click)="login()">Sign in with Spotify</a>
+        </h3>
+      </div>
+      <div class="col-md-4 rounded-50 overflow-hidden">
+        <img
+          src="spotify_music.jpg"
+          class="img-fluid img-thumbnail"
+          alt="Home Icon" />
+      </div>
+    </div>
+  </section>
+</ng-template>
+
+<ng-template #authenticated>
+  <section>
+    @if (topArtists) {
+      <h1 class="text-center fs-1">Welcome, {{ user.display_name }}</h1>
+      <div class="py-5"></div>
+    }
+  </section>
+</ng-template>
+
+<ng-template #topArtistsSection>
+  <section class="my-4">
+    <div class="card bg-transparent text-white">
+      <div class="card-header text-center">
+        <h2 class="fs-2">Top Artists</h2>
+      </div>
+      <div class="card-body text-center">
+        <div class="row justify-content-evenly">
+          @for (artist of topArtists; track $index) {
+            <div class="col-md-3">
+              <div class="card bg-transparent text-white">
+                <img
+                  src="{{ artist.images[0].url }}"
+                  class="card-img-top img-thumbnail"
+                  alt="{{ artist.name }}" />
+                <div class="card-body">
+                  <h5 class="card-title fw-bolder">{{ artist.name }}</h5>
+                </div>
+              </div>
+            </div>
+          }
         </div>
       </div>
     </div>
   </section>
-</main>
+</ng-template>

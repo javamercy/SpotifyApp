@@ -7,7 +7,7 @@ export const environment = {
       clientId: "8391e4bc1aa947a1a2e48479e1365329",
       responseType: "code",
       redirectUri: "http://localhost:4200/callback",
-      scope: "user-read-private user-read-email",
+      scope: "user-read-private user-read-email user-top-read user-follow-read",
     },
     TokenOptions: {
       url: "https://accounts.spotify.com/api/token",

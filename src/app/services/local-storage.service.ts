@@ -27,7 +27,9 @@ export class LocalStorageService {
   }
 
   getAccessToken(): AccessToken | null {
-    const accessToken = this.get(Constants.ACCESS_TOKEN) as AccessToken;
+    const accessToken: AccessToken = this.get(
+      Constants.ACCESS_TOKEN
+    ) as AccessToken;
 
     if (!accessToken) return null;
 
@@ -38,7 +40,7 @@ export class LocalStorageService {
     return accessToken;
   }
 
-  isAccessTokenExpired(expiration: Date): boolean {
-    return expiration < new Date();
+  private isAccessTokenExpired(expiration: Date): boolean {
+    return new Date(expiration) < new Date();
   }
 }
