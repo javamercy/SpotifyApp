@@ -39,6 +39,7 @@
   font-weight: bold;
   background: linear-gradient(to right, var(--lime-green), var(--white));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   background-size: 200% 100%;
   transition: background-position 0.5s ease; /* Transition background-position */
@@ -47,6 +48,85 @@
 
 .ek-link-gradient:hover {
   background-position: 100% 0;
+}
+
+.ek-wavy-underline-lime-green {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--lime-green);
+  text-underline-offset: 0.2em;
+}
+
+.ek-wavy-underline-spring-green {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--spring-green);
+  text-underline-offset: 0.2em;
+}
+
+.ek-wavy-underline-forest-green {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--forest-green);
+  text-underline-offset: 0.2em;
+}
+
+.ek-wavy-underline-dark-green {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--dark-green);
+  text-underline-offset: 0.2em;
+}
+
+.ek-wavy-underline-light-blue {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--light-blue);
+  text-underline-offset: 0.2em;
+}
+
+.ek-wavy-underline-sky-blue {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--sky-blue);
+  text-underline-offset: 0.2em;
+}
+
+.ek-wavy-underline-deep-sky-blue {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--deep-sky-blue);
+  text-underline-offset: 0.2em;
+}
+
+.ek-wavy-underline-dodger-blue {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--dodger-blue);
+  text-underline-offset: 0.2em;
+}
+.ek-track-index {
+  display: inline-block;
+  width: 25px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.ek-album-cover {
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+}
+
+.ek-option {
+  background-color: #16222a;
+  padding-inline: 1rem !important;
+  color: inherit;
+}
+
+.ek-option:hover {
+  background-color: #16222a !important;
+  color: var(--lime-green) !important;
 }
 
 html,
@@ -58,11 +138,17 @@ body {
 }
 
 body {
-  background-color: #16222a !important;
+  background-color: #121212 !important;
+  color: #ffffff !important;
 }
 
 :host {
   display: block;
   height: 100%;
   width: 100%;
+}
+
+img {
+  aspect-ratio: 1/1;
+  object-fit: cover;
 }

@@ -1,69 +1,71 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { User } from "../../../models/user.model";
-import { filter, Subscription } from "rxjs";
-import { NavigationEnd, Router } from "@angular/router";
+import { Subscription } from "rxjs";
 import { AuthService } from "../../../services/auth.service";
+import { Router, RouterModule } from "@angular/router";
+import { LocalStorageService } from "../../../services/local-storage.service";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: "app-navbar",
   standalone: true,
-  imports: [],
+  imports: [CommonModule, RouterModule],
   templateUrl: "./navbar.component.html",
   styleUrl: "./navbar.component.css",
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription;
-  isAuthenticated: boolean | undefined;
-  user: User | null | undefined;
-
+  user: User;
+  isAuthenticated: boolean;
   constructor(
     private authService: AuthService,
+    private localStorageService: LocalStorageService,
     private router: Router
   ) {
     this.subscriptions = new Subscription();
   }
 
   ngOnInit(): void {
-    this.checkIfUserIsAuthenticated();
-
     this.subscriptions.add(
-      this.router.events
-        .pipe(filter(event => event instanceof NavigationEnd))
-        .subscribe(() => {
-          this.checkIfUserIsAuthenticated();
-        })
+      this.router.events.subscribe({
+        next: () => {
+          this.isAuthenticated = this.checkifUserAuthenticated();
+          if (this.isAuthenticated) {
+            this.getCurrentUser();
+          }
+        },
+      })
     );
   }
 
   ngOnDestroy(): void {
-    if (this.subscriptions) {
-      this.subscriptions.unsubscribe();
-    }
+    this.subscriptions.unsubscribe();
   }
 
-  private getUser(): void {
-    this.subscriptions.add(
-      this.authService.user$.subscribe({
-        next: response => {
-          this.user = response;
-        },
-        error: error => console.error(error),
-      })
-    );
+  login(): void {
+    this.authService.login();
   }
 
-  private checkIfUserIsAuthenticated(): void {
-    this.subscriptions.add(
-      this.authService.isAuthenticated().subscribe({
-        next: response => {
-          this.isAuthenticated = response;
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(["/"]);
+  }
 
-          if (this.isAuthenticated) {
-            this.getUser();
-          }
-        },
-        error: error => console.error(error),
-      })
-    );
+  getCurrentUser(): void {
+    this.authService.getCurrentUser().subscribe({
+      next: user => {
+        this.user = user;
+      },
+      error: error => console.error(error),
+    });
+  }
+
+  checkifUserAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
+  log(value: unknown): boolean {
+    console.log(value);
+    return true;
   }
 }

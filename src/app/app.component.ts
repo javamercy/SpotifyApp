@@ -1,15 +1,12 @@
 import { Component } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
-import { SharedModule } from "./shared/modules/shared.module";
-import { NgxSpinnerModule } from "ngx-spinner";
+import { NavbarComponent } from "./shared/components/navbar/navbar.component";
 
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [RouterOutlet, SharedModule, NgxSpinnerModule],
+  imports: [RouterOutlet, NavbarComponent],
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.css",
 })
-export class AppComponent {
-  title = "SpotifyApp";
-}
+export class AppComponent {}

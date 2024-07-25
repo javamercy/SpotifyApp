@@ -2,12 +2,13 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment.development";
 import { Observable } from "rxjs";
-import { User } from "../models/user.model";
 import { ListResponse } from "../models/list-response.model";
 import { Artist } from "../models/artist.model";
 import { PageRequest } from "../models/page-request.model";
 import { Track } from "../models/track.model";
 import { Album } from "../models/album.model";
+import { TimeRange } from "../enums/time-range";
+import { User } from "../models/user.model";
 
 @Injectable({
   providedIn: "root",
@@ -16,19 +17,23 @@ export class UserService {
   private apiUrl = environment.spotify.apiUrl;
   constructor(private http: HttpClient) {}
 
-  getUser(): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/me`);
-  }
-
-  getTopArtists(pageRequest: PageRequest): Observable<ListResponse<Artist>> {
+  getTopArtists(
+    pageRequest: PageRequest,
+    timeRange = TimeRange.LONG_TERM
+  ): Observable<ListResponse<Artist>> {
     return this.http.get<ListResponse<Artist>>(
-      `${this.apiUrl}/me/top/artists?limit=${pageRequest.limit}&offset=${pageRequest.offset}`
+      `${this.apiUrl}/me/top/artists?limit=${pageRequest.limit}&offset=${pageRequest.offset}&time_range=${timeRange}`
     );
   }
 
-  getTopTracks(pageRequest: PageRequest): Observable<ListResponse<Track>> {
+  getTopTracks(
+    pageRequest: PageRequest,
+    timeRange = TimeRange.LONG_TERM
+  ): Observable<ListResponse<Track>> {
+    console.log(timeRange);
+
     return this.http.get<ListResponse<Track>>(
-      `${this.apiUrl}/me/top/tracks?limit=${pageRequest.limit}&offset=${pageRequest.offset}`
+      `${this.apiUrl}/me/top/tracks?limit=${pageRequest.limit}&offset=${pageRequest.offset}&time_range=${timeRange}`
     );
   }
 
@@ -44,5 +49,9 @@ export class UserService {
     return this.http.get<ListResponse<Artist>>(
       `${this.apiUrl}/me/following?type=artist&limit=${pageRequest.limit}&offset=${pageRequest.offset}`
     );
+  }
+
+  getById(id: string): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/users/${id}`);
   }
 }

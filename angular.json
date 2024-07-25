@@ -31,7 +31,10 @@
               "node_modules/bootstrap-icons/font/bootstrap-icons.min.css",
               "node_modules/ngx-spinner/animations/ball-circus.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+            ]
           },
           "configurations": {
             "production": {

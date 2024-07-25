@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Playlist } from "../../models/playlist.mode";
+import { Playlist } from "../../models/playlist.model";
 import { PlaylistService } from "../../services/playlist.service";
 import { ActivatedRoute } from "@angular/router";
 import { Subscription } from "rxjs";

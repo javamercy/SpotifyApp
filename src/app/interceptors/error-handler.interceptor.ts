@@ -8,7 +8,7 @@ export const errorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      toastr.error(error.message);
+      toastr.error(error.error.error.message);
       return throwError(() => error);
     })
   );

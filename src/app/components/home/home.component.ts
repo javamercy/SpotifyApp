@@ -1,94 +1,119 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  CUSTOM_ELEMENTS_SCHEMA,
+} from "@angular/core";
 import { SharedModule } from "../../shared/modules/shared.module";
-import { Observable, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { User } from "../../models/user.model";
-import { Artist } from "../../models/artist.model";
 import { AuthService } from "../../services/auth.service";
 import { UserService } from "../../services/user.service";
 import { PageRequest } from "../../models/page-request.model";
+import { PlaylistService } from "../../services/playlist.service";
+import { Playlist } from "../../models/playlist.model";
+import { FormsModule } from "@angular/forms";
+import { TimeRange } from "../../enums/time-range";
+import { RouterModule } from "@angular/router";
 
 @Component({
   selector: "app-home",
   standalone: true,
-  imports: [SharedModule],
+  imports: [SharedModule, FormsModule, RouterModule],
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.css",
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class HomeComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
-  user: User;
-  isAuthenticated: Observable<boolean>;
-  topArtists: Artist[];
+  currentUser: User;
+  isAuthenticated: boolean;
+  trendPlaylists: Playlist[];
+  playlistsByGenre: Playlist[];
+  playlistsFilterQuery: string;
+  topGenres: string[];
   constructor(
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    private playlistService: PlaylistService
   ) {
     this.subscription = new Subscription();
   }
 
   ngOnInit() {
-    this.checkIfUserIsAuthenticated();
+    this.checkIfUserAutenticated();
   }
 
   ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscription.unsubscribe();
   }
 
   login() {
     this.authService.login();
   }
 
-  private getTopArtists(pageRequest: PageRequest) {
-    this.subscription.add(
-      this.userService.getTopArtists(pageRequest).subscribe({
-        next: response => {
-          console.log(response);
-
-          this.topArtists = response.items;
-        },
-        error: error => console.error(error),
-      })
-    );
-  }
-
-  private getTopTracks(pageRequest: PageRequest) {
-    this.subscription.add(
-      this.userService.getTopTracks(pageRequest).subscribe({
-        next: response => {
-          console.log(response);
-        },
-        error: error => console.error(error),
-      })
-    );
-  }
-
-  private getUser(): void {
-    this.subscription.add(
-      this.authService.user$.subscribe({
-        next: response => {
-          this.user = response;
-        },
-        error: error => console.error(error),
-      })
-    );
-  }
-
-  private checkIfUserIsAuthenticated(): void {
+  checkIfUserAutenticated(): void {
     this.isAuthenticated = this.authService.isAuthenticated();
+    if (this.isAuthenticated) {
+      this.getCurrentUser();
+      this.getFeaturedPlaylists();
+      this.getTopGenres();
+    }
+  }
 
+  getFeaturedPlaylists(): void {
     this.subscription.add(
-      this.isAuthenticated.subscribe({
-        next: response => {
-          if (response) {
-            this.getUser();
-            this.getTopArtists(new PageRequest(10, 0));
-            this.getTopTracks(new PageRequest(10, 0));
-          }
+      this.playlistService
+        .getFeaturedPlaylists(new PageRequest(20, 0))
+        .subscribe({
+          next: playlists => {
+            this.trendPlaylists = playlists.playlists.items;
+          },
+          error: error => console.error(error),
+        })
+    );
+  }
+
+  getCurrentUser(): void {
+    this.subscription.add(
+      this.authService.getCurrentUser().subscribe({
+        next: user => {
+          this.currentUser = user;
         },
         error: error => console.error(error),
       })
+    );
+  }
+
+  getTopGenres(): void {
+    this.subscription.add(
+      this.userService
+        .getTopArtists(new PageRequest(10, 0), TimeRange.SHORT_TERM)
+        .subscribe({
+          next: artists => {
+            const genres = artists.items
+              .map(artist => artist.genres)
+              .reduce((acc, val) => acc.concat(val), []);
+            this.topGenres = genres.slice(0, 5);
+            const genre = this.topGenres.find(g => g.split(" ").length === 1);
+
+            this.getPlaylistsByGenre(genre);
+          },
+          error: error => console.error(error),
+        })
+    );
+  }
+
+  getPlaylistsByGenre(genre: string): void {
+    this.subscription.add(
+      this.playlistService
+        .getAllByGenre(new PageRequest(20, 0), genre)
+        .subscribe({
+          next: playlists => {
+            this.playlistsByGenre = playlists.playlists.items;
+          },
+          error: error => console.error(error),
+        })
     );
   }
 }

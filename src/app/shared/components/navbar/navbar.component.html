@@ -1,54 +1,43 @@
-<nav class="navbar bg-transparent navbar-expand">
-  <div class="container-fluid py-3 px-5">
-    <a
-      class="navbar-brand fw-bolder fs-2 text-white"
-      routerLink="/home"
-      role="button"
-      >Magic Spotify</a
-    >
-    <div
-      class="collapse navbar-collapse justify-content-center"
-      id="navbarSupportedContent">
-      @if (user) {
-        <ul class="navbar-nav gap-2">
-          <li class="nav-item">
-            <a
-              class="nav-link text-white"
-              routerLink="/home"
-              routerLinkActive="active"
-              >Top Artists</a
-            >
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link text-white"
-              routerLink="/search"
-              routerLinkActive="active"
-              >Top Musics</a
-            >
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link text-white"
-              routerLink="/search"
-              routerLinkActive="active"
-              >Top Genres</a
-            >
-          </li>
-        </ul>
-      }
-    </div>
+<nav class="navbar navbar-dark px-2 py-3">
+  <div class="container-fluid align-items-center">
+    <a class="navbar-brand fw-bolder" routerLink="/">Spotify</a>
+    @if (user) {
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/me/stats" role="button">My Stats</a>
+        </li>
+      </ul>
+    }
     <div>
-      @if (user) {
-        <button class="btn btn-md btn-outline-success d-flex gap-2">
-          <span>{{ user.display_name }}</span>
-          <i class="bi bi-spotify"></i>
-        </button>
+      @if (isAuthenticated) {
+        @if (user) {
+          <ng-container *ngTemplateOutlet="authenticated"></ng-container>
+        }
       } @else {
-        <button class="btn btn-md text-white rounded-5 px-3 ek-bg-forest-green">
-          Sign In With Spotify
-        </button>
+        <ng-container *ngTemplateOutlet="unauthenticated"></ng-container>
       }
     </div>
   </div>
 </nav>
+
+<ng-template #authenticated>
+  <!-- <div role="button">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      fill="currentColor"
+      class="bi bi-person-circle text-success"
+      viewBox="0 0 16 16">
+      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+      <path
+        fill-rule="evenodd"
+        d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+    </svg>
+  </div> -->
+  <button class="btn btn-danger" (click)="logout()">Log out</button>
+</ng-template>
+
+<ng-template #unauthenticated>
+  <button class="btn btn-success" (click)="login()">Log in with Spotify</button>
+</ng-template>

@@ -1,69 +1,99 @@
-<main class="text-white pt-5">
-  <section>
-    <div class="container">
-      @if (isAuthenticated | async) {
-        <ng-container *ngTemplateOutlet="authenticated"></ng-container>
-        @if (topArtists) {
-          <ng-container *ngTemplateOutlet="topArtistsSection"></ng-container>
+<div class="container">
+  <main>
+    @if (isAuthenticated) {
+      <div class="p-5"></div>
+      <h3 class="text-center ek-wavy-underline-dark-green">
+        Welcome, {{ currentUser.display_name }}
+      </h3>
+      <div class="p-5"></div>
+      <section class="my-5">
+        @if (trendPlaylists && trendPlaylists.length) {
+          <ng-container
+            *ngTemplateOutlet="
+              featuredPlaylistsTemplate;
+              context: { playlists: trendPlaylists, heading: 'Trend Playlists' }
+            "></ng-container>
         }
-      } @else {
+      </section>
+      <section class="my-5">
+        @if (playlistsByGenre && playlistsByGenre.length) {
+          <ng-container
+            *ngTemplateOutlet="
+              featuredPlaylistsTemplate;
+              context: {
+                playlists: playlistsByGenre,
+                heading: 'Based on Your Taste',
+              }
+            "></ng-container>
+        }
+      </section>
+    } @else {
+      <section>
         <ng-container *ngTemplateOutlet="unauthenticated"></ng-container>
-      }
-    </div>
-  </section>
-</main>
+      </section>
+    }
+  </main>
+</div>
 
 <ng-template #unauthenticated>
-  <section>
-    <div class="row justify-content-evenly align-items-center">
-      <div class="col-md-6 text-center">
-        <h1>Welcome to Magic Spotify</h1>
-        <h3 class="mb-5">
-          <a class="link text-white" (click)="login()">Sign in with Spotify</a>
-        </h3>
-      </div>
-      <div class="col-md-4 rounded-50 overflow-hidden">
-        <img
-          src="spotify_music.jpg"
-          class="img-fluid img-thumbnail"
-          alt="Home Icon" />
-      </div>
+  <div class="row justify-content-evenly align-items-center">
+    <div class="col-md-6 text-center">
+      <h1>Welcome to Magic Spotify</h1>
+      <h3 class="mb-5">
+        <a class="link text-white" (click)="login()" role="button"
+          >Sign in with Spotify</a
+        >
+      </h3>
     </div>
-  </section>
+    <div class="col-md-4 rounded-50 overflow-hidden">
+      <img
+        src="spotify_music.jpg"
+        class="img-fluid img-thumbnail"
+        alt="Home Icon" />
+    </div>
+  </div>
 </ng-template>
 
-<ng-template #authenticated>
-  <section>
-    @if (topArtists) {
-      <h1 class="text-center fs-1">Welcome, {{ user.display_name }}</h1>
-      <div class="py-5"></div>
-    }
-  </section>
-</ng-template>
+<ng-template
+  #featuredPlaylistsTemplate
+  let-playlists="playlists"
+  let-heading="heading">
+  <h3
+    class="text-center font-monospace fw-semibold fs-5 mb-3 ek-wavy-underline-deep-sky-blue">
+    {{ heading }}
+  </h3>
 
-<ng-template #topArtistsSection>
-  <section class="my-4">
-    <div class="card bg-transparent text-white">
-      <div class="card-header text-center">
-        <h2 class="fs-2">Top Artists</h2>
-      </div>
-      <div class="card-body text-center">
-        <div class="row justify-content-evenly">
-          @for (artist of topArtists; track $index) {
-            <div class="col-md-3">
-              <div class="card bg-transparent text-white">
-                <img
-                  src="{{ artist.images[0].url }}"
-                  class="card-img-top img-thumbnail"
-                  alt="{{ artist.name }}" />
-                <div class="card-body">
-                  <h5 class="card-title fw-bolder">{{ artist.name }}</h5>
-                </div>
-              </div>
+  <div class="col-md-12 mx-auto">
+    <swiper-container
+      effect="card"
+      grab-cursor="true"
+      autoplay="true"
+      speed="1000"
+      slides-per-view="4"
+      space-between="20"
+      pagination>
+      @for (playlist of playlists; track $index) {
+        <swiper-slide lazy="true" class="p-1">
+          <div class="card mb-3 pb-3 position-relative">
+            <img
+              src="{{ playlist.images[0].url }}"
+              class="card-img-top"
+              alt="{{ playlist.name }}" />
+
+            <div class="card-body">
+              <h6 class="text-center text-muted text-truncate">
+                {{ playlist.name }}
+              </h6>
             </div>
-          }
-        </div>
-      </div>
-    </div>
-  </section>
+            <button
+              class="btn btn-outline-success w-75 mx-auto position-relative"
+              routerLink="/playlist/{{ playlist.id }}">
+              Spotify
+              <i class="bi bi-spotify"></i>
+            </button>
+          </div>
+        </swiper-slide>
+      }
+    </swiper-container>
+  </div>
 </ng-template>

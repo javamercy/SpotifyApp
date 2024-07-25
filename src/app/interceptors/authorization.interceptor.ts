@@ -4,16 +4,16 @@ import { LocalStorageService } from "../services/local-storage.service";
 
 export const authorizationInterceptor: HttpInterceptorFn = (req, next) => {
   const localStorageService = inject(LocalStorageService);
+
   const accessToken = localStorageService.getAccessToken();
 
-  const authReq = accessToken
-    ? req.clone({
-        headers: req.headers.set(
-          "Authorization",
-          `Bearer ${accessToken.token}`
-        ),
-      })
-    : req;
+  if (!accessToken) return next(req);
+
+  const authReq = req.clone({
+    setHeaders: {
+      Authorization: `Bearer ${accessToken.token}`,
+    },
+  });
 
   return next(authReq);
 };

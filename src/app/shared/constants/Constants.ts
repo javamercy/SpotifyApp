@@ -1,3 +1,4 @@
 export const Constants = {
-  ACCESS_TOKEN: "AccessToken",
+  ACCESS_TOKEN: "access_token",
+  USER: "user",
 };
