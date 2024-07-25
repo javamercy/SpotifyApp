@@ -1,0 +1,7 @@
+.list-group-item:hover {
+  background-color: #232323 !important;
+}
+
+.list-group-item:hover .ek-play-circle-icon {
+  display: block !important;
+}

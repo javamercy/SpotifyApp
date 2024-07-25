@@ -1,0 +1,102 @@
+<div class="p-2 px-md-5">
+  <main>
+    @if (playlist) {
+      <section>
+        <div
+          class="row align-items-center gap-4 gap-md-0 justify-content-center">
+          <div class="col-sm-4 text-center">
+            <img class="img-fluid rounded" [src]="playlist.images[0].url" />
+          </div>
+          <div class="col-sm-8 d-flex flex-column gap-5">
+            <h1 class="text-center ek-wavy-underline-light-blue">
+              {{ playlist.name }}
+            </h1>
+            <div class="d-flex justify-content-center gap-2">
+              <a
+                class="btn btn-outline-light d-inline-flex align-items-center gap-2"
+                [href]="playlist.external_urls.spotify">
+                <img src="spotify.svg" />
+                <span>Play on Spotify</span>
+              </a>
+              <button
+                class="btn btn-outline-light d-inline-flex align-items-center gap-2">
+                <img src="music-note-beamed.svg" alt="" />
+                <span>Play Preview</span>
+              </button>
+            </div>
+            <div class="font-monospace fw-bolder text-center">
+              <span class="d-inline-flex align-items-center">
+                <img src="music-note-beamed.svg" alt="" />
+                <span class="ms-2">{{ playlist.tracks.total }}</span>
+              </span>
+              <span class="ms-4 d-inline-flex align-items-center">
+                <img src="star-fill.svg" alt="" />
+                <span class="ms-2"
+                  >{{ playlist.followers.total | number }}
+                </span>
+              </span>
+            </div>
+            <!-- @if (owner) {
+                <div class="text-end">
+                  <span class="font-monospace fw-bolder">
+                    by {{ playlist.owner.display_name }}
+                  </span>
+                  <img
+                    [src]="owner.images[0].url"
+                    width="20"
+                    height="20"
+                    class="img-fluid rounded-circle" />
+                </div>
+              } -->
+          </div>
+        </div>
+      </section>
+      <div class="py-4"></div>
+      <section>
+        <div class="text-center">
+          <h3 class="fw-bold fs-3 mb-3">Songs</h3>
+          <p class="font-monospace ek-wavy-underline-dark-green">
+            The tracklist for "{{ playlist.name }}"
+          </p>
+        </div>
+        <ul class="list-group list-group-flush bg-transparent">
+          @for (track of playlist.tracks.items; track $index) {
+            <li
+              class="list-group-item bg-transparent text-white border-secondary ps-0 py-3 py-sm-2">
+              <div class="d-flex align-items-center gap-3">
+                <span class="ek-track-index">{{ $index + 1 }}</span>
+                <div class="position-relative flex-shrink-0 ek-album-cover">
+                  <img
+                    class="rounded img-fluid"
+                    [src]="track.track.album.images[0].url"
+                    alt="{{ track.track.name }}" />
+                  <img
+                    src="play-circle.svg"
+                    alt="play"
+                    class="ek-play-circle-icon position-absolute translate-middle top-50 start-50 d-none" />
+                </div>
+
+                <div class="d-flex flex-column flex-sm-row gap-sm-2">
+                  <a
+                    class="fw-bold mb-0 link-underline link-light link-underline-opacity-0 link-underline-opacity-100-hover text-reset"
+                    role="button">
+                    {{ track.track.name }}
+                  </a>
+                  <a
+                    class="link-underline link-secondary link-underline-opacity-0 link-underline-opacity-100-hover text-secondary mb-0"
+                    role="button">
+                    {{ track.track.artists[0].name }}
+                  </a>
+                </div>
+                <span class="ms-auto d-none d-sm-flex align-items-center gap-2">
+                  <img src="clock.svg" alt="clock" />
+                  {{ track.track.duration_ms | msToTime }}
+                </span>
+              </div>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  </main>
+</div>
