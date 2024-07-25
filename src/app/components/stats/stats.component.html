@@ -1,0 +1,100 @@
+<main>
+  <section>
+    <div class="py-5 p-sm-4 p-1">
+      <div class="row justify-content-center">
+        <div class="my-5 col-md-4 col-sm-6 col-8">
+          <select
+            #timeRange
+            class="form-select bg-transparent text-reset"
+            (change)="onTimeRangeChange(timeRange.value)">
+            <option class="ek-option" value="short_term">Last 4 Weeks</option>
+            <option class="ek-option" value="medium_term">Last 6 Months</option>
+            <option class="ek-option" value="long_term" selected>
+              All Time
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        @if (topTracks && topTracks.length > 0) {
+          <div class="col-md-6 col-11">
+            <h4 class="text-center fw-bolder mb-5 ek-wavy-underline">
+              Your Top Tracks
+            </h4>
+            <div class="bg-dark pb-3">
+              <ul class="list-group rounded" role="button" tabindex="0">
+                @for (track of topTracks; track $index) {
+                  <li
+                    class="list-group-item bg-dark border-0 d-flex align-items-center gap-3">
+                    <span class="fw-bolder text-success ek-track-index">
+                      #{{ $index + 1 }}
+                    </span>
+                    <img
+                      class="rounded flex-1"
+                      src="{{ track.album.images[0].url }}"
+                      alt="{{ track.name }}"
+                      width="40"
+                      height="40" />
+                    <div class="text-secondary">
+                      <div class="fw-bold text-white">
+                        {{ track.name }}
+                      </div>
+                      {{ track.artists[0].name }}
+                    </div>
+                  </li>
+                }
+              </ul>
+              <p class="text-center mt-4">
+                <a
+                  class="fw-bolder link text-success"
+                  role="button"
+                  (click)="toggleTopTracks()"
+                  [textContent]="isAllTopTracks ? 'SEE TOP 10' : 'SEE TOP 50'">
+                </a>
+              </p>
+            </div>
+          </div>
+        }
+        @if (topArtists && topArtists.length > 0) {
+          <div class="col-md-6 col-11">
+            <h4 class="text-center fw-bolder mb-5 ek-wavy-underline">
+              Your Top Artists
+            </h4>
+            <div class="bg-dark pb-3">
+              <ul class="list-group rounded" role="button" tabindex="0">
+                @for (artist of topArtists; track $index) {
+                  <li
+                    class="list-group-item bg-dark border-0 d-flex align-items-center gap-3">
+                    <span class="fw-bolder text-success ek-track-index">
+                      #{{ $index + 1 }}
+                    </span>
+                    <img
+                      class="rounded flex-1"
+                      src="{{ artist.images[0].url }}"
+                      alt="{{ artist.name }}"
+                      width="40"
+                      height="40" />
+                    <div class="text-secondary flex-1">
+                      <div class="fw-bold text-white">
+                        {{ artist.name }}
+                      </div>
+                      {{ artist.genres[0] }}
+                    </div>
+                  </li>
+                }
+              </ul>
+              <p class="text-center mt-4">
+                <a
+                  class="fw-bolder link text-success"
+                  role="button"
+                  (click)="toggleTopArtists()"
+                  [textContent]="isAllTopArtists ? 'SEE TOP 10' : 'SEE TOP 50'">
+                </a>
+              </p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+</main>
