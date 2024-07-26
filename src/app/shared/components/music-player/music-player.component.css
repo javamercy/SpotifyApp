@@ -1,0 +1,74 @@
+.ek-music-player {
+  width: 100%;
+  z-index: 1000;
+  animation: gradient-flow 10s infinite;
+  background: linear-gradient(
+    270deg,
+    #000000,
+    #111111,
+    #222222,
+    #282828,
+    #343434,
+    #414141,
+    #454545,
+    #414141,
+    #343434,
+    #282828,
+    #222222,
+    #111111,
+    #000000
+  );
+  background-size: 300% 300%;
+}
+
+@keyframes gradient-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.ek-progress-container {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background-color: var(--white);
+  border-radius: 5px;
+  overflow: hidden;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.ek-progress {
+  height: 100%;
+  width: 0;
+  background-color: var(--dark-violet);
+}
+
+.ek-close-btn {
+  animation: jump 1s ease-in-out infinite 2s;
+}
+
+@keyframes jump {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.ek-close-btn:hover {
+  animation: none;
+  transform: scale(1.2);
+}

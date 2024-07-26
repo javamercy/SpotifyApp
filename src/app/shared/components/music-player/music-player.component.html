@@ -1,0 +1,43 @@
+@if (currentTrack && currentTrack.preview_url) {
+  <div class="fixed-bottom bottom-0 start-0 pb-2 mx-3">
+    <div class="text-end pe-2 pb-2">
+      <img
+        src="x-circle.svg"
+        alt="close"
+        class="ek-close-btn"
+        (click)="closePlayer()"
+        role="button" />
+    </div>
+    <div class="ek-music-player fw-bold p-2 rounded p-sm-3 position-relative">
+      <div class="d-flex mb-4 align-items-center gap-2">
+        <img
+          [src]="currentTrack.album.images[0].url"
+          class="ek-album-cover rounded-circle border" />
+
+        <div class="ek-track-info">
+          <div class="ek-track-title">{{ currentTrack.name }}</div>
+          <div class="ek-track-artist text-secondary">
+            {{ currentTrack.artists[0].name }}
+          </div>
+        </div>
+        <div class="ms-auto ek-controls">
+          <div>
+            <img
+              [src]="audioRef.paused ? 'play-circle.svg' : 'pause-circle.svg'"
+              alt="music controller"
+              (click)="toggle()" />
+          </div>
+        </div>
+        <div class="ek-progress-container">
+          <div class="ek-progress" [ngStyle]="{ width: progress }"></div>
+        </div>
+      </div>
+      <audio
+        #audioRef
+        (ended)="onTrackEnded()"
+        (timeupdate)="onTimeUpdate()"
+        [autoplay]="true"
+        [src]="currentTrack.preview_url"></audio>
+    </div>
+  </div>
+}
