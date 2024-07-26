@@ -9,6 +9,7 @@ import { Track } from "../models/track.model";
 import { Album } from "../models/album.model";
 import { TimeRange } from "../enums/time-range";
 import { User } from "../models/user.model";
+import { SimplifiedPlaylist } from "../models/simplified.playlist.model";
 
 @Injectable({
   providedIn: "root",
@@ -48,6 +49,14 @@ export class UserService {
   ): Observable<ListResponse<Artist>> {
     return this.http.get<ListResponse<Artist>>(
       `${this.apiUrl}/me/following?type=artist&limit=${pageRequest.limit}&offset=${pageRequest.offset}`
+    );
+  }
+
+  getCurrentUserPlaylists(
+    pageRequest: PageRequest
+  ): Observable<ListResponse<SimplifiedPlaylist>> {
+    return this.http.get<ListResponse<SimplifiedPlaylist>>(
+      `${this.apiUrl}/me/playlists?limit=${pageRequest.limit}&offset=${pageRequest.offset}`
     );
   }
 

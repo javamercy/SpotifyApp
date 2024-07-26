@@ -15,6 +15,7 @@ import { Playlist } from "../../models/playlist.model";
 import { FormsModule } from "@angular/forms";
 import { TimeRange } from "../../enums/time-range";
 import { RouterModule } from "@angular/router";
+import { SimplifiedPlaylist } from "../../models/simplified.playlist.model";
 
 @Component({
   selector: "app-home",
@@ -25,11 +26,12 @@ import { RouterModule } from "@angular/router";
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  private subscription: Subscription;
+  private subscriptions: Subscription;
   currentUser: User;
   isAuthenticated: boolean;
   trendPlaylists: Playlist[];
   playlistsByGenre: Playlist[];
+  currentUsersPlaylists: SimplifiedPlaylist[];
   playlistsFilterQuery: string;
   topGenres: string[];
   constructor(
@@ -37,7 +39,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private playlistService: PlaylistService
   ) {
-    this.subscription = new Subscription();
+    this.subscriptions = new Subscription();
   }
 
   ngOnInit() {
@@ -45,7 +47,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   login() {
@@ -58,11 +60,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.getCurrentUser();
       this.getFeaturedPlaylists();
       this.getTopGenres();
+      this.getCurrentUserPlaylists();
     }
   }
 
   getFeaturedPlaylists(): void {
-    this.subscription.add(
+    this.subscriptions.add(
       this.playlistService
         .getFeaturedPlaylists(new PageRequest(20, 0))
         .subscribe({
@@ -75,7 +78,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getCurrentUser(): void {
-    this.subscription.add(
+    this.subscriptions.add(
       this.authService.getCurrentUser().subscribe({
         next: user => {
           this.currentUser = user;
@@ -86,7 +89,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getTopGenres(): void {
-    this.subscription.add(
+    this.subscriptions.add(
       this.userService
         .getTopArtists(new PageRequest(10, 0), TimeRange.SHORT_TERM)
         .subscribe({
@@ -105,12 +108,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getPlaylistsByGenre(genre: string): void {
-    this.subscription.add(
+    this.subscriptions.add(
       this.playlistService
         .getAllByGenre(new PageRequest(20, 0), genre)
         .subscribe({
           next: playlists => {
             this.playlistsByGenre = playlists.playlists.items;
+          },
+          error: error => console.error(error),
+        })
+    );
+  }
+
+  getCurrentUserPlaylists(): void {
+    this.subscriptions.add(
+      this.userService
+        .getCurrentUserPlaylists(new PageRequest(20, 0))
+        .subscribe({
+          next: playlists => {
+            this.currentUsersPlaylists = playlists.items;
           },
           error: error => console.error(error),
         })

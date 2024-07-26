@@ -4,12 +4,24 @@
   --spring-green: #00ff7f;
   --forest-green: #228b22;
   --dark-green: #006400;
+  --neon-green: #39ff14;
 
   /* blue */
   --light-blue: #add8e6;
   --sky-blue: #87ceeb;
   --deep-sky-blue: #00bfff;
   --dodger-blue: #1e90ff;
+
+  /* purple */
+  --medium-purple: #9370db;
+  --blue-violet: #8a2be2;
+  --dark-violet: #9400d3;
+
+  /* gray */
+  --light-gray: #d3d3d3;
+  --silver: #c0c0c0;
+  --dark-gray: #a9a9a9;
+  --dim-gray: #696969;
 
   /* white */
   --white: #ffffff;
@@ -127,6 +139,13 @@
 .ek-option:hover {
   background-color: #16222a !important;
   color: var(--lime-green) !important;
+}
+.ek-list-group-item:hover {
+  background-color: #232323 !important;
+}
+
+.ek-list-group-item:hover .ek-play-circle-icon {
+  display: block !important;
 }
 
 html,

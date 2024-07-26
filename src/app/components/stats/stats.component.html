@@ -18,14 +18,17 @@
       <div class="row justify-content-center">
         @if (topTracks && topTracks.length > 0) {
           <div class="col-md-6 col-11">
-            <h4 class="text-center fw-bolder mb-5 ek-wavy-underline">
+            <h4 class="text-center fw-bolder mb-5 ek-wavy-underline-light-blue">
               Your Top Tracks
             </h4>
-            <div class="bg-dark pb-3">
-              <ul class="list-group rounded" role="button" tabindex="0">
+            <div class="pb-3">
+              <ul
+                class="list-group border-end border-start border-secondary"
+                role="button"
+                tabindex="0">
                 @for (track of topTracks; track $index) {
                   <li
-                    class="list-group-item bg-dark border-0 d-flex align-items-center gap-3">
+                    class="list-group-item ek-list-group-item bg-transparent border-0 d-flex align-items-center gap-3">
                     <span class="fw-bolder text-success ek-track-index">
                       #{{ $index + 1 }}
                     </span>
@@ -35,11 +38,16 @@
                       alt="{{ track.name }}"
                       width="40"
                       height="40" />
-                    <div class="text-secondary">
-                      <div class="fw-bold text-white">
+                    <div class="fw-bold d-flex flex-column gap-1 gap-sm-0">
+                      <a
+                        class="text-white link-underline link-light link-underline-opacity-0 link-underline-opacity-100-hover">
                         {{ track.name }}
-                      </div>
-                      {{ track.artists[0].name }}
+                      </a>
+                      <a
+                        class="mb-0 link-underline text-secondary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover"
+                        role="button">
+                        {{ track.artists[0].name }}
+                      </a>
                     </div>
                   </li>
                 }
@@ -57,14 +65,17 @@
         }
         @if (topArtists && topArtists.length > 0) {
           <div class="col-md-6 col-11">
-            <h4 class="text-center fw-bolder mb-5 ek-wavy-underline">
+            <h4 class="text-center fw-bolder mb-5 ek-wavy-underline-light-blue">
               Your Top Artists
             </h4>
-            <div class="bg-dark pb-3">
-              <ul class="list-group rounded" role="button" tabindex="0">
+            <div class="pb-3">
+              <ul
+                class="list-group border-end border-start border-secondary"
+                role="button"
+                tabindex="0">
                 @for (artist of topArtists; track $index) {
                   <li
-                    class="list-group-item bg-dark border-0 d-flex align-items-center gap-3">
+                    class="list-group-item ek-list-group-item bg-transparent border-0 d-flex align-items-center gap-3">
                     <span class="fw-bolder text-success ek-track-index">
                       #{{ $index + 1 }}
                     </span>
@@ -74,11 +85,16 @@
                       alt="{{ artist.name }}"
                       width="40"
                       height="40" />
-                    <div class="text-secondary flex-1">
-                      <div class="fw-bold text-white">
+                    <div class="fw-bold d-flex flex-column gap-1 gap-sm-0">
+                      <a
+                        class="text-white link-underline link-light link-underline-opacity-0 link-underline-opacity-100-hover">
                         {{ artist.name }}
-                      </div>
-                      {{ artist.genres[0] }}
+                      </a>
+                      <a
+                        class="mb-0 link-underline text-secondary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover"
+                        role="button">
+                        {{ artist.genres[0] }}
+                      </a>
                     </div>
                   </li>
                 }

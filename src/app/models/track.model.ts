@@ -1,9 +1,15 @@
 import { Album } from "./album.model";
-import { Artist } from "./artist.model";
 
 export class Track {
   album: Album;
-  artists: Artist[];
+  artists: {
+    external_urls: { spotify: string };
+    href: string;
+    id: string;
+    name: string;
+    type: string;
+    uri: string;
+  }[];
   available_markets: string[];
   disc_number: number;
   duration_ms: number;

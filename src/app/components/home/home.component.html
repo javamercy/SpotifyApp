@@ -26,6 +26,16 @@
               }
             "></ng-container>
         }
+        @if (currentUsersPlaylists && currentUsersPlaylists.length) {
+          <ng-container
+            *ngTemplateOutlet="
+              featuredPlaylistsTemplate;
+              context: {
+                playlists: currentUsersPlaylists,
+                heading: 'Your Playlists',
+              }
+            "></ng-container>
+        }
       </section>
     } @else {
       <section>
@@ -70,8 +80,7 @@
       autoplay="true"
       speed="1000"
       slides-per-view="4"
-      space-between="20"
-      pagination>
+      space-between="20">
       @for (playlist of playlists; track $index) {
         <swiper-slide lazy="true" class="p-1">
           <div class="card mb-3 pb-3 position-relative">

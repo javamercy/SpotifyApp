@@ -7,11 +7,14 @@ import { SharedModule } from "../../shared/modules/shared.module";
 import { UserService } from "../../services/user.service";
 import { User } from "../../models/user.model";
 import { MsToTimePipe } from "../../pipes/ms-to-time.pipe";
+import { PlaylistChartComponent } from "../playlist-chart/playlist-chart.component";
+import { MusicPlayerService } from "../../services/music-player.service";
+import { PlaylistTrackItem } from "../../models/playlist-track-item.model";
 
 @Component({
   selector: "app-playlist",
   standalone: true,
-  imports: [SharedModule, MsToTimePipe],
+  imports: [SharedModule, MsToTimePipe, PlaylistChartComponent],
   templateUrl: "./playlist.component.html",
   styleUrl: "./playlist.component.css",
 })
@@ -19,13 +22,16 @@ export class PlaylistComponent implements OnInit, OnDestroy {
   playlist: Playlist;
   subscription: Subscription;
   owner: User;
+  genres: Map<string, number>;
 
   constructor(
     private playlistService: PlaylistService,
     private userService: UserService,
+    private musicPlayerService: MusicPlayerService,
     private activatedRoute: ActivatedRoute
   ) {
     this.subscription = new Subscription();
+    this.genres = new Map<string, number>();
   }
 
   ngOnInit() {
@@ -44,7 +50,7 @@ export class PlaylistComponent implements OnInit, OnDestroy {
             this.playlistService.getById(params["id"]).subscribe({
               next: playlist => {
                 this.playlist = playlist;
-                console.log(playlist.tracks);
+                console.log(playlist);
 
                 this.getOwner(playlist.owner.id);
               },
@@ -64,5 +70,9 @@ export class PlaylistComponent implements OnInit, OnDestroy {
         error: error => console.error(error),
       })
     );
+  }
+
+  play(track: PlaylistTrackItem) {
+    this.musicPlayerService.setTrack(track.track);
   }
 }
