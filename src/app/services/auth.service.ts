@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable, tap } from "rxjs";
+import { BehaviorSubject, Observable, shareReplay, tap } from "rxjs";
 import { environment } from "./../../environments/environment.development";
 import { Injectable } from "@angular/core";
 import { SpotifyToken } from "../models/spotify-token.model";
@@ -22,7 +22,7 @@ export class AuthService {
     private localStorageService: LocalStorageService
   ) {
     this.userSubject = new BehaviorSubject<User | null>(null);
-    this.user$ = this.userSubject.asObservable();
+    this.user$ = this.userSubject.asObservable().pipe(shareReplay(1));
   }
 
   login(): void {
@@ -75,14 +75,17 @@ export class AuthService {
 
   getCurrentUser(): Observable<User> {
     if (this.userSubject.value) {
-      return this.user$;
+      return this.user$ as Observable<User>;
     }
 
     const newUrl = `${this.apiUrl}/me`;
 
-    return this.http
-      .get<User>(newUrl)
-      .pipe(tap(user => this.userSubject.next(user)));
+    return this.http.get<User>(newUrl).pipe(
+      tap(user => {
+        this.userSubject.next(user);
+      }),
+      shareReplay(1)
+    );
   }
 
   setCurrentUser(user: User): void {

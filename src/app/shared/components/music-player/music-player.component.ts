@@ -22,6 +22,7 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
   @ViewChild("audioRef") audioRef: ElementRef<HTMLAudioElement>;
   currentTrack: Track | null;
   progress: string;
+  isPlaying: boolean;
   subscriptions: Subscription;
 
   constructor(private musicPlayerService: MusicPlayerService) {
@@ -57,10 +58,12 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
     } else {
       this.audioRef.nativeElement.pause();
     }
+    this.isPlaying = !this.audioRef.nativeElement.paused;
   }
 
   stop() {
     this.audioRef.nativeElement.pause();
+    this.isPlaying = false;
   }
 
   onTimeUpdate() {

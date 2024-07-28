@@ -15,16 +15,18 @@
           class="ek-album-cover rounded-circle border" />
 
         <div class="ek-track-info">
-          <div class="ek-track-title">{{ currentTrack.name }}</div>
-          <div class="ek-track-artist text-secondary">
+          <div class="ek-track-title ek-text-spring-green">
+            {{ currentTrack.name }}
+          </div>
+          <div class="ek-track-artist ek-text-silver">
             {{ currentTrack.artists[0].name }}
           </div>
         </div>
         <div class="ms-auto ek-controls">
           <div>
             <img
-              [src]="audioRef.paused ? 'play-circle.svg' : 'pause-circle.svg'"
-              alt="music controller"
+              [src]="isPlaying ? 'pause-circle.svg' : 'play-circle.svg'"
+              alt="toggle"
               (click)="toggle()" />
           </div>
         </div>
@@ -37,6 +39,7 @@
         (ended)="onTrackEnded()"
         (timeupdate)="onTimeUpdate()"
         [autoplay]="true"
+        (playing)="isPlaying = true"
         [src]="currentTrack.preview_url"></audio>
     </div>
   </div>

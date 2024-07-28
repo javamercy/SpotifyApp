@@ -6,8 +6,8 @@ import { Constants } from "../shared/constants/Constants";
   providedIn: "root",
 })
 export class LocalStorageService {
-  get(key: string) {
-    return JSON.parse(localStorage.getItem(key));
+  get<T>(key: string) {
+    return JSON.parse(localStorage.getItem(key)) as T;
   }
 
   set(key: string, value: unknown): void {

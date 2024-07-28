@@ -22,9 +22,24 @@ export const routes: Routes = [
   },
 
   {
-    path: "me/stats",
-    loadComponent: () =>
-      import("./components/stats/stats.component").then(m => m.StatsComponent),
+    path: "me",
+    children: [
+      {
+        path: "stats",
+        loadComponent: () =>
+          import("./components/stats/stats.component").then(
+            m => m.StatsComponent
+          ),
+      },
+
+      {
+        path: "discover",
+        loadComponent: () =>
+          import("./components/track-discover/track-discover.component").then(
+            m => m.TrackDiscoverComponent
+          ),
+      },
+    ],
   },
 
   {

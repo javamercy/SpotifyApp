@@ -18,7 +18,20 @@ export class MusicPlayerService {
     this.trackSubject.next(track);
   }
 
+  togglePlay(track: Track) {
+    if (this.trackSubject.value && this.trackSubject.value.id === track.id) {
+      this.trackSubject.next(null);
+    } else {
+      this.trackSubject.next(track);
+    }
+  }
+
   clearTrack() {
     this.trackSubject.next(null);
+  }
+
+  isNowPlaying(track: Track): boolean {
+    if (!this.trackSubject.value) return false;
+    return this.trackSubject.value.id === track.id;
   }
 }

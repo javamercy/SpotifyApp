@@ -7,14 +7,13 @@ import { SharedModule } from "../../shared/modules/shared.module";
 import { UserService } from "../../services/user.service";
 import { User } from "../../models/user.model";
 import { MsToTimePipe } from "../../pipes/ms-to-time.pipe";
-import { PlaylistChartComponent } from "../playlist-chart/playlist-chart.component";
 import { MusicPlayerService } from "../../services/music-player.service";
 import { PlaylistTrackItem } from "../../models/playlist-track-item.model";
 
 @Component({
   selector: "app-playlist",
   standalone: true,
-  imports: [SharedModule, MsToTimePipe, PlaylistChartComponent],
+  imports: [SharedModule, MsToTimePipe],
   templateUrl: "./playlist.component.html",
   styleUrl: "./playlist.component.css",
 })

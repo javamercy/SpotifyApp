@@ -31,6 +31,66 @@
   color: var(--lime-green) !important;
 }
 
+.ek-text-spring-green {
+  color: var(--spring-green) !important;
+}
+
+.ek-text-forest-green {
+  color: var(--forest-green) !important;
+}
+
+.ek-text-dark-green {
+  color: var(--dark-green) !important;
+}
+
+.ek-text-neon-green {
+  color: var(--neon-green) !important;
+}
+
+.ek-text-light-blue {
+  color: var(--light-blue) !important;
+}
+
+.ek-text-sky-blue {
+  color: var(--sky-blue) !important;
+}
+
+.ek-text-deep-sky-blue {
+  color: var(--deep-sky-blue) !important;
+}
+
+.ek-text-dodger-blue {
+  color: var(--dodger-blue) !important;
+}
+
+.ek-text-medium-purple {
+  color: var(--medium-purple) !important;
+}
+
+.ek-text-blue-violet {
+  color: var(--blue-violet) !important;
+}
+
+.ek-text-dark-violet {
+  color: var(--dark-violet) !important;
+}
+
+.ek-text-light-gray {
+  color: var(--light-gray) !important;
+}
+
+.ek-text-silver {
+  color: var(--silver) !important;
+}
+
+.ek-text-dark-gray {
+  color: var(--dark-gray) !important;
+}
+
+.ek-text-dim-gray {
+  color: var(--dim-gray) !important;
+}
+
 .ek-bg-lime-green {
   background-color: var(--lime-green) !important;
 }
@@ -45,6 +105,59 @@
 
 .ek-bg-dark-green {
   background-color: var(--dark-green) !important;
+}
+
+.ek-bg-neon-green {
+  background-color: var(--neon-green) !important;
+}
+
+.ek-bg-light-blue {
+  background-color: var(--light-blue) !important;
+}
+
+/* gray bg*/
+.ek-bg-light-gray {
+  background-color: var(--light-gray) !important;
+}
+
+.ek-bg-silver {
+  background-color: var(--silver) !important;
+}
+
+.ek-bg-dark-gray {
+  background-color: var(--dark-gray) !important;
+}
+
+.ek-bg-dim-gray {
+  background-color: var(--dim-gray) !important;
+}
+
+.ek-bg-sky-blue {
+  background-color: var(--sky-blue) !important;
+}
+
+.ek-bg-deep-sky-blue {
+  background-color: var(--deep-sky-blue) !important;
+}
+
+.ek-bg-dodger-blue {
+  background-color: var(--dodger-blue) !important;
+}
+
+.ek-bg-medium-purple {
+  background-color: var(--medium-purple) !important;
+}
+
+.ek-bg-blue-violet {
+  background-color: var(--blue-violet) !important;
+}
+
+.ek-bg-dark-violet {
+  background-color: var(--dark-violet) !important;
+}
+
+.ek-border-dotted-spring-green {
+  border: 2px dotted var(--spring-green) !important;
 }
 
 .ek-link-gradient {

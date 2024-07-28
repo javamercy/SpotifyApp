@@ -34,9 +34,6 @@ export class SpotifyCallbackComponent implements OnInit, OnDestroy {
           this.subscription = this.authService.getToken(code).subscribe({
             next: () => {
               this.authService.getCurrentUser().subscribe({
-                next: user => {
-                  this.authService.setCurrentUser(user);
-                },
                 complete: () => this.router.navigate(["/"]),
               });
             },

@@ -52,11 +52,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   getCurrentUser(): void {
-    this.authService.getCurrentUser().subscribe({
+    this.authService.user$.subscribe({
       next: user => {
         this.user = user;
       },
-      error: error => console.error(error),
     });
   }
 

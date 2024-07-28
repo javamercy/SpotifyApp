@@ -67,14 +67,14 @@
         <ul class="list-group list-group-flush bg-transparent">
           @for (track of playlist.tracks.items; track $index) {
             <li
+              role="button"
+              (click)="play(track)"
               class="list-group-item ek-list-group-item bg-transparent text-white border-secondary ps-0 py-3 py-sm-2">
               <div class="d-flex align-items-center gap-3">
                 <span class="ek-track-index text-secondary fw-bold">{{
                   $index + 1
                 }}</span>
-                <div
-                  class="position-relative flex-shrink-0 ek-album-cover"
-                  (click)="play(track)">
+                <div class="position-relative flex-shrink-0 ek-album-cover">
                   <img
                     class="rounded img-fluid"
                     [src]="track.track.album.images[0].url"
@@ -86,16 +86,12 @@
                 </div>
 
                 <div class="d-flex flex-column flex-sm-row gap-sm-2">
-                  <a
-                    class="fw-bold mb-0 link-underline link-light link-underline-opacity-0 link-underline-opacity-100-hover text-reset"
-                    role="button">
+                  <div class="fw-bold mb-0">
                     {{ track.track.name }}
-                  </a>
-                  <a
-                    class="link-underline link-secondary link-underline-opacity-0 link-underline-opacity-100-hover text-secondary mb-0"
-                    role="button">
+                  </div>
+                  <div class="ek-text-silver mb-0">
                     {{ track.track.artists[0].name }}
-                  </a>
+                  </div>
                 </div>
                 <span class="ms-auto d-none d-sm-flex align-items-center gap-2">
                   <img src="clock.svg" alt="clock" />

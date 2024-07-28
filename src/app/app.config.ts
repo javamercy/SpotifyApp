@@ -1,4 +1,8 @@
-import { ApplicationConfig, provideZoneChangeDetection } from "@angular/core";
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  provideZoneChangeDetection,
+} from "@angular/core";
 import { provideRouter } from "@angular/router";
 
 import { routes } from "./app.routes";
@@ -7,6 +11,7 @@ import { provideAnimations } from "@angular/platform-browser/animations";
 import { provideToastr } from "ngx-toastr";
 import { authorizationInterceptor } from "./interceptors/authorization.interceptor";
 import { errorHandlerInterceptor } from "./interceptors/error-handler.interceptor";
+import { HammerModule } from "@angular/platform-browser";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,5 +26,6 @@ export const appConfig: ApplicationConfig = {
       preventDuplicates: true,
       closeButton: true,
     }),
+    importProvidersFrom(HammerModule),
   ],
 };

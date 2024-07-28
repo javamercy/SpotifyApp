@@ -1,22 +1,22 @@
 .ek-music-player {
   width: 100%;
   z-index: 1000;
-  animation: gradient-flow 10s infinite;
+  animation: gradient-flow 20s infinite;
   background: linear-gradient(
     270deg,
     #000000,
-    #111111,
-    #222222,
-    #282828,
-    #343434,
-    #414141,
-    #454545,
-    #414141,
-    #343434,
-    #282828,
-    #222222,
-    #111111,
-    #000000
+    /* Black */ #1c1c1c,
+    /* Dark Gray */ #2e2e2e,
+    /* Darker Gray */ #3a3a3a,
+    /* Gray */ #4c4c4c,
+    /* Medium Gray */ #5f5f5f,
+    /* Lighter Gray */ #424242,
+    /* Slightly Darker Gray */ #3a3a3a,
+    /* Gray */ #2e2e2e,
+    /* Darker Gray */ #1c1c1c,
+    /* Dark Gray */ #000000,
+    /* Black */ #333333,
+    /* Dark Gray with Blue Tint */ #000000 /* Black */
   );
   background-size: 300% 300%;
 }
