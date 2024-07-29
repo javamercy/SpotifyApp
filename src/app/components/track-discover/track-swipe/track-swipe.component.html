@@ -1,0 +1,72 @@
+<main class="py-5">
+  @if (tracks && tracks.length) {
+    <section>
+      <h2 class="text-center">{{ genre }}</h2>
+      <div class="row justify-content-center align-items-center mt-5">
+        <div class="col-md-3 col-sm-4 col-6">
+          <swiper-container
+            #swiperContainer
+            effect="cards"
+            grap-cursor="true"
+            slides-per-view="auto">
+            @for (track of tracks; track $index) {
+              <swiper-slide lazy="true">
+                <div class="card position-relative">
+                  <img
+                    class="card-img-top"
+                    src="{{ track.album.images[0].url }}"
+                    alt="{{ track.name }}" />
+                  <div
+                    class="card-body"
+                    [appAverageColor]="track.album.images[0].url">
+                    <p class="card-title fw-bold text-truncate">
+                      {{ track.name }}
+                    </p>
+                    <p class="card-text">{{ track.artists[0].name }}</p>
+                    <div class="d-flex justify-content-between">
+                      <div (click)="togglePlay(track)">
+                        <img
+                          class="img-fluid"
+                          src="play-circle.svg"
+                          alt="play"
+                          width="50"
+                          height="50" />
+                      </div>
+                      <div (click)="toggleLike(track)">
+                        <img
+                          class="img-fluid"
+                          [src]="
+                            isAlreadyLiked(track)
+                              ? 'heart-fill.svg'
+                              : 'heart.svg'
+                          "
+                          width="50"
+                          height="50" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                @if ((nowPlayingTrack | async)?.id === track.id) {
+                  <div
+                    class="position-absolute start-50 top-50 translate-middle z-1">
+                    <div class="music-bar-container">
+                      <span class="bar n1"></span>
+                      <span class="bar n2"></span>
+                      <span class="bar n3"></span>
+                      <span class="bar n4"></span>
+                      <span class="bar n5"></span>
+                      <span class="bar n6"></span>
+                      <span class="bar n7"></span>
+                      <span class="bar n8"></span>
+                    </div>
+                  </div>
+                }
+              </swiper-slide>
+            }
+          </swiper-container>
+        </div>
+      </div>
+    </section>
+  }
+  <audio #audioRef></audio>
+</main>
