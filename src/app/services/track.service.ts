@@ -19,9 +19,9 @@ export class TrackService {
     private localstorageService: LocalStorageService
   ) {}
 
-  getTracksByGenres(
+  getTracksByGenre(
     pageRequest: PageRequest,
-    genres: string[]
+    genre: string
   ): Observable<{ seeds: RecommendationSeed; tracks: Track[] }> {
     const cached = this.localstorageService.get<{
       seeds: RecommendationSeed;
@@ -34,8 +34,7 @@ export class TrackService {
         observer.complete();
       });
     }
-    const url = `${this.apiUrl}/recommendations?limit=${pageRequest.limit}&offset=${pageRequest.offset}&seed_genres=${genres.join(
-      ","
+    const url = `${this.apiUrl}/recommendations?limit=${pageRequest.limit}&offset=${pageRequest.offset}&seed_genres=${genre}
     )}`;
     return this.http
       .get<{ seeds: RecommendationSeed; tracks: Track[] }>(url)

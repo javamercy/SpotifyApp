@@ -1,59 +1,55 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from "@angular/core";
-import { SharedModule } from "../../shared/modules/shared.module";
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  OnInit,
+  CUSTOM_ELEMENTS_SCHEMA,
+} from "@angular/core";
 import { TrackService } from "../../services/track.service";
 import { Track } from "../../models/track.model";
 import { PageRequest } from "../../models/page-request.model";
-import { MusicPlayerService } from "../../services/music-player.service";
+import { TrackSwipeComponent } from "./track-swipe/track-swipe.component";
+import { GenreService } from "../../services/genre.service";
 
 @Component({
   selector: "app-track-discover",
   standalone: true,
-  imports: [SharedModule],
+  imports: [TrackSwipeComponent],
   templateUrl: "./track-discover.component.html",
   styleUrl: "./track-discover.component.css",
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class TrackDiscoverComponent implements OnInit {
+  @ViewChild("audioRef") audioRef: ElementRef<HTMLAudioElement>;
+  nowPlayingTrack: Track;
   tracks: Track[];
   likedTracks: Map<string, Track> = new Map<string, Track>();
+  genres: string[];
+
   private pageRequest: PageRequest = new PageRequest(30, 0);
-  private genres: string[] = ["pop"];
 
   constructor(
     private trackService: TrackService,
-    private musicPlayerService: MusicPlayerService
+    private genreService: GenreService
   ) {}
 
-  ngOnInit(): void {
-    this.getTracksByGenre();
+  ngOnInit() {
+    this.getGenres();
   }
 
   getTracksByGenre() {
     this.trackService
-      .getTracksByGenres(this.pageRequest, this.genres)
+      .getTracksByGenre(this.pageRequest, this.genres[0])
       .subscribe(response => {
         this.tracks = response.tracks;
-        console.log(this.tracks.map(track => track.name));
       });
   }
 
-  togglePlay(track: Track) {
-    this.musicPlayerService.togglePlay(track);
-  }
+  getGenres() {
+    this.genreService.getGenres().subscribe(genres => {
+      this.genres = genres.genres;
 
-  isAlreadyLiked(track: Track): boolean {
-    return this.likedTracks.has(track.id);
-  }
-
-  toggleLike(track: Track) {
-    if (this.isAlreadyLiked(track)) {
-      this.likedTracks.delete(track.id);
-    } else {
-      this.likedTracks.set(track.id, track);
-    }
-  }
-
-  isNowPlaying(track: Track): boolean {
-    return this.musicPlayerService.isNowPlaying(track);
+      this.getTracksByGenre();
+    });
   }
 }

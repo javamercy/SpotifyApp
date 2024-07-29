@@ -30,6 +30,7 @@ export class AverageColorDirective implements OnInit {
         );
         const luminance = this.calculateLuminance(color.value);
         const textColor = luminance > 0.5 ? "#000" : "#FFF";
+
         this.renderer.setStyle(this.el.nativeElement, "color", textColor);
       })
       .catch(e => {
@@ -37,11 +38,11 @@ export class AverageColorDirective implements OnInit {
       });
   }
 
-  private calculateLuminance([r, g, b]: number[]) {
-    const a = [r, g, b].map(v => {
-      v /= 255;
-      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
-    });
-    return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+  private calculateLuminance([R, G, B]: number[]): number {
+    const rNormalized = R / 255;
+    const gNormalized = G / 255;
+    const bNormalized = B / 255;
+
+    return 0.21 * rNormalized + 0.72 * gNormalized + 0.07 * bNormalized;
   }
 }

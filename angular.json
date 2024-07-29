@@ -29,7 +29,8 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/bootstrap-icons/font/bootstrap-icons.min.css",
-              "node_modules/ngx-spinner/animations/ball-circus.css"
+              "node_modules/ngx-spinner/animations/ball-circus.css",
+              "node_modules/swiper/swiper-bundle.min.css"
             ],
             "scripts": ["node_modules/bootstrap/dist/js/bootstrap.min.js"]
           },

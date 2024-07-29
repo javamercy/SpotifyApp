@@ -6,25 +6,18 @@ import { Constants } from "../shared/constants/Constants";
   providedIn: "root",
 })
 export class LocalStorageService {
-  get<T>(key: string) {
+  get<T>(key: string): T | null {
     return JSON.parse(localStorage.getItem(key)) as T;
   }
 
-  set(key: string, value: unknown): void {
+  set = (key: string, value: unknown): void =>
     localStorage.setItem(key, JSON.stringify(value));
-  }
 
-  delete(key: string): void {
-    localStorage.removeItem(key);
-  }
+  delete = (key: string): void => localStorage.removeItem(key);
 
-  clear(): void {
-    localStorage.clear();
-  }
+  clear = (): void => localStorage.clear();
 
-  has(key: string): boolean {
-    return !!localStorage.getItem(key);
-  }
+  has = (key: string): boolean => !!localStorage.getItem(key);
 
   getAccessToken(): AccessToken | null {
     const accessToken: AccessToken = this.get(
@@ -40,7 +33,6 @@ export class LocalStorageService {
     return accessToken;
   }
 
-  private isAccessTokenExpired(expiration: Date): boolean {
-    return new Date(expiration) < new Date();
-  }
+  private isAccessTokenExpired = (expiration: Date): boolean =>
+    new Date(expiration) < new Date();
 }

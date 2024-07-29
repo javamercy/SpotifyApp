@@ -72,6 +72,6 @@ export class PlaylistComponent implements OnInit, OnDestroy {
   }
 
   play(track: PlaylistTrackItem) {
-    this.musicPlayerService.setTrack(track.track);
+    this.musicPlayerService.play(track.track);
   }
 }

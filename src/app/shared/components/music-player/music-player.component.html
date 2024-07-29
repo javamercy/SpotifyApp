@@ -25,7 +25,9 @@
         <div class="ms-auto ek-controls">
           <div>
             <img
-              [src]="isPlaying ? 'pause-circle.svg' : 'play-circle.svg'"
+              [src]="
+                (isPlaying | async) ? 'pause-circle.svg' : 'play-circle.svg'
+              "
               alt="toggle"
               (click)="toggle()" />
           </div>
@@ -39,8 +41,7 @@
         (ended)="onTrackEnded()"
         (timeupdate)="onTimeUpdate()"
         [autoplay]="true"
-        (playing)="isPlaying = true"
-        [src]="currentTrack.preview_url"></audio>
+        [src]="currentTrack?.preview_url"></audio>
     </div>
   </div>
 }

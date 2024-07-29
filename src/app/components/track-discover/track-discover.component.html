@@ -1,60 +1,27 @@
-<main>
-  <section>
-    <div class="row justify-content-center mt-5">
-      <div class="col-md-4 col-sm-6 col-8">
-        @if (tracks) {
-          <swiper-container
-            #swiperContainer
-            effect="cards"
-            grap-cursor="true"
-            slides-per-view="auto">
-            @for (track of tracks; track $index) {
-              <swiper-slide lazy="true">
-                <div class="card">
-                  <img
-                    class="card-img-top"
-                    src="{{ track.album.images[0].url }}"
-                    alt="{{ track.name }}" />
-                  <div
-                    class="card-body p-4"
-                    [appAverageColor]="track.album.images[0].url">
-                    <h5 class="card-title fw-bold">
-                      {{ track.name }}
-                    </h5>
-                    <p class="card-text">{{ track.artists[0].name }}</p>
-                    <div class="d-flex justify-content-between">
-                      <div
-                        class="ek-card-btn"
-                        [ngClass]="{ 'ek-play-btn': isNowPlaying(track) }"
-                        (click)="togglePlay(track)">
-                        <img
-                          class="img-fluid"
-                          src="play-circle.svg"
-                          alt="play"
-                          width="50"
-                          height="50" />
-                      </div>
-                      <div
-                        class="ek-card-btn ek-like-btn"
-                        (click)="toggleLike(track)">
-                        <img
-                          class="img-fluid"
-                          [src]="
-                            isAlreadyLiked(track)
-                              ? 'heart-fill.svg'
-                              : 'heart.svg'
-                          "
-                          width="50"
-                          height="50" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </swiper-slide>
-            }
-          </swiper-container>
-        }
-      </div>
-    </div>
-  </section>
-</main>
+@if (tracks) {
+  <app-track-swipe
+    [audioRef]="audioRef"
+    [genre]="genres[0]"
+    [likedTracks]="likedTracks"
+    [tracks]="tracks"></app-track-swipe>
+}
+<!-- @if (genres && genres.length > 0) {
+  <swiper-container
+    grid
+    slides-per-view="4"
+    autoplay="true"
+    autoplay-delay="0"
+    autoplay-disable-on-interaction="false"
+    speed="1250">
+    @for (genre of genres; track $index) {
+      <swiper-slide>
+        <div class="btn btn-lg btn-outline-info">{{ genre }}</div>
+      </swiper-slide>
+    }
+  </swiper-container>
+} -->
+
+<div class="py-5"></div>
+
+<div class="py-5"></div>
+<div class="py-5"></div>

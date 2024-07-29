@@ -8,20 +8,24 @@ import { BehaviorSubject, Observable, shareReplay, tap } from "rxjs";
 })
 export class GenreService {
   private apiUrl: string = environment.spotify.apiUrl;
-  private genreSubject: BehaviorSubject<string[] | null>;
-  genres$: Observable<string[] | null>;
+  private genreSubject: BehaviorSubject<{ genres: string[] } | null>;
+  genres$: Observable<{ genres: string[] } | null>;
   constructor(private http: HttpClient) {
-    this.genreSubject = new BehaviorSubject<string[] | null>(null);
+    this.genreSubject = new BehaviorSubject<{ genres: string[] } | null>(null);
     this.genres$ = this.genreSubject.asObservable().pipe(shareReplay(1));
   }
 
-  getGenres(): Observable<string[]> {
+  getGenres(): Observable<{ genres: string[] }> {
     if (this.genreSubject.value) {
-      return this.genres$ as Observable<string[]>;
+      console.log("returning cached genres");
+
+      return this.genres$ as Observable<{ genres: string[] }>;
     }
 
     return this.http
-      .get<string[]>(`${this.apiUrl}/recommendations/available-genre-seeds`)
+      .get<{
+        genres: string[];
+      }>(`${this.apiUrl}/recommendations/available-genre-seeds`)
       .pipe(
         shareReplay(1),
         tap(genres => {

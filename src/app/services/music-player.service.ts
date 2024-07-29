@@ -8,30 +8,47 @@ import { BehaviorSubject, Observable } from "rxjs";
 export class MusicPlayerService {
   private trackSubject: BehaviorSubject<Track | null>;
   track$: Observable<Track | null>;
+  private isPlaying: BehaviorSubject<boolean>;
+  isPlaying$: Observable<boolean>;
 
   constructor() {
     this.trackSubject = new BehaviorSubject<Track | null>(null);
     this.track$ = this.trackSubject.asObservable();
+
+    this.isPlaying = new BehaviorSubject<boolean>(false);
+    this.isPlaying$ = this.isPlaying.asObservable();
   }
 
-  setTrack(track: Track) {
+  play(track: Track) {
+    this.isPlaying.next(true);
+    if (this.trackSubject.value && this.trackSubject.value.id === track.id)
+      return;
     this.trackSubject.next(track);
   }
 
   togglePlay(track: Track) {
     if (this.trackSubject.value && this.trackSubject.value.id === track.id) {
-      this.trackSubject.next(null);
+      this.isPlaying.next(!this.isPlaying.value);
     } else {
-      this.trackSubject.next(track);
+      this.play(track);
+      this.isPlaying.next(true);
     }
+  }
+
+  pause() {
+    this.isPlaying.next(false);
   }
 
   clearTrack() {
     this.trackSubject.next(null);
+    this.isPlaying.next(false);
   }
 
   isNowPlaying(track: Track): boolean {
-    if (!this.trackSubject.value) return false;
-    return this.trackSubject.value.id === track.id;
+    return this.trackSubject.value?.id === track.id;
+  }
+
+  getNowPlaying(): Track | null {
+    return this.trackSubject.value;
   }
 }

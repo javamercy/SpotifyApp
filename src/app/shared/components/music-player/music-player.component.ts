@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { MusicPlayerService } from "../../../services/music-player.service";
 import { Track } from "../../../models/track.model";
-import { Subscription } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { SharedModule } from "../../modules/shared.module";
 
 @Component({
@@ -22,7 +22,7 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
   @ViewChild("audioRef") audioRef: ElementRef<HTMLAudioElement>;
   currentTrack: Track | null;
   progress: string;
-  isPlaying: boolean;
+  isPlaying: Observable<boolean>;
   subscriptions: Subscription;
 
   constructor(private musicPlayerService: MusicPlayerService) {
@@ -35,6 +35,7 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
         this.currentTrack = track;
       })
     );
+    this.isPlaying = this.musicPlayerService.isPlaying$;
   }
 
   ngOnDestroy(): void {
@@ -50,20 +51,22 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
   play(track: Track) {
     this.audioRef.nativeElement.src = track.preview_url;
     this.audioRef.nativeElement.play();
+    this.musicPlayerService.play(track);
   }
 
   toggle() {
     if (this.audioRef.nativeElement.paused) {
       this.audioRef.nativeElement.play();
+      this.musicPlayerService.play(this.currentTrack);
     } else {
       this.audioRef.nativeElement.pause();
+      this.musicPlayerService.pause();
     }
-    this.isPlaying = !this.audioRef.nativeElement.paused;
   }
 
-  stop() {
+  pause() {
     this.audioRef.nativeElement.pause();
-    this.isPlaying = false;
+    this.musicPlayerService.pause();
   }
 
   onTimeUpdate() {
@@ -75,8 +78,7 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
   }
 
   onTrackEnded() {
-    this.stop();
-    this.clear();
+    this.musicPlayerService.clearTrack();
   }
 
   closePlayer() {
