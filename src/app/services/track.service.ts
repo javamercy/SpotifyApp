@@ -12,8 +12,8 @@ import { LocalStorageService } from "./local-storage.service";
 })
 export class TrackService {
   private apiUrl = environment.spotify.apiUrl;
-  private cacheKey = (pageRequest: PageRequest) =>
-    `tracks(${pageRequest.limit},${pageRequest.offset})`;
+  private cacheKey = (pageRequest: PageRequest, genre: string) =>
+    `tracks(${pageRequest.limit},${pageRequest.offset})/${genre}`;
   constructor(
     private http: HttpClient,
     private localstorageService: LocalStorageService
@@ -26,7 +26,7 @@ export class TrackService {
     const cached = this.localstorageService.get<{
       seeds: RecommendationSeed;
       tracks: Track[];
-    }>(this.cacheKey(pageRequest));
+    }>(this.cacheKey(pageRequest, genre));
 
     if (cached) {
       return new Observable(observer => {
@@ -34,8 +34,8 @@ export class TrackService {
         observer.complete();
       });
     }
-    const url = `${this.apiUrl}/recommendations?limit=${pageRequest.limit}&offset=${pageRequest.offset}&seed_genres=${genre}
-    )}`;
+    const url = `${this.apiUrl}/recommendations?limit=${pageRequest.limit}&offset=${pageRequest.offset}&seed_genres=${genre}`;
+
     return this.http
       .get<{ seeds: RecommendationSeed; tracks: Track[] }>(url)
       .pipe(
@@ -46,7 +46,10 @@ export class TrackService {
           };
         }),
         tap(response => {
-          this.localstorageService.set(this.cacheKey(pageRequest), response);
+          this.localstorageService.set(
+            this.cacheKey(pageRequest, genre),
+            response
+          );
         })
       );
   }

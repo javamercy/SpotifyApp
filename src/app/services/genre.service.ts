@@ -1,36 +1,39 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment.development";
-import { BehaviorSubject, Observable, shareReplay, tap } from "rxjs";
+import { Observable, shareReplay, tap } from "rxjs";
+import { LocalStorageService } from "./local-storage.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class GenreService {
   private apiUrl: string = environment.spotify.apiUrl;
-  private genreSubject: BehaviorSubject<{ genres: string[] } | null>;
-  genres$: Observable<{ genres: string[] } | null>;
-  constructor(private http: HttpClient) {
-    this.genreSubject = new BehaviorSubject<{ genres: string[] } | null>(null);
-    this.genres$ = this.genreSubject.asObservable().pipe(shareReplay(1));
-  }
+  private cacheKey = "genres";
+
+  constructor(
+    private http: HttpClient,
+    private localStorageService: LocalStorageService
+  ) {}
 
   getGenres(): Observable<{ genres: string[] }> {
-    if (this.genreSubject.value) {
-      console.log("returning cached genres");
+    const cached = this.localStorageService.get<{ genres: string[] }>(
+      this.cacheKey
+    );
 
-      return this.genres$ as Observable<{ genres: string[] }>;
+    if (cached) {
+      return new Observable(observer => {
+        observer.next(cached);
+        observer.complete();
+      });
     }
 
-    return this.http
-      .get<{
-        genres: string[];
-      }>(`${this.apiUrl}/recommendations/available-genre-seeds`)
-      .pipe(
-        shareReplay(1),
-        tap(genres => {
-          this.genreSubject.next(genres);
-        })
-      );
+    const url = `${this.apiUrl}/recommendations/available-genre-seeds`;
+    return this.http.get<{ genres: string[] }>(url).pipe(
+      tap(response => {
+        this.localStorageService.set(this.cacheKey, response);
+      }),
+      shareReplay(1)
+    );
   }
 }

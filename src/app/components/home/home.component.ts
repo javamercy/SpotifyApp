@@ -98,7 +98,9 @@ export class HomeComponent implements OnInit, OnDestroy {
               .map(artist => artist.genres)
               .reduce((acc, val) => acc.concat(val), []);
             this.topGenres = genres.slice(0, 5);
-            const genre = this.topGenres.find(g => g.split(" ").length === 1);
+            const genre = this.topGenres.find(
+              g => g.split(" ").length === 1 && g != "arabesk"
+            );
 
             this.getPlaylistsByGenre(genre);
           },

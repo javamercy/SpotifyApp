@@ -72,3 +72,16 @@
   animation: none;
   transform: scale(1.2);
 }
+
+/* ------------------------------ */
+
+.ek-player-menu-icon {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1;
+}
+
+.ek-menu {
+  width: 250px;
+}

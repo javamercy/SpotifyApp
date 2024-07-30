@@ -47,6 +47,25 @@
   color: var(--neon-green) !important;
 }
 
+.ek-shadow-dark-green-100:hover {
+  box-shadow: 0 0 10px var(--dark-green);
+}
+
+.ek-shadow-dark-green-100:focus {
+  box-shadow: none;
+}
+
+.ek-shadow-neon-green-300:hover {
+  box-shadow:
+    0 0 10px var(--neon-green),
+    0 0 20px var(--neon-green),
+    0 0 30px var(--neon-green);
+}
+
+.ek-shadow-neon-green-300:focus {
+  box-shadow: none;
+}
+
 .ek-text-light-blue {
   color: var(--light-blue) !important;
 }
@@ -249,6 +268,11 @@
   color: inherit;
 }
 
+.ek-scale-hover:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s;
+}
+
 .ek-option:hover {
   background-color: #16222a !important;
   color: var(--lime-green) !important;
@@ -261,17 +285,20 @@
   display: block !important;
 }
 
+.ek-box-shadow {
+  box-shadow:
+    0 0 10px var(--dark-green),
+    0 0 20px var(--forest-green);
+}
 html,
 body {
   height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
 }
-
 body {
   background-color: #121212 !important;
   color: #ffffff !important;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 :host {

@@ -1,27 +1,46 @@
-@if (tracks) {
-  <app-track-swipe
-    [audioRef]="audioRef"
-    [genre]="genres[0]"
-    [likedTracks]="likedTracks"
-    [tracks]="tracks"></app-track-swipe>
-}
-<!-- @if (genres && genres.length > 0) {
-  <swiper-container
-    grid
-    slides-per-view="4"
-    autoplay="true"
-    autoplay-delay="0"
-    autoplay-disable-on-interaction="false"
-    speed="1250">
-    @for (genre of genres; track $index) {
-      <swiper-slide>
-        <div class="btn btn-lg btn-outline-info">{{ genre }}</div>
-      </swiper-slide>
-    }
-  </swiper-container>
-} -->
-
-<div class="py-5"></div>
-
-<div class="py-5"></div>
-<div class="py-5"></div>
+<div class="container-sm p-3 p-sm-0">
+  <main>
+    <section #swipeSection>
+      @if (selectedGenre && tracks) {
+        <app-track-swipe
+          [audioRef]="audioRef"
+          [genre]="selectedGenre"
+          [likedTracks]="likedTracks"
+          [tracks]="tracks"></app-track-swipe>
+      }
+    </section>
+    <section>
+      @if (genres && genres.length > 0) {
+        <div class="row justify-content-center my-5">
+          <div class="col-6 col-md-4">
+            <input
+              type="text"
+              class="form-control bg-transparent ek-genre-input text-center"
+              id="genre"
+              placeholder="search for a genre"
+              [(ngModel)]="filterText" />
+          </div>
+        </div>
+        <div class="d-flex flex-wrap gap-3 p-2 justify-content-center">
+          @for (
+            genre of filterText
+              ? (genres | filterGenres: filterText)
+              : genres.slice(0, 15);
+            track $index
+          ) {
+            <button
+              class="btn ek-text-silver border-secondary ek-scale-hover ek-shadow-neon-green-300"
+              routerLink="/me/discover/{{ genre }}">
+              {{ genre }}
+            </button>
+          }
+        </div>
+        @if (!filterText) {
+          <div class="text-center fs-2 fw-bold">...</div>
+        }
+      }
+    </section>
+    <div class="py-5"></div>
+    <div class="py-5"></div>
+  </main>
+</div>

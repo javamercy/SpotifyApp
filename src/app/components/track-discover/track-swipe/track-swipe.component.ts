@@ -6,6 +6,8 @@ import {
   OnInit,
   ViewChild,
   AfterViewInit,
+  OnChanges,
+  SimpleChanges,
 } from "@angular/core";
 import { Track } from "../../../models/track.model";
 import { SharedModule } from "../../../shared/modules/shared.module";
@@ -21,7 +23,7 @@ import { Observable } from "rxjs";
   styleUrl: "./track-swipe.component.css",
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class TrackSwipeComponent implements OnInit, AfterViewInit {
+export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() tracks: Track[];
   @Input() genre: string;
   nowPlayingTrack: Observable<Track | null>;
@@ -29,11 +31,16 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit {
   @Input() audioRef: ElementRef<HTMLAudioElement>;
   @ViewChild("swiperContainer")
   swiperContainer: ElementRef<SwiperContainer>;
+  autoPlay = true;
 
   constructor(private musicPlayerService: MusicPlayerService) {}
 
   togglePlay(track: Track) {
     this.musicPlayerService.togglePlay(track);
+  }
+
+  toggleAutoplay(checked: boolean) {
+    this.autoPlay = checked;
   }
 
   ngOnInit(): void {
@@ -42,6 +49,17 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.addEventListeners();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["genre"] && !changes["genre"].firstChange) {
+      this.resetSwiper();
+    }
+  }
+
+  resetSwiper() {
+    this.swiperContainer.nativeElement.swiper.slideTo(0);
+    this.musicPlayerService.clearTrack();
   }
 
   toggleLike(track: Track) {
@@ -64,7 +82,9 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit {
     this.swiperContainer.nativeElement.swiper.on("slideChange", () => {
       const index = this.swiperContainer.nativeElement.swiper.realIndex;
       const track = this.tracks[index];
-      this.play(track);
+      if (this.autoPlay) {
+        this.play(track);
+      }
     });
   }
 

@@ -34,10 +34,22 @@ export const routes: Routes = [
 
       {
         path: "discover",
-        loadComponent: () =>
-          import("./components/track-discover/track-discover.component").then(
-            m => m.TrackDiscoverComponent
-          ),
+        children: [
+          {
+            path: "",
+            loadComponent: () =>
+              import(
+                "./components/track-discover/track-discover.component"
+              ).then(m => m.TrackDiscoverComponent),
+          },
+          {
+            path: ":genre",
+            loadComponent: () =>
+              import(
+                "./components/track-discover/track-discover.component"
+              ).then(m => m.TrackDiscoverComponent),
+          },
+        ],
       },
     ],
   },
