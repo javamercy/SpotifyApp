@@ -8,6 +8,8 @@ import {
   AfterViewInit,
   OnChanges,
   SimpleChanges,
+  ViewChildren,
+  QueryList,
 } from "@angular/core";
 import { Track } from "../../../models/track.model";
 import { SharedModule } from "../../../shared/modules/shared.module";
@@ -30,18 +32,14 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() likedTracks: Map<string, Track>;
   @Input() audioRef: ElementRef<HTMLAudioElement>;
   @ViewChild("swiperContainer")
-  swiperContainer: ElementRef<SwiperContainer>;
+  private readonly swiperContainer: ElementRef<SwiperContainer>;
+
+  @ViewChildren("scrollItem")
+  private readonly scrollItems: QueryList<ElementRef<HTMLDivElement>>;
+
   autoPlay = true;
 
   constructor(private musicPlayerService: MusicPlayerService) {}
-
-  togglePlay(track: Track) {
-    this.musicPlayerService.togglePlay(track);
-  }
-
-  toggleAutoplay(checked: boolean) {
-    this.autoPlay = checked;
-  }
 
   ngOnInit(): void {
     this.getNowPlayingTrack();
@@ -49,6 +47,15 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngAfterViewInit(): void {
     this.addEventListeners();
+    this.setScrollAnimationProperty();
+  }
+
+  togglePlay(track: Track) {
+    this.musicPlayerService.togglePlay(track);
+  }
+
+  toggleAutoplay(checked: boolean) {
+    this.autoPlay = checked;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -60,6 +67,30 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
   resetSwiper() {
     this.swiperContainer.nativeElement.swiper.slideTo(0);
     this.musicPlayerService.clearTrack();
+  }
+
+  setScrollAnimationProperty() {
+    this.scrollItems.forEach(item => {
+      const containerWidth = item.nativeElement.parentElement.offsetWidth;
+      const scrollItemWidth = item.nativeElement.offsetWidth;
+
+      const overflowWidth = scrollItemWidth - containerWidth;
+
+      if (overflowWidth > 0) {
+        const animationDuration = Math.ceil(overflowWidth * 0.15);
+        item.nativeElement.style.setProperty(
+          "--overflow-width",
+          `${overflowWidth}px`
+        );
+
+        item.nativeElement.style.setProperty(
+          "--animation-duration",
+          `${animationDuration}s`
+        );
+      } else {
+        item.nativeElement.classList.remove("animate");
+      }
+    });
   }
 
   toggleLike(track: Track) {

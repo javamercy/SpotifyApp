@@ -10,6 +10,13 @@ import { MusicPlayerService } from "../../../services/music-player.service";
 import { Track } from "../../../models/track.model";
 import { Observable, Subscription } from "rxjs";
 import { SharedModule } from "../../modules/shared.module";
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from "@angular/animations";
 
 @Component({
   selector: "app-music-player",
@@ -17,13 +24,32 @@ import { SharedModule } from "../../modules/shared.module";
   imports: [SharedModule],
   templateUrl: "./music-player.component.html",
   styleUrls: ["./music-player.component.css"],
+  animations: [
+    trigger("slideInOut", [
+      state(
+        "in",
+        style({
+          transform: "translateX(0)",
+        })
+      ),
+      state(
+        "out",
+        style({
+          transform: "translateX(150%)",
+        })
+      ),
+      transition("out => in", [animate("200ms ease-in-out")]),
+      transition("in => out", [animate("200ms ease-out")]),
+    ]),
+  ],
 })
 export class MusicPlayerComponent implements OnInit, OnDestroy {
-  @ViewChild("audioRef") audioRef: ElementRef<HTMLAudioElement>;
+  @ViewChild("audioRef") public readonly audioRef: ElementRef<HTMLAudioElement>;
   currentTrack: Track | null;
   progress: string;
   isPlaying: Observable<boolean>;
   subscriptions: Subscription;
+  showPlayer = false;
 
   constructor(private musicPlayerService: MusicPlayerService) {
     this.subscriptions = new Subscription();
@@ -35,7 +61,10 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
         this.currentTrack = track;
       })
     );
-    this.isPlaying = this.musicPlayerService.isPlaying$;
+  }
+
+  get playerState() {
+    return this.showPlayer ? "in" : "out";
   }
 
   ngOnDestroy(): void {
@@ -78,12 +107,16 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
   }
 
   onTrackEnded() {
+    this.progress = "0%";
+  }
+
+  close() {
+    this.showPlayer = false;
     this.musicPlayerService.clearTrack();
   }
 
-  closePlayer() {
-    this.clear();
-    this.musicPlayerService.clearTrack();
+  minimize() {
+    this.showPlayer = false;
   }
 
   clear() {

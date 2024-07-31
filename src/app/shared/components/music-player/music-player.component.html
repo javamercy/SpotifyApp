@@ -1,12 +1,24 @@
 @if (currentTrack && currentTrack.preview_url) {
-  <div class="fixed-bottom bottom-0 start-0 pb-2 mx-3">
+  <div
+    class="fixed-bottom bottom-0 start-0 pb-2 mx-3"
+    [@slideInOut]="playerState">
     <div class="text-end pe-2 pb-2">
       <img
         src="x-circle.svg"
         alt="close"
-        class="ek-close-btn"
-        (click)="closePlayer()"
-        role="button" />
+        class="ek-music-player-close me-2"
+        (click)="close()"
+        role="button"
+        width="40"
+        height="40" />
+      <img
+        src="arrow-right-circle.svg"
+        alt="minimize"
+        class="ek-music-player-minimize"
+        (click)="minimize()"
+        role="button"
+        width="40"
+        height="40" />
     </div>
     <div class="ek-music-player fw-bold p-2 rounded p-sm-3 position-relative">
       <div class="d-flex mb-1 align-items-center gap-2">
@@ -14,14 +26,19 @@
           [src]="currentTrack.album.images[0].url"
           class="ek-album-cover rounded-circle border" />
 
-        <div class="ek-track-info">
-          <div class="ek-track-title ek-text-spring-green">
-            {{ currentTrack.name }}
+        <div class="d-flex flex-column">
+          <div class="ek-scroll-container">
+            <div class="ek-text-spring-green ek-scroll-item">
+              {{ currentTrack.name }}
+            </div>
           </div>
-          <div class="ek-track-artist ek-text-silver">
-            {{ currentTrack.artists[0].name }}
+          <div class="ek-scroll-container">
+            <div class="ek-text-silver ek-scroll-item">
+              {{ currentTrack.artists[0].name }}
+            </div>
           </div>
         </div>
+
         <div class="ms-auto ek-controls">
           <div>
             <img
@@ -38,10 +55,21 @@
       </div>
       <audio
         #audioRef
-        (ended)="onTrackEnded()"
         (timeupdate)="onTimeUpdate()"
+        (ended)="onTrackEnded()"
         [autoplay]="true"
         [src]="currentTrack?.preview_url"></audio>
     </div>
   </div>
+
+  @if (!showPlayer) {
+    <div class="ek-player-menu-icon">
+      <img
+        src="play-circle.svg"
+        alt="music"
+        width="40"
+        role="button"
+        (click)="showPlayer = true" />
+    </div>
+  }
 }

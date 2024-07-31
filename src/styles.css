@@ -290,6 +290,34 @@
     0 0 10px var(--dark-green),
     0 0 20px var(--forest-green);
 }
+
+.ek-scroll-container {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ek-scroll-item {
+  display: inline-block;
+  white-space: nowrap;
+  position: relative;
+}
+
+.ek-scroll-item.animate {
+  animation: scroll var(--animation-duration) linear infinite;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(calc(-1 * var(--overflow-width)));
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
 html,
 body {
   height: 100%;
