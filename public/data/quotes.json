@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "quoteText": "Music is like magic, there's a certain feelin' you get.",
+    "author": "Eminem, the greatest rapper of all time"
+  },
+  {
+    "id": 2,
+    "quoteText": "Writing about music is like dancing about architecture.",
+    "author": "Martin Mull, a comedian"
+  },
+  {
+    "id": 3,
+    "quoteText": "Where words fail, music speaks.",
+    "author": "Hans Christian Andersen, a Danish author"
+  },
+
+  {
+    "id": 4,
+    "quoteText": "Music is the strongest form of magic.",
+    "author": "Marilyn Manson, an American musician"
+  },
+
+  {
+    "id": 5,
+    "quoteText": "Every song is like a painting.",
+    "author": "Dick Dale"
+  },
+
+  {
+    "id": 6,
+    "quoteText": "Next to the word of God, the noble art of music is the greatest treasure in the world.",
+    "author": "Martin Luther"
+  }
+]

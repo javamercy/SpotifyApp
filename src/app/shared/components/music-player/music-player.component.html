@@ -24,15 +24,16 @@
       <div class="d-flex mb-1 align-items-center gap-2">
         <img
           [src]="currentTrack.album.images[0].url"
-          class="ek-album-cover rounded-circle border" />
+          class="img-fluid rounded-circle"
+          width="60" />
 
-        <div class="d-flex flex-column">
-          <div class="ek-scroll-container">
+        <div class="d-flex flex-column overflow-hidden m-2">
+          <div class="ek-scroll-container" appTextScroll>
             <div class="ek-text-spring-green ek-scroll-item">
               {{ currentTrack.name }}
             </div>
           </div>
-          <div class="ek-scroll-container">
+          <div class="ek-scroll-container" appTextScroll>
             <div class="ek-text-silver ek-scroll-item">
               {{ currentTrack.artists[0].name }}
             </div>

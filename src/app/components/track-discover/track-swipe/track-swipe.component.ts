@@ -16,11 +16,14 @@ import { SharedModule } from "../../../shared/modules/shared.module";
 import { MusicPlayerService } from "../../../services/music-player.service";
 import { SwiperContainer } from "swiper/element";
 import { Observable } from "rxjs";
+import { Router } from "@angular/router";
+import { AverageColorDirective } from "../../../shared/directives/average-color.directive";
+import { TextScrollDirective } from "../../../shared/directives/text-scroll.directive";
 
 @Component({
   selector: "app-track-swipe",
   standalone: true,
-  imports: [SharedModule],
+  imports: [SharedModule, AverageColorDirective, TextScrollDirective],
   templateUrl: "./track-swipe.component.html",
   styleUrl: "./track-swipe.component.css",
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -39,7 +42,10 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
 
   autoPlay = true;
 
-  constructor(private musicPlayerService: MusicPlayerService) {}
+  constructor(
+    private musicPlayerService: MusicPlayerService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.getNowPlayingTrack();
@@ -47,7 +53,6 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngAfterViewInit(): void {
     this.addEventListeners();
-    this.setScrollAnimationProperty();
   }
 
   togglePlay(track: Track) {
@@ -67,30 +72,6 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
   resetSwiper() {
     this.swiperContainer.nativeElement.swiper.slideTo(0);
     this.musicPlayerService.clearTrack();
-  }
-
-  setScrollAnimationProperty() {
-    this.scrollItems.forEach(item => {
-      const containerWidth = item.nativeElement.parentElement.offsetWidth;
-      const scrollItemWidth = item.nativeElement.offsetWidth;
-
-      const overflowWidth = scrollItemWidth - containerWidth;
-
-      if (overflowWidth > 0) {
-        const animationDuration = Math.ceil(overflowWidth * 0.15);
-        item.nativeElement.style.setProperty(
-          "--overflow-width",
-          `${overflowWidth}px`
-        );
-
-        item.nativeElement.style.setProperty(
-          "--animation-duration",
-          `${animationDuration}s`
-        );
-      } else {
-        item.nativeElement.classList.remove("animate");
-      }
-    });
   }
 
   toggleLike(track: Track) {

@@ -1,4 +1,5 @@
 export const Constants = {
-  ACCESS_TOKEN: "access_token",
+  SPOTIFY_ACCESS_TOKEN: "spotify_access_token",
   USER: "user",
+  QUOTES: "quotes",
 };

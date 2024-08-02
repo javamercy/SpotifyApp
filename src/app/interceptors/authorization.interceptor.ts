@@ -5,7 +5,7 @@ import { LocalStorageService } from "../services/local-storage.service";
 export const authorizationInterceptor: HttpInterceptorFn = (req, next) => {
   const localStorageService = inject(LocalStorageService);
 
-  const accessToken = localStorageService.getAccessToken();
+  const accessToken = localStorageService.getSpotifyAccessToken();
 
   if (!accessToken) return next(req);
 

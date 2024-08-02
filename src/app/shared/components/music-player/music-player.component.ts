@@ -17,11 +17,12 @@ import {
   transition,
   trigger,
 } from "@angular/animations";
+import { TextScrollDirective } from "../../directives/text-scroll.directive";
 
 @Component({
   selector: "app-music-player",
   standalone: true,
-  imports: [SharedModule],
+  imports: [SharedModule, TextScrollDirective],
   templateUrl: "./music-player.component.html",
   styleUrls: ["./music-player.component.css"],
   animations: [
@@ -51,6 +52,9 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
   subscriptions: Subscription;
   showPlayer = false;
 
+  private radius = 45;
+  private circumference = 2 * Math.PI * this.radius;
+
   constructor(private musicPlayerService: MusicPlayerService) {
     this.subscriptions = new Subscription();
   }
@@ -63,12 +67,12 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
     );
   }
 
-  get playerState() {
-    return this.showPlayer ? "in" : "out";
-  }
-
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+
+  get playerState() {
+    return this.showPlayer ? "in" : "out";
   }
 
   @HostListener("window:keydown.space", ["$event"])
@@ -108,6 +112,8 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
 
   onTrackEnded() {
     this.progress = "0%";
+    this.musicPlayerService.pause();
+    this.resetProgress();
   }
 
   close() {
@@ -122,5 +128,22 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
   clear() {
     this.progress = "0%";
     this.audioRef.nativeElement.currentTime = 0;
+  }
+
+  updateProgress() {
+    const audio = this.audioRef.nativeElement;
+    const progress = (audio.currentTime / audio.duration) * 100;
+    const offset = this.circumference - (progress / 100) * this.circumference;
+    const progressRing = document.querySelector(
+      ".progress-ring__circle"
+    ) as SVGCircleElement;
+    progressRing.style.strokeDashoffset = `${offset}`;
+  }
+
+  private resetProgress() {
+    const progressRing = document.querySelector(
+      ".progress-ring__circle"
+    ) as SVGCircleElement;
+    progressRing.style.strokeDashoffset = `${this.circumference}`;
   }
 }

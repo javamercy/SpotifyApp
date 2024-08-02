@@ -291,7 +291,13 @@
     0 0 20px var(--forest-green);
 }
 
+.ek-blank-h-150 {
+  height: 150px;
+  background: transparent;
+}
+
 .ek-scroll-container {
+  width: 100%;
   overflow: hidden;
   white-space: nowrap;
 }
@@ -311,7 +317,7 @@
     transform: translateX(0);
   }
   50% {
-    transform: translateX(calc(-1 * var(--overflow-width)));
+    transform: translateX(var(--overflow-width));
   }
   100% {
     transform: translateX(0);

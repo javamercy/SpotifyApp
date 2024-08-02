@@ -3,6 +3,7 @@ import {
   OnInit,
   OnDestroy,
   CUSTOM_ELEMENTS_SCHEMA,
+  ViewChild,
 } from "@angular/core";
 import { SharedModule } from "../../shared/modules/shared.module";
 import { Subscription } from "rxjs";
@@ -16,11 +17,14 @@ import { FormsModule } from "@angular/forms";
 import { TimeRange } from "../../enums/time-range";
 import { RouterModule } from "@angular/router";
 import { SimplifiedPlaylist } from "../../models/simplified.playlist.model";
+import { QuoteService } from "../../services/quote.service";
+import { NgxTypedJsComponent, NgxTypedJsModule } from "ngx-typed-js";
+import { Quote } from "../../models/quote.model";
 
 @Component({
   selector: "app-home",
   standalone: true,
-  imports: [SharedModule, FormsModule, RouterModule],
+  imports: [SharedModule, FormsModule, RouterModule, NgxTypedJsModule],
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.css",
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -34,16 +38,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   currentUsersPlaylists: SimplifiedPlaylist[];
   playlistsFilterQuery: string;
   topGenres: string[];
+  quotes: Quote[];
+  strings: string[];
+  isAuthorShown = false;
+  currentAuthor: string;
+
+  @ViewChild(NgxTypedJsComponent) private readonly typed: NgxTypedJsComponent;
+
   constructor(
     private userService: UserService,
     private authService: AuthService,
-    private playlistService: PlaylistService
+    private playlistService: PlaylistService,
+    private quoteService: QuoteService
   ) {
     this.subscriptions = new Subscription();
   }
 
   ngOnInit() {
     this.checkIfUserAutenticated();
+    this.getQuotes();
   }
 
   ngOnDestroy() {
@@ -98,9 +111,7 @@ export class HomeComponent implements OnInit, OnDestroy {
               .map(artist => artist.genres)
               .reduce((acc, val) => acc.concat(val), []);
             this.topGenres = genres.slice(0, 5);
-            const genre = this.topGenres.find(
-              g => g.split(" ").length === 1 && g != "arabesk"
-            );
+            const genre = this.topGenres.find(g => g.split(" ").length === 1);
 
             this.getPlaylistsByGenre(genre);
           },
@@ -133,5 +144,37 @@ export class HomeComponent implements OnInit, OnDestroy {
           error: error => console.error(error),
         })
     );
+  }
+
+  getQuotes() {
+    this.quoteService.getAll().subscribe({
+      next: response => {
+        this.quotes = response;
+        this.shuffleQuotes(this.quotes);
+        this.strings = this.quotes.map(quote => quote.quoteText);
+      },
+      error: error => console.error(error),
+    });
+  }
+
+  onStringTyped(index: number) {
+    this.currentAuthor = this.quotes[index].author;
+    this.isAuthorShown = true;
+  }
+
+  onPreStringTyped() {
+    this.isAuthorShown = false;
+  }
+
+  onLastStringBackspaced() {
+    this.isAuthorShown = false;
+  }
+
+  log(value: string) {
+    console.log(value);
+  }
+
+  shuffleQuotes(quotes: Quote[]) {
+    quotes.sort(() => Math.random() - 0.5);
   }
 }

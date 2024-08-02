@@ -19,15 +19,15 @@ export class LocalStorageService {
 
   has = (key: string): boolean => !!localStorage.getItem(key);
 
-  getAccessToken(): AccessToken | null {
+  getSpotifyAccessToken(): AccessToken | null {
     const accessToken: AccessToken = this.get(
-      Constants.ACCESS_TOKEN
+      Constants.SPOTIFY_ACCESS_TOKEN
     ) as AccessToken;
 
     if (!accessToken) return null;
 
     if (this.isAccessTokenExpired(accessToken.expiration)) {
-      this.delete(Constants.ACCESS_TOKEN);
+      this.delete(Constants.SPOTIFY_ACCESS_TOKEN);
       return null;
     }
     return accessToken;

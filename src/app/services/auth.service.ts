@@ -61,7 +61,10 @@ export class AuthService {
               new Date(expirationUtcTime)
             );
 
-            this.localStorageService.set(Constants.ACCESS_TOKEN, accessToken);
+            this.localStorageService.set(
+              Constants.SPOTIFY_ACCESS_TOKEN,
+              accessToken
+            );
           },
         })
       );
@@ -69,7 +72,7 @@ export class AuthService {
 
   logout(): void {
     this.userSubject.next(null);
-    this.localStorageService.delete(Constants.ACCESS_TOKEN);
+    this.localStorageService.delete(Constants.SPOTIFY_ACCESS_TOKEN);
     this.localStorageService.delete(Constants.USER);
   }
 
@@ -94,7 +97,7 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     const accessToken = this.localStorageService.get(
-      Constants.ACCESS_TOKEN
+      Constants.SPOTIFY_ACCESS_TOKEN
     ) as AccessToken;
     const token = accessToken?.token;
     const expiration = accessToken?.expiration as Date;
@@ -113,7 +116,7 @@ export class AuthService {
 
   private clearToken(): void {
     this.userSubject.next(null);
-    this.localStorageService.delete(Constants.ACCESS_TOKEN);
+    this.localStorageService.delete(Constants.SPOTIFY_ACCESS_TOKEN);
   }
 
   private isTokenExpired(expiration: Date): boolean {

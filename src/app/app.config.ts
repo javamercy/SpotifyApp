@@ -10,6 +10,7 @@ import { provideHttpClient, withInterceptors } from "@angular/common/http";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { provideToastr } from "ngx-toastr";
 import { SweetAlert2Module } from "@sweetalert2/ngx-sweetalert2";
+import { NgxTypedJsModule } from "ngx-typed-js";
 import { authorizationInterceptor } from "./interceptors/authorization.interceptor";
 import { errorHandlerInterceptor } from "./interceptors/error-handler.interceptor";
 
@@ -26,6 +27,6 @@ export const appConfig: ApplicationConfig = {
       preventDuplicates: true,
       closeButton: true,
     }),
-    importProvidersFrom(SweetAlert2Module.forRoot()),
+    importProvidersFrom(SweetAlert2Module.forRoot(), NgxTypedJsModule),
   ],
 };
