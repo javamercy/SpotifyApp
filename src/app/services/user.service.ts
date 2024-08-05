@@ -63,4 +63,12 @@ export class UserService {
   getById(id: string): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/users/${id}`);
   }
+
+  saveTrack(track: Track): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/me/tracks?ids=${track.id}`, {});
+  }
+
+  unsaveTrack(track: Track): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/me/tracks?ids=${track.id}`);
+  }
 }

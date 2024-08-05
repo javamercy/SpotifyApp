@@ -50,6 +50,9 @@ export class PlaylistService {
     );
   }
 
+  getCategories() {
+    return this.http.get(`${this.apiUrl}/browse/categories`);
+  }
   getById(id: string): Observable<Playlist> {
     return this.http
       .get<Playlist>(`${this.apiUrl}/playlists/${id}`)

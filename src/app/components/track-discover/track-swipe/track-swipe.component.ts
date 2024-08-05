@@ -15,10 +15,10 @@ import { Track } from "../../../models/track.model";
 import { SharedModule } from "../../../shared/modules/shared.module";
 import { MusicPlayerService } from "../../../services/music-player.service";
 import { SwiperContainer } from "swiper/element";
-import { Observable } from "rxjs";
-import { Router } from "@angular/router";
+import { Observable, Subscription } from "rxjs";
 import { AverageColorDirective } from "../../../shared/directives/average-color.directive";
 import { TextScrollDirective } from "../../../shared/directives/text-scroll.directive";
+import { UserService } from "../../../services/user.service";
 
 @Component({
   selector: "app-track-swipe",
@@ -36,6 +36,7 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() audioRef: ElementRef<HTMLAudioElement>;
   @ViewChild("swiperContainer")
   private readonly swiperContainer: ElementRef<SwiperContainer>;
+  private subscriptions: Subscription = new Subscription();
 
   @ViewChildren("scrollItem")
   private readonly scrollItems: QueryList<ElementRef<HTMLDivElement>>;
@@ -44,7 +45,7 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
 
   constructor(
     private musicPlayerService: MusicPlayerService,
-    private router: Router
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -77,8 +78,10 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
   toggleLike(track: Track) {
     if (this.isAlreadyLiked(track)) {
       this.likedTracks.delete(track.id);
+      this.unsaveTrack(track);
     } else {
       this.likedTracks.set(track.id, track);
+      this.saveTrack(track);
     }
   }
 
@@ -106,5 +109,21 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
 
   getNowPlayingTrack(): void {
     this.nowPlayingTrack = this.musicPlayerService.track$;
+  }
+
+  saveTrack(track: Track) {
+    this.subscriptions.add(
+      this.userService.saveTrack(track).subscribe(response => {
+        console.log(response);
+      })
+    );
+  }
+
+  unsaveTrack(track: Track) {
+    this.subscriptions.add(
+      this.userService.unsaveTrack(track).subscribe(response => {
+        console.log(response);
+      })
+    );
   }
 }

@@ -14,7 +14,6 @@ import { PageRequest } from "../../models/page-request.model";
 import { PlaylistService } from "../../services/playlist.service";
 import { Playlist } from "../../models/playlist.model";
 import { FormsModule } from "@angular/forms";
-import { TimeRange } from "../../enums/time-range";
 import { RouterModule } from "@angular/router";
 import { SimplifiedPlaylist } from "../../models/simplified.playlist.model";
 import { QuoteService } from "../../services/quote.service";
@@ -34,10 +33,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   currentUser: User;
   isAuthenticated: boolean;
   trendPlaylists: Playlist[];
-  playlistsByGenre: Playlist[];
   currentUsersPlaylists: SimplifiedPlaylist[];
   playlistsFilterQuery: string;
-  topGenres: string[];
   quotes: Quote[];
   strings: string[];
   isAuthorShown = false;
@@ -72,7 +69,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.isAuthenticated) {
       this.getCurrentUser();
       this.getFeaturedPlaylists();
-      this.getTopGenres();
       this.getCurrentUserPlaylists();
     }
   }
@@ -98,38 +94,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         },
         error: error => console.error(error),
       })
-    );
-  }
-
-  getTopGenres(): void {
-    this.subscriptions.add(
-      this.userService
-        .getTopArtists(new PageRequest(10, 0), TimeRange.SHORT_TERM)
-        .subscribe({
-          next: artists => {
-            const genres = artists.items
-              .map(artist => artist.genres)
-              .reduce((acc, val) => acc.concat(val), []);
-            this.topGenres = genres.slice(0, 5);
-            const genre = this.topGenres.find(g => g.split(" ").length === 1);
-
-            this.getPlaylistsByGenre(genre);
-          },
-          error: error => console.error(error),
-        })
-    );
-  }
-
-  getPlaylistsByGenre(genre: string): void {
-    this.subscriptions.add(
-      this.playlistService
-        .getAllByGenre(new PageRequest(20, 0), genre)
-        .subscribe({
-          next: playlists => {
-            this.playlistsByGenre = playlists.playlists.items;
-          },
-          error: error => console.error(error),
-        })
     );
   }
 
