@@ -30,6 +30,22 @@ export const routes: Routes = [
           import("./components/stats/stats.component").then(
             m => m.StatsComponent
           ),
+        children: [
+          {
+            path: "tracks",
+            loadComponent: () =>
+              import("./components/top-tracks/top-tracks.component").then(
+                m => m.TopTracksComponent
+              ),
+          },
+          {
+            path: "artists",
+            loadComponent: () =>
+              import("./components/top-artists/top-artists.component").then(
+                m => m.TopArtistsComponent
+              ),
+          },
+        ],
       },
 
       {

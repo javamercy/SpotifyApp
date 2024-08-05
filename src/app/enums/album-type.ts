@@ -1,5 +1,5 @@
 export enum AlbumType {
-  Album = "album",
-  Single = "single",
-  Compilation = "compilation",
+  ALBUM = "album",
+  SINGLE = "single",
+  COMPILATION = "compilation",
 }

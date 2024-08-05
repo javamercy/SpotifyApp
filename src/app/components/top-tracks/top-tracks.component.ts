@@ -1,11 +1,12 @@
-import { UserService } from "./../../services/user.service";
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Track } from "../../models/track.model";
-import { Subscription } from "rxjs";
-import { PageRequest } from "../../models/page-request.model";
-import { TimeRange } from "../../enums/time-range";
 import { MsToTimePipe } from "../../pipes/ms-to-time.pipe";
 import { SharedModule } from "../../shared/modules/shared.module";
+import { UserService } from "../../services/user.service";
+import { PageRequest } from "../../models/page-request.model";
+import { TimeRange } from "../../enums/time-range";
+import { Subscription } from "rxjs";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-top-tracks",
@@ -16,34 +17,36 @@ import { SharedModule } from "../../shared/modules/shared.module";
 })
 export class TopTracksComponent implements OnInit, OnDestroy {
   topTracks: Track[];
-  private subscription: Subscription;
+  pageRequest: PageRequest = new PageRequest(50, 0);
 
-  constructor(private userService: UserService) {
-    this.topTracks = [];
-    this.subscription = new Subscription();
-  }
+  private subscriptions: Subscription = new Subscription();
+
+  constructor(
+    private userService: UserService,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-    this.getTopTracks();
+    this.subscriptions.add(
+      this.activatedRoute.queryParams.subscribe(params => {
+        const timeRange = params["time_range"] as TimeRange;
+
+        this.getTopTracks(this.pageRequest, timeRange);
+      })
+    );
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
-  getTopTracks() {
-    this.subscription.add(
+  getTopTracks(pageRequest: PageRequest, timeRange: TimeRange) {
+    this.subscriptions.add(
       this.userService
-        .getTopTracks(new PageRequest(10, 0), TimeRange.LONG_TERM)
+        .getTopTracks(pageRequest, timeRange)
         .subscribe(response => {
           this.topTracks = response.items;
         })
     );
-  }
-
-  getBadgeColor(popularity: number): string {
-    const red = Math.round(255 * (1 - popularity / 100));
-    const green = Math.round(255 * (popularity / 100));
-    return `rgb(${red}, ${green}, 0)`;
   }
 }

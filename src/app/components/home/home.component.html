@@ -1,64 +1,65 @@
 <div class="container">
   <div class="ek-blank-h-150"></div>
-
-  <div class="ek-blank-h-150">
-    <ngx-typed-js
-      [strings]="strings"
-      [typeSpeed]="30"
-      [showCursor]="false"
-      [backDelay]="5000"
-      (stringTyped)="onStringTyped($event)"
-      (preStringTyped)="onPreStringTyped()"
-      (lastStringBackspaced)="onLastStringBackspaced()"
-      [loop]="true">
-      <figure class="text-center px-2">
-        <blockquote class="blockquote fs-3">
-          <p class="typing"></p>
-        </blockquote>
-        @if (isAuthorShown) {
-          <figcaption class="blockquote-footer">
-            <cite title="Source Title">{{ currentAuthor }}</cite>
-          </figcaption>
-        }
-      </figure>
-    </ngx-typed-js>
-  </div>
-
-  @if (isAuthenticated) {
-    @if (currentUser) {
-      <h3 class="text-center font-monospace fs-2">
-        Welcome, {{ currentUser.display_name }}
-      </h3>
-    }
-
-    <section>
-      @if (trendPlaylists && trendPlaylists.length) {
-        <ng-container
-          *ngTemplateOutlet="
-            featuredPlaylistsTemplate;
-            context: { playlists: trendPlaylists, heading: 'Trend Playlists' }
-          "></ng-container>
-      }
-    </section>
-  } @else {
-    <section>
-      <ng-container *ngTemplateOutlet="unauthenticated"></ng-container>
-    </section>
+  @if (!isAuthenticated) {
+    <div class="ek-blank-h-150">
+      <ngx-typed-js
+        [strings]="strings"
+        [typeSpeed]="30"
+        [showCursor]="false"
+        [backDelay]="5000"
+        (stringTyped)="onStringTyped($event)"
+        (preStringTyped)="onPreStringTyped()"
+        (lastStringBackspaced)="onLastStringBackspaced()"
+        [loop]="true">
+        <figure class="text-center px-2">
+          <blockquote class="blockquote fs-3">
+            <p class="typing"></p>
+          </blockquote>
+          @if (isAuthorShown) {
+            <figcaption class="blockquote-footer">
+              <cite title="Source Title">{{ currentAuthor }}</cite>
+            </figcaption>
+          }
+        </figure>
+      </ngx-typed-js>
+    </div>
   }
+
+  <div class="py-5">
+    @if (isAuthenticated) {
+      @if (currentUser) {
+        <h3 class="text-center">Welcome, {{ currentUser.display_name }}</h3>
+      }
+      <section>
+        @if (trendPlaylists && trendPlaylists.length) {
+          <ng-container
+            *ngTemplateOutlet="
+              featuredPlaylistsTemplate;
+              context: {
+                playlists: trendPlaylists,
+                heading: 'Featured Playlists',
+              }
+            "></ng-container>
+        }
+      </section>
+    } @else {
+      <section>
+        <ng-container *ngTemplateOutlet="unauthenticated"></ng-container>
+      </section>
+    }
+  </div>
 </div>
 
 <ng-template #unauthenticated>
-  <div class="row justify-content-evenly align-items-center">
-    <div class="col-md-6 text-center">
-      <h1>Welcome to Magic Spotify</h1>
-      <h3 class="mb-5">
-        <span>
-          <a class="link text-white" (click)="login()" role="button"
-            >Sign in with Spotify
-          </a>
-          to deep dive into music.</span
-        >
-      </h3>
+  <div class="row justify-content-center align-items-center">
+    <div class="col-md-7 d-flex flex-column align-items-center gap-3">
+      <h1 class="fs-2">Welcome to Magic Spotify</h1>
+      <button
+        class="btn btn-lg btn-outline-light d-inline-flex gap-2 align-items-center justify-content-center fw-semibold"
+        (click)="login()">
+        Sign in with
+        <img src="spotify.svg" alt="spotify icon" width="30" height="30" />
+      </button>
     </div>
     <div class="col-md-4 overflow-hidden">
       <img
@@ -77,7 +78,6 @@
     class="text-center font-monospace fw-semibold fs-5 mb-3 ek-wavy-underline-deep-sky-blue">
     {{ heading }}
   </h3>
-
   <div class="col-md-12 mx-auto">
     <swiper-container
       effect="card"
@@ -93,7 +93,6 @@
               src="{{ playlist.images[0].url }}"
               class="card-img-top"
               alt="{{ playlist.name }}" />
-
             <div class="card-body">
               <h6 class="text-center text-muted text-truncate">
                 {{ playlist.name }}
@@ -102,7 +101,7 @@
             <button
               class="btn btn-outline-success w-75 mx-auto position-relative"
               routerLink="/playlist/{{ playlist.id }}">
-              Spotify
+              See More
               <i class="bi bi-spotify"></i>
             </button>
           </div>

@@ -1,3 +1,14 @@
 <app-navbar></app-navbar>
 <router-outlet></router-outlet>
-<app-music-player></app-music-player>
+<app-footer></app-footer>
+@if (isTrack) {
+  <app-music-player></app-music-player>
+}
+@if (isLoding) {
+  <ngx-spinner
+    bdColor="rgba(0, 0, 0, 0.8)"
+    size="large"
+    color="#fff"
+    type="square-jelly-box"
+    [fullScreen]="true"></ngx-spinner>
+}

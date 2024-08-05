@@ -29,7 +29,6 @@
     "ngx-toastr": "^19.0.0",
     "ngx-typed-js": "^2.1.1",
     "rxjs": "~7.8.0",
-    "sweetalert2": "^11.12.3",
     "swiper": "^11.1.8",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"

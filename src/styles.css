@@ -27,6 +27,8 @@
   --white: #ffffff;
 }
 
+/* color  */
+
 .ek-text-lime-green {
   color: var(--lime-green) !important;
 }
@@ -45,25 +47,6 @@
 
 .ek-text-neon-green {
   color: var(--neon-green) !important;
-}
-
-.ek-shadow-dark-green-100:hover {
-  box-shadow: 0 0 10px var(--dark-green);
-}
-
-.ek-shadow-dark-green-100:focus {
-  box-shadow: none;
-}
-
-.ek-shadow-neon-green-300:hover {
-  box-shadow:
-    0 0 10px var(--neon-green),
-    0 0 20px var(--neon-green),
-    0 0 30px var(--neon-green);
-}
-
-.ek-shadow-neon-green-300:focus {
-  box-shadow: none;
 }
 
 .ek-text-light-blue {
@@ -110,6 +93,8 @@
   color: var(--dim-gray) !important;
 }
 
+/* background color */
+
 .ek-bg-lime-green {
   background-color: var(--lime-green) !important;
 }
@@ -134,7 +119,6 @@
   background-color: var(--light-blue) !important;
 }
 
-/* gray bg*/
 .ek-bg-light-gray {
   background-color: var(--light-gray) !important;
 }
@@ -175,6 +159,29 @@
   background-color: var(--dark-violet) !important;
 }
 
+/* box shadow */
+
+.ek-shadow-dark-green-100:hover {
+  box-shadow: 0 0 10px var(--dark-green);
+}
+
+.ek-shadow-dark-green-100:focus {
+  box-shadow: none;
+}
+
+.ek-shadow-neon-green-300:hover {
+  box-shadow:
+    0 0 10px var(--neon-green),
+    0 0 20px var(--neon-green),
+    0 0 30px var(--neon-green);
+}
+
+.ek-shadow-neon-green-300:focus {
+  box-shadow: none;
+}
+
+/* border */
+
 .ek-border-dotted-spring-green {
   border: 2px dotted var(--spring-green) !important;
 }
@@ -193,6 +200,8 @@
 .ek-link-gradient:hover {
   background-position: 100% 0;
 }
+
+/* underline */
 
 .ek-wavy-underline-lime-green {
   text-decoration-line: underline;
@@ -277,8 +286,12 @@
   background-color: #16222a !important;
   color: var(--lime-green) !important;
 }
+.ek-list-group-item {
+  transition: transform 0.5s;
+}
 .ek-list-group-item:hover {
   background-color: #232323 !important;
+  transform: scale(1.02);
 }
 
 .ek-list-group-item:hover .ek-play-circle-icon {
@@ -294,6 +307,16 @@
 .ek-blank-h-150 {
   height: 150px;
   background: transparent;
+}
+
+.ek-border-dim-gray {
+  border-color: var(--dim-gray) !important;
+}
+.ek-border-dotted {
+  border-style: dotted !important;
+}
+.ek-border-bottom-200 {
+  border-bottom-width: 2px !important;
 }
 
 .ek-scroll-container {
