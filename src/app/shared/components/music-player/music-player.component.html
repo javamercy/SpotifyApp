@@ -40,15 +40,10 @@
         <div class="ms-auto ek-controls">
           <div>
             <img
-              [src]="
-                (isPlaying | async) ? 'pause-circle.svg' : 'play-circle.svg'
-              "
+              [src]="isPlaying ? 'pause-circle.svg' : 'play-circle.svg'"
               alt="toggle"
               (click)="toggle()" />
           </div>
-        </div>
-        <div class="ek-progress-container">
-          <div class="ek-progress" [ngStyle]="{ width: progress }"></div>
         </div>
       </div>
       <audio
@@ -66,7 +61,7 @@
         width="50"
         height="50"
         color="var(--white)"
-        path="icons/icons.svg#playFill"
+        path="icons/icons.svg#{{ isPlaying ? 'pauseFill' : 'playFill' }}"
         (click)="show()"
         [appCircularProgressBar]="{
           percentage: progress,

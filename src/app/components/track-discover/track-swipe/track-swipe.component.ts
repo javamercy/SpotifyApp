@@ -15,7 +15,7 @@ import { Track } from "../../../models/track.model";
 import { SharedModule } from "../../../shared/modules/shared.module";
 import { MusicPlayerService } from "../../../services/music-player.service";
 import { SwiperContainer } from "swiper/element";
-import { Observable, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { AverageColorDirective } from "../../../shared/directives/average-color.directive";
 import { TextScrollDirective } from "../../../shared/directives/text-scroll.directive";
 import { UserService } from "../../../services/user.service";
@@ -31,7 +31,7 @@ import { UserService } from "../../../services/user.service";
 export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() tracks: Track[];
   @Input() genre: string;
-  nowPlayingTrack: Observable<Track | null>;
+  nowPlayingTrack: Track | null;
   @Input() likedTracks: Map<string, Track>;
   @Input() audioRef: ElementRef<HTMLAudioElement>;
   @ViewChild("swiperContainer")
@@ -49,7 +49,11 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.getNowPlayingTrack();
+    this.subscriptions.add(
+      this.musicPlayerService.track$.subscribe(track => {
+        this.nowPlayingTrack = track;
+      })
+    );
   }
 
   ngAfterViewInit(): void {
@@ -105,10 +109,6 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
 
   play(track: Track) {
     this.musicPlayerService.play(track);
-  }
-
-  getNowPlayingTrack(): void {
-    this.nowPlayingTrack = this.musicPlayerService.track$;
   }
 
   saveTrack(track: Track) {

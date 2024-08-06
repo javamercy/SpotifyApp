@@ -75,7 +75,7 @@ export class CircularProgressBarDirective implements OnChanges {
       this.renderer.setStyle(this.svg, "position", "absolute");
       this.renderer.setStyle(this.svg, "z-index", "9999");
       this.renderer.setStyle(this.svg, "top", "50%");
-      this.renderer.setStyle(this.svg, "left", "46%");
+      this.renderer.setStyle(this.svg, "left", "50%");
       this.renderer.setStyle(this.svg, "transform", "translate(-50%, -50%)");
     }
   }

@@ -11,7 +11,7 @@
           <swiper-slide
             lazy="true"
             class="overflow-hidden rounded"
-            [class.ek-box-shadow]="(nowPlayingTrack | async)?.id === track.id">
+            [class.ek-box-shadow]="nowPlayingTrack?.id === track.id">
             <div class="card position-relative">
               <img
                 class="card-img-top"
@@ -24,17 +24,13 @@
                   <span
                     class="ek-scroll-item fw-bold"
                     #scrollItem
-                    [class.animate]="
-                      track.id === (nowPlayingTrack | async)?.id
-                    ">
+                    [class.animate]="track.id === nowPlayingTrack?.id">
                     {{ track.name }}
                   </span>
                   <div
                     class="ek-scroll-item"
                     #scrollItem
-                    [class.animate]="
-                      track.id === (nowPlayingTrack | async)?.id
-                    ">
+                    [class.animate]="track.id === nowPlayingTrack?.id">
                     {{ track.artists[0].name }}
                   </div>
                 </div>

@@ -8,5 +8,7 @@
         }
       }
     ]
-  }
+  },
+  "editor.fontSize": 16,
+  "editor.fontFamily": "JetBrains Mono SemiBold"
 }

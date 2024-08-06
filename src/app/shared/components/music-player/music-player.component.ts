@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { MusicPlayerService } from "../../../services/music-player.service";
 import { Track } from "../../../models/track.model";
-import { Observable, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { SharedModule } from "../../modules/shared.module";
 import {
   animate,
@@ -49,9 +49,9 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
   @ViewChild("audioRef") public readonly audioRef: ElementRef<HTMLAudioElement>;
   currentTrack: Track | null;
   progress = 0;
-  isPlaying: Observable<boolean>;
+  isPlaying: boolean;
   subscriptions: Subscription;
-  showPlayer = false;
+  showPlayer = true;
 
   constructor(private musicPlayerService: MusicPlayerService) {
     this.subscriptions = new Subscription();
@@ -61,6 +61,12 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.musicPlayerService.track$.subscribe(track => {
         this.currentTrack = track;
+      })
+    );
+
+    this.subscriptions.add(
+      this.musicPlayerService.isPlaying$.subscribe(isPlaying => {
+        this.isPlaying = isPlaying;
       })
     );
   }
