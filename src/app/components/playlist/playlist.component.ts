@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+} from "@angular/core";
 import { Playlist } from "../../models/playlist.model";
 import { PlaylistService } from "../../services/playlist.service";
 import { ActivatedRoute } from "@angular/router";
@@ -9,6 +15,7 @@ import { User } from "../../models/user.model";
 import { MsToTimePipe } from "../../pipes/ms-to-time.pipe";
 import { MusicPlayerService } from "../../services/music-player.service";
 import { PlaylistTrackItem } from "../../models/playlist-track-item.model";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: "app-playlist",
@@ -19,49 +26,46 @@ import { PlaylistTrackItem } from "../../models/playlist-track-item.model";
 })
 export class PlaylistComponent implements OnInit, OnDestroy {
   playlist: Playlist;
-  subscription: Subscription;
   owner: User;
-  genres: Map<string, number>;
+  selectedTrack: PlaylistTrackItem;
+
+  @ViewChild("modal") private readonly modal: ElementRef;
+  private readonly subscriptions: Subscription = new Subscription();
 
   constructor(
     private playlistService: PlaylistService,
     private userService: UserService,
     private musicPlayerService: MusicPlayerService,
-    private activatedRoute: ActivatedRoute
-  ) {
-    this.subscription = new Subscription();
-    this.genres = new Map<string, number>();
-  }
+    private activatedRoute: ActivatedRoute,
+    private toastrService: ToastrService
+  ) {}
 
   ngOnInit() {
-    this.getPlaylist();
+    this.subscriptions.add(
+      this.activatedRoute.params.subscribe(params => {
+        const id = params["id"];
+        this.getPlaylist(id);
+      })
+    );
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
-  getPlaylist() {
-    this.subscription.add(
-      this.activatedRoute.params.subscribe({
-        next: params => {
-          this.subscription.add(
-            this.playlistService.getById(params["id"]).subscribe({
-              next: playlist => {
-                this.playlist = playlist;
-                console.log(playlist);
-
-                this.getOwner(playlist.owner.id);
-              },
-            })
-          );
+  getPlaylist(id: string) {
+    this.subscriptions.add(
+      this.playlistService.getById(id).subscribe({
+        next: playlist => {
+          this.playlist = playlist;
+          this.getOwner(playlist.owner.id);
         },
       })
     );
   }
 
   getOwner(id: string) {
-    this.subscription.add(
+    this.subscriptions.add(
       this.userService.getById(id).subscribe({
         next: owner => {
           this.owner = owner;
@@ -73,5 +77,31 @@ export class PlaylistComponent implements OnInit, OnDestroy {
 
   play(track: PlaylistTrackItem) {
     this.musicPlayerService.play(track.track);
+  }
+
+  getJoinedArtists(artists: { name: string }[]) {
+    if (!artists || artists.length == 0) return "";
+    return artists.map(artist => artist.name).join(", ");
+  }
+
+  setSelectedTrack(track: PlaylistTrackItem, event: Event) {
+    event.stopPropagation();
+    this.selectedTrack = track;
+  }
+
+  like(track: PlaylistTrackItem) {
+    this.userService.saveTrack(track.track.id).subscribe({
+      next: () => {
+        this.toastrService.success("Track saved to your library", null, {
+          tapToDismiss: true,
+          positionClass: "toast-top-right",
+          timeOut: 2500,
+          progressBar: true,
+          closeButton: false,
+        });
+        this.selectedTrack = null;
+      },
+      error: error => console.error(error),
+    });
   }
 }

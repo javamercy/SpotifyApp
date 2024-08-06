@@ -113,7 +113,7 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
 
   saveTrack(track: Track) {
     this.subscriptions.add(
-      this.userService.saveTrack(track).subscribe(response => {
+      this.userService.saveTrack(track.id).subscribe(response => {
         console.log(response);
       })
     );
@@ -121,7 +121,7 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
 
   unsaveTrack(track: Track) {
     this.subscriptions.add(
-      this.userService.unsaveTrack(track).subscribe(response => {
+      this.userService.unsaveTrack(track.id).subscribe(response => {
         console.log(response);
       })
     );

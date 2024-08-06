@@ -1,1 +1,13 @@
+.modal.show {
+  backdrop-filter: blur(4px) !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
 
+.ek-options-list-group > * {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.ek-options-list-group > *:hover {
+  transform: scale(1.1);
+}

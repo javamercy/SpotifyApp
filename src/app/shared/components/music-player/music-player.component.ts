@@ -18,11 +18,12 @@ import {
   trigger,
 } from "@angular/animations";
 import { TextScrollDirective } from "../../directives/text-scroll.directive";
+import { CircularProgressBarDirective } from "../../directives/circular-progress-bar.directive";
 
 @Component({
   selector: "app-music-player",
   standalone: true,
-  imports: [SharedModule, TextScrollDirective],
+  imports: [SharedModule, TextScrollDirective, CircularProgressBarDirective],
   templateUrl: "./music-player.component.html",
   styleUrls: ["./music-player.component.css"],
   animations: [
@@ -47,13 +48,10 @@ import { TextScrollDirective } from "../../directives/text-scroll.directive";
 export class MusicPlayerComponent implements OnInit, OnDestroy {
   @ViewChild("audioRef") public readonly audioRef: ElementRef<HTMLAudioElement>;
   currentTrack: Track | null;
-  progress: string;
+  progress = 0;
   isPlaying: Observable<boolean>;
   subscriptions: Subscription;
   showPlayer = false;
-
-  private radius = 45;
-  private circumference = 2 * Math.PI * this.radius;
 
   constructor(private musicPlayerService: MusicPlayerService) {
     this.subscriptions = new Subscription();
@@ -107,13 +105,12 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
     const duration = this.audioRef.nativeElement.duration;
 
     const progress = Math.round((currentTime / duration) * 100);
-    this.progress = `${progress}%`;
+    this.progress = progress;
   }
 
   onTrackEnded() {
-    this.progress = "0%";
+    this.progress = 0;
     this.musicPlayerService.pause();
-    this.resetProgress();
   }
 
   close() {
@@ -121,29 +118,16 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
     this.musicPlayerService.clearTrack();
   }
 
-  minimize() {
+  show() {
+    this.showPlayer = true;
+  }
+
+  hide() {
     this.showPlayer = false;
   }
 
   clear() {
-    this.progress = "0%";
+    this.progress = 0;
     this.audioRef.nativeElement.currentTime = 0;
-  }
-
-  updateProgress() {
-    const audio = this.audioRef.nativeElement;
-    const progress = (audio.currentTime / audio.duration) * 100;
-    const offset = this.circumference - (progress / 100) * this.circumference;
-    const progressRing = document.querySelector(
-      ".progress-ring__circle"
-    ) as SVGCircleElement;
-    progressRing.style.strokeDashoffset = `${offset}`;
-  }
-
-  private resetProgress() {
-    const progressRing = document.querySelector(
-      ".progress-ring__circle"
-    ) as SVGCircleElement;
-    progressRing.style.strokeDashoffset = `${this.circumference}`;
   }
 }

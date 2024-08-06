@@ -1,4 +1,4 @@
-<div class="container-md px-4 px-sm-0">
+<div class="container-md px-3 px-sm-0">
   <main>
     @if (playlist) {
       <section>
@@ -94,14 +94,20 @@
                   </div>
                   <div class="ek-text-silver mb-0">
                     <div class="text-truncate">
-                      {{ track.track.artists[0].name }}
+                      {{ getJoinedArtists(track.track.artists) }}
                     </div>
                   </div>
                 </div>
-                <span class="ms-auto d-none d-sm-flex align-items-center gap-2">
-                  <img src="clock.svg" alt="clock" />
-                  {{ track.track.duration_ms | msToTime }}
-                </span>
+                <div class="ms-auto">
+                  <app-icon
+                    width="25"
+                    height="25"
+                    path="icons/icons.svg#threeDotsVertical"
+                    color="white"
+                    data-bs-toggle="modal"
+                    data-bs-target="#optionsModal"
+                    (click)="setSelectedTrack(track, $event)"></app-icon>
+                </div>
               </div>
             </li>
           }
@@ -109,4 +115,51 @@
       </section>
     }
   </main>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal"
+  id="optionsModal"
+  tabindex="-1"
+  aria-labelledby="optionsModal"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    @if (selectedTrack) {
+      <div class="modal-content bg-transparent">
+        <div class="modal-body">
+          <div class="d-flex gap-3">
+            <img
+              [src]="selectedTrack.track.album.images[0].url"
+              class="rounded img-fluid"
+              alt="album image"
+              width="75"
+              height="75" />
+            <div class="d-flex flex-column gap-2">
+              <h5 class="fw-bold mb-0">
+                {{ selectedTrack.track.name }}
+              </h5>
+              <p class="mb-0 fw-light">
+                {{ getJoinedArtists(selectedTrack.track.artists) }}
+              </p>
+            </div>
+          </div>
+          <div
+            class="d-flex align-items-start flex-column gap-4 mt-5 fw-bold ek-options-list-group">
+            <div
+              class="d-inline-flex align-items-center gap-3"
+              (click)="like(selectedTrack)"
+              data-bs-dismiss="modal">
+              <app-icon path="icons/icons.svg#heart"></app-icon>
+              <span>Like</span>
+            </div>
+            <div class="d-inline-flex align-items-center gap-3">
+              <app-icon path="icons/icons.svg#share"></app-icon>
+              <span>Share</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
 </div>

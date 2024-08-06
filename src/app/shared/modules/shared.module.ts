@@ -1,10 +1,11 @@
-import { NgModule } from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { NavbarComponent } from "../components/navbar/navbar.component";
+import { IconComponent } from "../components/icon/icon.component";
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, NavbarComponent],
-  exports: [CommonModule, NavbarComponent],
+  imports: [CommonModule, IconComponent],
+  exports: [CommonModule, IconComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SharedModule {}

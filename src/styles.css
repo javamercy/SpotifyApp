@@ -335,6 +335,19 @@
   animation: scroll var(--animation-duration) linear infinite;
 }
 
+.ek-circle-bg {
+  fill: none;
+  stroke: #eee;
+  stroke-width: 2.8;
+}
+
+.ek-circle {
+  fill: none;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.3s;
+}
+
 @keyframes scroll {
   0% {
     transform: translateX(0);

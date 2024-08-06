@@ -52,7 +52,7 @@
   background-color: var(--dark-violet);
 }
 
-.ek-music-player-minimize {
+.ek-music-player-hider {
   animation: jump 1s ease-in-out infinite 1s;
 }
 
@@ -69,7 +69,7 @@
 }
 
 .ek-music-player-close:hover,
-.ek-music-player-minimize:hover {
+.ek-music-player-hider:hover {
   animation: none;
   transform: scale(1.1);
 }

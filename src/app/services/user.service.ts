@@ -64,11 +64,11 @@ export class UserService {
     return this.http.get<User>(`${this.apiUrl}/users/${id}`);
   }
 
-  saveTrack(track: Track): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/me/tracks?ids=${track.id}`, {});
+  saveTrack(id: string): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/me/tracks?ids=${id}`, {});
   }
 
-  unsaveTrack(track: Track): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/me/tracks?ids=${track.id}`);
+  unsaveTrack(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/me/tracks?ids=${id}`);
   }
 }

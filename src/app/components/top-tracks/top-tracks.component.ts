@@ -49,4 +49,8 @@ export class TopTracksComponent implements OnInit, OnDestroy {
         })
     );
   }
+
+  getJoinedArtists(artists: { name: string }[]) {
+    return artists.map(artist => artist.name).join(", ");
+  }
 }

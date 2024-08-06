@@ -2,23 +2,20 @@
   <div
     class="fixed-bottom bottom-0 start-0 pb-2 mx-3"
     [@slideInOut]="playerState">
-    <div class="text-end pe-2 pb-2">
-      <img
-        src="x-circle.svg"
-        alt="close"
-        class="ek-music-player-close me-2"
-        (click)="close()"
-        role="button"
-        width="40"
-        height="40" />
-      <img
-        src="arrow-right-circle.svg"
-        alt="minimize"
-        class="ek-music-player-minimize"
-        (click)="minimize()"
-        role="button"
-        width="40"
-        height="40" />
+    <div class="d-flex justify-content-between px-2">
+      <app-icon
+        width="30"
+        height="30"
+        color="red"
+        path="icons/icons.svg#xCircleFill"
+        (click)="close()"></app-icon>
+      <app-icon
+        width="35"
+        height="35"
+        color="var(--lime-green)"
+        path="icons/icons.svg#arrowRight"
+        class="ek-music-player-hider"
+        (click)="hide()"></app-icon>
     </div>
     <div class="ek-music-player fw-bold p-2 rounded p-sm-3 position-relative">
       <div class="d-flex mb-1 align-items-center gap-2">
@@ -65,12 +62,17 @@
 
   @if (!showPlayer) {
     <div class="ek-player-menu-icon">
-      <img
-        src="play-circle.svg"
-        alt="music"
-        width="40"
-        role="button"
-        (click)="showPlayer = true" />
+      <app-icon
+        width="50"
+        height="50"
+        color="var(--white)"
+        path="icons/icons.svg#playFill"
+        (click)="show()"
+        [appCircularProgressBar]="{
+          percentage: progress,
+          color: 'var(--dark-green)',
+        }">
+      </app-icon>
     </div>
   }
 }

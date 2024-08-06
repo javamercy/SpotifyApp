@@ -24,13 +24,8 @@
             <a
               class="mb-0 link-underline text-secondary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover"
               role="button">
-              {{ track.artists[0].name }}
+              {{ getJoinedArtists(track.artists) }}
             </a>
-          </div>
-          <div>
-            <a class="text-white"
-              ><img src="play-fill.svg" alt="play" width="25" height="25"
-            /></a>
           </div>
         </li>
       }
