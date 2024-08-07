@@ -50,12 +50,10 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
   currentTrack: Track | null;
   progress = 0;
   isPlaying: boolean;
-  subscriptions: Subscription;
   showPlayer = true;
+  private subscriptions: Subscription = new Subscription();
 
-  constructor(private musicPlayerService: MusicPlayerService) {
-    this.subscriptions = new Subscription();
-  }
+  constructor(private musicPlayerService: MusicPlayerService) {}
 
   ngOnInit() {
     this.subscriptions.add(

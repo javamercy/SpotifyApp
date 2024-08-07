@@ -67,13 +67,12 @@ export class CircularProgressBarDirective implements OnChanges {
     const iconElement = this.el.nativeElement;
 
     if (iconElement) {
-      const width = iconElement.getAttribute("width") || "50";
-      const height = iconElement.getAttribute("height") || "50";
+      const width = parseInt(iconElement.getAttribute("width") || "50", 10);
+      const height = parseInt(iconElement.getAttribute("height") || "50", 10);
 
-      this.renderer.setStyle(this.svg, "width", `${width}px`);
-      this.renderer.setStyle(this.svg, "height", `${height}px`);
+      this.renderer.setStyle(this.svg, "width", `${width + 5}px`);
+      this.renderer.setStyle(this.svg, "height", `${height + 5}px`);
       this.renderer.setStyle(this.svg, "position", "absolute");
-      this.renderer.setStyle(this.svg, "z-index", "9999");
       this.renderer.setStyle(this.svg, "top", "50%");
       this.renderer.setStyle(this.svg, "left", "50%");
       this.renderer.setStyle(this.svg, "transform", "translate(-50%, -50%)");

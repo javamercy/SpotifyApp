@@ -286,12 +286,9 @@
   background-color: #16222a !important;
   color: var(--lime-green) !important;
 }
-.ek-list-group-item {
-  transition: transform 0.5s;
-}
+
 .ek-list-group-item:hover {
   background-color: #232323 !important;
-  transform: scale(1.02);
 }
 
 .ek-list-group-item:hover .ek-play-circle-icon {
