@@ -1,12 +1,12 @@
 <div class="container-sm p-3 p-sm-0">
   <main>
+    <div class="ek-blank-h-50"></div>
     <section #swipeSection>
       @if (selectedGenre && tracks) {
-        <app-track-swipe
-          [audioRef]="audioRef"
-          [genre]="selectedGenre"
-          [likedTracks]="likedTracks"
-          [tracks]="tracks"></app-track-swipe>
+        <app-track-swipe [genre]="selectedGenre" [tracks]="tracks">
+        </app-track-swipe>
+      } @else {
+        <h4 class="text-center">What kind of music would you like listen?</h4>
       }
     </section>
     <section>

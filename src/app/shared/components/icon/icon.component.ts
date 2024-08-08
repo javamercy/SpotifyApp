@@ -24,8 +24,8 @@ import { Component, Input } from "@angular/core";
 })
 export class IconComponent {
   @Input() path: string;
-  @Input() width = "24";
-  @Input() height = "24";
-  @Input() color = "currentColor";
-  @Input() viewBox = "0 0 16 16";
+  @Input() width? = "24";
+  @Input() height? = "24";
+  @Input() color? = "currentColor";
+  @Input() viewBox? = "0 0 16 16";
 }

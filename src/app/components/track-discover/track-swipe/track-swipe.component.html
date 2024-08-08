@@ -1,5 +1,18 @@
 @if (tracks && tracks.length) {
-  <h2 class="text-center mb-5 ek-wavy-underline-dodger-blue">{{ genre }}</h2>
+  <div class="d-flex gap-4 justify-content-center align-items-center mb-4">
+    <h2 class="ek-wavy-underline-dodger-blue">{{ genre }}</h2>
+    <div class="form-check form-switch">
+      <input
+        class="form-check-input ek-switch"
+        type="checkbox"
+        role="switch"
+        id="autoPlaySwitch"
+        (change)="switchAutoplay()"
+        [checked]="autoplay" />
+      <label class="form-check-label" for="autoPlaySwitch"></label>
+    </div>
+  </div>
+
   <div class="row justify-content-center align-items-center">
     <div class="col-sm-5 col-lg-3 col-6">
       <swiper-container
@@ -11,7 +24,7 @@
           <swiper-slide
             lazy="true"
             class="overflow-hidden rounded"
-            [class.ek-box-shadow]="nowPlayingTrack?.id === track.id">
+            [class.ek-box-shadow]="currentlyPlayingTrack?.id === track.id">
             <div class="card position-relative">
               <img
                 class="card-img-top"
@@ -20,31 +33,45 @@
               <div
                 class="card-body border-0"
                 [appAverageColor]="track.album.images[0].url">
-                <div class="ek-scroll-container mb-2" appTextScroll>
+                <div class="ek-scroll-container mb" appTextScroll>
                   <span
                     class="ek-scroll-item fw-bold"
                     #scrollItem
-                    [class.animate]="track.id === nowPlayingTrack?.id">
+                    [class.animate]="track.id === currentlyPlayingTrack?.id">
                     {{ track.name }}
                   </span>
-                  <div
+                </div>
+                <div class="ek-scroll-container" appTextScroll>
+                  <span
                     class="ek-scroll-item"
                     #scrollItem
-                    [class.animate]="track.id === nowPlayingTrack?.id">
+                    [class.animate]="track.id === currentlyPlayingTrack?.id">
                     {{ track.artists[0].name }}
-                  </div>
+                  </span>
                 </div>
-
-                <div class="text-end">
-                  <img
-                    class="img-fluid"
-                    role="button"
-                    [src]="
-                      isAlreadyLiked(track) ? 'heart-fill.svg' : 'heart.svg'
+                <div class="d-flex justify-content-end gap-4 mt-2">
+                  <app-icon
+                    width="25"
+                    height="25"
+                    [color]="
+                      track.id === currentlyPlayingTrack?.id && isPlaying
+                        ? 'var(--spring-green)'
+                        : 'currentColor'
                     "
-                    width="35"
-                    height="35"
-                    (click)="toggleLike(track)" />
+                    path="icons/icons.svg{{
+                      currentlyPlayingTrack?.id === track.id && isPlaying
+                        ? '#pauseCircle'
+                        : '#playCircle'
+                    }}
+                    "
+                    (click)="togglePlay(track)"></app-icon>
+                  <app-icon
+                    width="25"
+                    height="25"
+                    path="icons/icons.svg{{
+                      isAlreadyLiked(track) ? '#heartFill' : '#heart'
+                    }}"
+                    (click)="toggleLike(track)"></app-icon>
                 </div>
               </div>
             </div>
@@ -54,4 +81,3 @@
     </div>
   </div>
 }
-<audio #audioRef></audio>

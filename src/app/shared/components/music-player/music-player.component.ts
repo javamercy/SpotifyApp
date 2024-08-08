@@ -2,9 +2,10 @@ import {
   Component,
   ElementRef,
   ViewChild,
-  OnInit,
   OnDestroy,
   HostListener,
+  OnInit,
+  AfterViewInit,
 } from "@angular/core";
 import { MusicPlayerService } from "../../../services/music-player.service";
 import { Track } from "../../../models/track.model";
@@ -45,9 +46,9 @@ import { CircularProgressBarDirective } from "../../directives/circular-progress
     ]),
   ],
 })
-export class MusicPlayerComponent implements OnInit, OnDestroy {
+export class MusicPlayerComponent implements OnDestroy, OnInit, AfterViewInit {
   @ViewChild("audioRef") public readonly audioRef: ElementRef<HTMLAudioElement>;
-  currentTrack: Track | null;
+  currentlyPlayingTrack: Track | null;
   progress = 0;
   isPlaying: boolean;
   showPlayer = true;
@@ -55,18 +56,31 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
 
   constructor(private musicPlayerService: MusicPlayerService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.subscriptions.add(
       this.musicPlayerService.track$.subscribe(track => {
-        this.currentTrack = track;
+        this.currentlyPlayingTrack = track;
+
+        if (this.audioRef && track) {
+          this.updateAudio(track);
+        }
       })
     );
 
     this.subscriptions.add(
       this.musicPlayerService.isPlaying$.subscribe(isPlaying => {
         this.isPlaying = isPlaying;
+        if (this.audioRef && this.currentlyPlayingTrack) {
+          this.updatePlayback(isPlaying);
+        }
       })
     );
+  }
+
+  ngAfterViewInit(): void {
+    if (this.audioRef && this.currentlyPlayingTrack) {
+      this.updateAudio(this.currentlyPlayingTrack);
+    }
   }
 
   ngOnDestroy(): void {
@@ -83,43 +97,40 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
     this.toggle();
   }
 
-  play(track: Track) {
-    this.audioRef.nativeElement.src = track.preview_url;
-    this.audioRef.nativeElement.play();
-    this.musicPlayerService.play(track);
-  }
-
   toggle() {
     if (this.audioRef.nativeElement.paused) {
       this.audioRef.nativeElement.play();
-      this.musicPlayerService.play(this.currentTrack);
     } else {
       this.audioRef.nativeElement.pause();
-      this.musicPlayerService.pause();
     }
+    this.musicPlayerService.toggle();
   }
 
   pause() {
-    this.audioRef.nativeElement.pause();
     this.musicPlayerService.pause();
+  }
+
+  onRightClick(event: MouseEvent) {
+    event.preventDefault();
+    this.toggle();
   }
 
   onTimeUpdate() {
     const currentTime = this.audioRef.nativeElement.currentTime;
     const duration = this.audioRef.nativeElement.duration;
 
-    const progress = Math.round((currentTime / duration) * 100);
+    const progress: number = Math.round((currentTime / duration) * 100) || 0;
     this.progress = progress;
   }
 
   onTrackEnded() {
-    this.progress = 0;
+    this.reset();
     this.musicPlayerService.pause();
   }
 
   close() {
-    this.showPlayer = false;
-    this.musicPlayerService.clearTrack();
+    this.hide();
+    this.musicPlayerService.clear();
   }
 
   show() {
@@ -130,8 +141,26 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
     this.showPlayer = false;
   }
 
-  clear() {
+  reset() {
     this.progress = 0;
     this.audioRef.nativeElement.currentTime = 0;
+    this.audioRef.nativeElement.pause();
+  }
+
+  getJoinedArtists(artists: { name: string }[]) {
+    return artists.map(artist => artist.name).join(", ");
+  }
+
+  private updatePlayback(isPlaying: boolean) {
+    if (isPlaying && this.audioRef.nativeElement.paused) {
+      this.audioRef.nativeElement.play();
+    } else if (!isPlaying && !this.audioRef.nativeElement.paused) {
+      this.audioRef.nativeElement.pause();
+    }
+  }
+
+  private updateAudio(track: Track) {
+    this.audioRef.nativeElement.src = track.preview_url;
+    this.updatePlayback(this.isPlaying);
   }
 }

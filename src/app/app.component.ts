@@ -3,8 +3,9 @@ import { RouterOutlet } from "@angular/router";
 import { NavbarComponent } from "./shared/components/navbar/navbar.component";
 import { MusicPlayerComponent } from "./shared/components/music-player/music-player.component";
 import { FooterComponent } from "./shared/components/footer/footer.component";
-import { NgxSpinnerService } from "ngx-spinner";
 import { MusicPlayerService } from "./services/music-player.service";
+import { map, Observable } from "rxjs";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: "app-root",
@@ -14,29 +15,18 @@ import { MusicPlayerService } from "./services/music-player.service";
     NavbarComponent,
     MusicPlayerComponent,
     FooterComponent,
+    CommonModule,
   ],
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.css",
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppComponent implements OnInit {
-  isLoding: boolean;
-  isTrack: boolean;
+  isTrack: Observable<boolean>;
 
-  constructor(
-    private ngxSpinnerService: NgxSpinnerService,
-    private musicPlayerService: MusicPlayerService
-  ) {}
+  constructor(private musicPlayerService: MusicPlayerService) {}
 
   ngOnInit() {
-    this.ngxSpinnerService.spinnerObservable.subscribe(status => {
-      if (status) {
-        this.isLoding = status.show;
-      }
-    });
-
-    this.musicPlayerService.track$.subscribe(track => {
-      this.isTrack = !!track;
-    });
+    this.isTrack = this.musicPlayerService.track$.pipe(map(track => !!track));
   }
 }

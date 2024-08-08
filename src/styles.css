@@ -297,12 +297,22 @@
 
 .ek-box-shadow {
   box-shadow:
-    0 0 10px var(--dark-green),
-    0 0 20px var(--forest-green);
+    0 0 10px var(--dim-gray),
+    0 0 20px var(--dim-gray);
 }
 
 .ek-blank-h-150 {
   height: 150px;
+  background: transparent;
+}
+
+.ek-blank-h-100 {
+  height: 100px;
+  background: transparent;
+}
+
+.ek-blank-h-50 {
+  height: 50px;
   background: transparent;
 }
 
@@ -334,13 +344,11 @@
 
 .ek-circle-bg {
   fill: none;
-  stroke: #eee;
-  stroke-width: 2.8;
+  stroke: transparent;
 }
 
 .ek-circle {
   fill: none;
-  stroke-width: 2.8;
   stroke-linecap: round;
   transition: stroke-dasharray 0.3s;
 }
@@ -375,6 +383,5 @@ body {
 }
 
 img {
-  aspect-ratio: 1/1;
   object-fit: cover;
 }

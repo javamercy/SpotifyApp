@@ -30,11 +30,9 @@ import { FilterGenresPipe } from "../../pipes/filter-genres.pipe";
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class TrackDiscoverComponent implements OnInit {
-  @ViewChild("audioRef") audioRef: ElementRef<HTMLAudioElement>;
   @ViewChild("swipeSection") swipeSection: ElementRef<HTMLElement>;
   nowPlayingTrack: Track;
   tracks: Track[];
-  likedTracks: Map<string, Track> = new Map<string, Track>();
   genres: string[];
   selectedGenre: string;
   filterText = "";

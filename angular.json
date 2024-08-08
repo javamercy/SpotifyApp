@@ -30,7 +30,8 @@
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/ngx-spinner/animations/square-jelly-box.css",
               "node_modules/swiper/swiper-bundle.min.css",
-              "node_modules/animate.css/animate.min.css"
+              "node_modules/animate.css/animate.min.css",
+              "node_modules/@sweetalert2/theme-dark/dark.css"
             ],
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"

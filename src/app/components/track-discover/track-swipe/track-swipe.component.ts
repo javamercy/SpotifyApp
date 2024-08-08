@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
@@ -8,8 +9,6 @@ import {
   AfterViewInit,
   OnChanges,
   SimpleChanges,
-  ViewChildren,
-  QueryList,
 } from "@angular/core";
 import { Track } from "../../../models/track.model";
 import { SharedModule } from "../../../shared/modules/shared.module";
@@ -19,6 +18,7 @@ import { Subscription } from "rxjs";
 import { AverageColorDirective } from "../../../shared/directives/average-color.directive";
 import { TextScrollDirective } from "../../../shared/directives/text-scroll.directive";
 import { UserService } from "../../../services/user.service";
+import { LocalStorageService } from "../../../services/local-storage.service";
 
 @Component({
   selector: "app-track-swipe",
@@ -31,41 +31,75 @@ import { UserService } from "../../../services/user.service";
 export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() tracks: Track[];
   @Input() genre: string;
-  nowPlayingTrack: Track | null;
-  @Input() likedTracks: Map<string, Track>;
-  @Input() audioRef: ElementRef<HTMLAudioElement>;
+  currentlyPlayingTrack: Track | null;
+  isPlaying: boolean;
+  likedTracks = new Map<string, Track>();
+  autoplay: boolean;
   @ViewChild("swiperContainer")
   private readonly swiperContainer: ElementRef<SwiperContainer>;
-  private subscriptions: Subscription = new Subscription();
-
-  @ViewChildren("scrollItem")
-  private readonly scrollItems: QueryList<ElementRef<HTMLDivElement>>;
-
-  autoPlay = true;
-
+  private readonly subscriptions: Subscription = new Subscription();
   constructor(
     private musicPlayerService: MusicPlayerService,
-    private userService: UserService
+    private userService: UserService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit(): void {
+    this.autoplay = this.localStorageService.get<boolean>("autoplay") || false;
     this.subscriptions.add(
       this.musicPlayerService.track$.subscribe(track => {
-        this.nowPlayingTrack = track;
+        this.currentlyPlayingTrack = track;
+      })
+    );
+
+    this.subscriptions.add(
+      this.musicPlayerService.isPlaying$.subscribe(isPlaying => {
+        this.isPlaying = isPlaying;
       })
     );
   }
 
   ngAfterViewInit(): void {
     this.addEventListeners();
+    this.popupSwal();
   }
 
   togglePlay(track: Track) {
-    this.musicPlayerService.togglePlay(track);
+    if (
+      this.currentlyPlayingTrack &&
+      this.currentlyPlayingTrack.id === track.id
+    ) {
+      this.musicPlayerService.toggle();
+    } else {
+      this.musicPlayerService.play(track);
+    }
   }
 
-  toggleAutoplay(checked: boolean) {
-    this.autoPlay = checked;
+  popupSwal() {
+    const isAutoplay = this.localStorageService.get<boolean>("autoplay");
+
+    if (isAutoplay === null) {
+      Swal.fire({
+        title: "Welcome to the Discover!",
+        text: "Swipe to discover new tracks",
+        icon: "info",
+        confirmButtonText: "Got it!",
+      }).then(() => {
+        Swal.fire({
+          title: "Tip",
+          text: "Would you like to enable autoplay? You can always change this setting right above the cards",
+          icon: "question",
+          showCancelButton: true,
+          cancelButtonText: "No",
+          confirmButtonText: "Yes",
+        }).then((result: { isConfirmed: boolean }) => {
+          if (result.isConfirmed) {
+            this.autoplay = true;
+            this.localStorageService.set("autoplay", this.autoplay);
+          }
+        });
+      });
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -75,22 +109,52 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   resetSwiper() {
+    this.musicPlayerService.clear();
     this.swiperContainer.nativeElement.swiper.slideTo(0);
-    this.musicPlayerService.clearTrack();
   }
 
   toggleLike(track: Track) {
     if (this.isAlreadyLiked(track)) {
       this.likedTracks.delete(track.id);
-      this.unsaveTrack(track);
+      this.save(track);
     } else {
       this.likedTracks.set(track.id, track);
-      this.saveTrack(track);
+      this.unsave(track);
     }
   }
 
   isAlreadyLiked(track: Track): boolean {
     return this.likedTracks.has(track.id);
+  }
+
+  play(track: Track) {
+    this.musicPlayerService.play(track);
+  }
+
+  save(track: Track) {
+    this.subscriptions.add(
+      this.userService.saveTrack(track.id).subscribe({
+        next: response => {
+          console.log(response);
+        },
+        error: error => {
+          console.log(error);
+        },
+      })
+    );
+  }
+
+  unsave(track: Track) {
+    this.subscriptions.add(
+      this.userService.unsaveTrack(track.id).subscribe({
+        next: response => {
+          console.log(response);
+        },
+        error: error => {
+          console.log(error);
+        },
+      })
+    );
   }
 
   addEventListeners() {
@@ -99,31 +163,16 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
 
   onSlideChange() {
     this.swiperContainer.nativeElement.swiper.on("slideChange", () => {
-      const index = this.swiperContainer.nativeElement.swiper.realIndex;
-      const track = this.tracks[index];
-      if (this.autoPlay) {
-        this.play(track);
+      if (this.autoplay) {
+        const index = this.swiperContainer.nativeElement.swiper.realIndex;
+        const track = this.tracks[index];
+        this.musicPlayerService.play(track);
       }
     });
   }
 
-  play(track: Track) {
-    this.musicPlayerService.play(track);
-  }
-
-  saveTrack(track: Track) {
-    this.subscriptions.add(
-      this.userService.saveTrack(track.id).subscribe(response => {
-        console.log(response);
-      })
-    );
-  }
-
-  unsaveTrack(track: Track) {
-    this.subscriptions.add(
-      this.userService.unsaveTrack(track.id).subscribe(response => {
-        console.log(response);
-      })
-    );
+  switchAutoplay() {
+    this.autoplay = !this.autoplay;
+    this.localStorageService.set("autoplay", this.autoplay);
   }
 }

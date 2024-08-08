@@ -1,4 +1,4 @@
-@if (currentTrack && currentTrack.preview_url) {
+@if (currentlyPlayingTrack) {
   <div
     class="fixed-bottom bottom-0 start-0 pb-2 mx-3"
     [@slideInOut]="playerState">
@@ -17,22 +17,22 @@
         class="ek-music-player-hider"
         (click)="hide()"></app-icon>
     </div>
-    <div class="ek-music-player fw-bold p-2 rounded p-1 position-relative">
+    <div class="ek-music-player p-2 rounded p-1 position-relative">
       <div class="d-flex align-items-center gap-2">
         <img
-          [src]="currentTrack.album.images[0].url"
-          class="img-fluid rounded-2"
+          [src]="currentlyPlayingTrack.album.images[0].url"
+          class="img-fluid rounded-circle"
           width="45" />
 
         <div class="d-flex flex-column overflow-hidden m-2">
           <div class="ek-scroll-container" appTextScroll>
-            <div class="ek-text-spring-green ek-scroll-item">
-              {{ currentTrack.name }}
+            <div class="ek-scroll-item fw-bold">
+              {{ currentlyPlayingTrack.name }}
             </div>
           </div>
           <div class="ek-scroll-container" appTextScroll>
             <div class="ek-text-silver ek-scroll-item">
-              {{ currentTrack.artists[0].name }}
+              {{ getJoinedArtists(currentlyPlayingTrack.artists) }}
             </div>
           </div>
         </div>
@@ -47,35 +47,38 @@
             height="30"
             path="icons/icons.svg{{
               isPlaying ? '#pauseCircleFill' : '#playCircleFill'
-            }}"></app-icon>
+            }}"
+            (click)="toggle()"></app-icon>
           <app-icon
             width="25"
             height="25"
             path="icons/icons.svg#forward"></app-icon>
         </div>
       </div>
-      <audio
-        #audioRef
-        (timeupdate)="onTimeUpdate()"
-        (ended)="onTrackEnded()"
-        [autoplay]="true"
-        [src]="currentTrack?.preview_url"></audio>
     </div>
   </div>
 
   @if (!showPlayer) {
-    <div class="ek-player-menu-icon">
+    <div
+      class="ek-player-menu-icon"
+      (click)="show()"
+      (contextmenu)="onRightClick($event)">
       <app-icon
         width="50"
         height="50"
         color="var(--white)"
         path="icons/icons.svg#{{ isPlaying ? 'pauseFill' : 'playFill' }}"
-        (click)="show()"
         [appCircularProgressBar]="{
           percentage: progress,
-          color: 'var(--dark-green)',
+          color: 'var(--forest-green)',
+          strokeWidth: 2,
         }">
       </app-icon>
     </div>
   }
+
+  <audio
+    #audioRef
+    (timeupdate)="onTimeUpdate()"
+    (ended)="onTrackEnded()"></audio>
 }
