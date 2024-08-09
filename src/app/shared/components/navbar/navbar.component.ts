@@ -1,9 +1,15 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  HostListener,
+  ViewChild,
+  ElementRef,
+} from "@angular/core";
 import { User } from "../../../models/user.model";
 import { Subscription } from "rxjs";
 import { AuthService } from "../../../services/auth.service";
 import { Router, RouterModule } from "@angular/router";
-import { LocalStorageService } from "../../../services/local-storage.service";
 import { CommonModule } from "@angular/common";
 
 @Component({
@@ -17,9 +23,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription;
   user: User;
   isAuthenticated: boolean;
+  navbarVisible = false;
+
+  @ViewChild("navbar") private readonly navbar: ElementRef<HTMLElement>;
+
   constructor(
     private authService: AuthService,
-    private localStorageService: LocalStorageService,
     private router: Router
   ) {
     this.subscriptions = new Subscription();
@@ -40,6 +49,23 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+
+  @HostListener("window:scroll", ["$event"])
+  onWindowScroll(): void {
+    if (this.isAuthenticated) return;
+    const scrollY = window.scrollY;
+    const parallaxContainer = document.querySelector(
+      ".ek-parallax-container"
+    ) as HTMLElement;
+    const parallaxContainerPos = parallaxContainer.offsetTop;
+    const navbarHeight = this.navbar.nativeElement.clientHeight;
+
+    if (scrollY > parallaxContainerPos - navbarHeight) {
+      this.navbarVisible = true;
+    } else {
+      this.navbarVisible = false;
+    }
   }
 
   login(): void {

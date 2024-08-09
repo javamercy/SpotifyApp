@@ -1,7 +1,6 @@
 <div class="container">
-  <div class="ek-blank-h-150"></div>
   @if (!isAuthenticated) {
-    <div class="ek-blank-h-150">
+    <div class="ek-container-fluid" #containerFluid>
       <ngx-typed-js
         [strings]="strings"
         [typeSpeed]="30"
@@ -22,37 +21,47 @@
           }
         </figure>
       </ngx-typed-js>
+      <div
+        class="ek-arrow-down bg-success border border-2 border-success rounded-circle"
+        (click)="autoScroll()"
+        #autoScrollArrow>
+        <app-icon
+          width="30"
+          height="30"
+          path="icons/icons.svg#arrowDownCircleFill"></app-icon>
+      </div>
     </div>
   }
 
-  <div class="py-5">
-    @if (isAuthenticated) {
-      @if (currentUser) {
-        <h3 class="text-center">Welcome, {{ currentUser.display_name }}</h3>
-      }
-      <section>
-        @if (trendPlaylists && trendPlaylists.length) {
-          <ng-container
-            *ngTemplateOutlet="
-              featuredPlaylistsTemplate;
-              context: {
-                playlists: trendPlaylists,
-                heading: 'Featured Playlists',
-              }
-            "></ng-container>
-        }
-      </section>
-    } @else {
-      <section>
-        <ng-container *ngTemplateOutlet="unauthenticated"></ng-container>
-      </section>
+  @if (isAuthenticated) {
+    @if (currentUser) {
+      <h3 class="text-center">Welcome, {{ currentUser.display_name }}</h3>
     }
-  </div>
+    <section>
+      @if (trendPlaylists && trendPlaylists.length) {
+        <ng-container
+          *ngTemplateOutlet="
+            featuredPlaylistsTemplate;
+            context: {
+              playlists: trendPlaylists,
+              heading: 'Featured Playlists',
+            }
+          "></ng-container>
+      }
+    </section>
+  } @else {
+    <section>
+      <ng-container *ngTemplateOutlet="unauthenticated"></ng-container>
+    </section>
+  }
 </div>
 
 <ng-template #unauthenticated>
-  <div class="row justify-content-center align-items-center">
-    <div class="col-md-7 d-flex flex-column align-items-center gap-3">
+  <div
+    class="ek-parallax-container d-flex flex-column flex-md-row align-items-center justify-content-center"
+    #parallaxContainer>
+    <div
+      class="ek-parallax-left col-md-7 d-flex flex-column align-items-center gap-3">
       <h1 class="fs-2">Welcome to Magic Spotify</h1>
       <button
         class="btn btn-lg btn-outline-light d-inline-flex gap-2 align-items-center justify-content-center fw-semibold"
@@ -61,7 +70,7 @@
         <img src="spotify.svg" alt="spotify icon" width="30" height="30" />
       </button>
     </div>
-    <div class="col-md-4 overflow-hidden">
+    <div class="ek-parallax-right col-md-4 overflow-hidden">
       <img
         src="spotify_music.jpg"
         class="img-fluid rounded-2"

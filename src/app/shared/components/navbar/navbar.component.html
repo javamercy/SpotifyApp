@@ -1,4 +1,12 @@
-<nav class="navbar navbar-dark navbar-expand px-2 py-3">
+<nav
+  #navbar
+  id="navbar"
+  class="navbar navbar-dark bg-dark navbar-expand px-2 py-3"
+  [ngClass]="{
+    'ek-navbar-fixed': !isAuthenticated,
+    'ek-navbar-hidden': !navbarVisible && !isAuthenticated,
+    'ek-navbar-visible': navbarVisible && !isAuthenticated,
+  }">
   <div class="container-fluid">
     <a class="navbar-brand fw-bolder" routerLink="/">Spotify</a>
     @if (user) {

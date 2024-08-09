@@ -4,6 +4,9 @@ import {
   OnDestroy,
   CUSTOM_ELEMENTS_SCHEMA,
   ViewChild,
+  HostListener,
+  ElementRef,
+  Renderer2,
 } from "@angular/core";
 import { SharedModule } from "../../shared/modules/shared.module";
 import { Subscription } from "rxjs";
@@ -40,13 +43,21 @@ export class HomeComponent implements OnInit, OnDestroy {
   isAuthorShown = false;
   currentAuthor: string;
 
+  @ViewChild("containerFluid")
+  private readonly containerFluid: ElementRef<HTMLElement>;
+  @ViewChild("autoScrollArrow")
+  private readonly autoScrollArrow: ElementRef<HTMLElement>;
+  @ViewChild("parallaxContainer")
+  private readonly parallaxContainer: ElementRef<HTMLElement>;
+
   @ViewChild(NgxTypedJsComponent) private readonly typed: NgxTypedJsComponent;
 
   constructor(
     private userService: UserService,
     private authService: AuthService,
     private playlistService: PlaylistService,
-    private quoteService: QuoteService
+    private quoteService: QuoteService,
+    private renderer: Renderer2
   ) {
     this.subscriptions = new Subscription();
   }
@@ -58,6 +69,50 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
+  }
+
+  @HostListener("window:scroll", ["$event"])
+  onScroll() {
+    if (this.isAuthenticated) return;
+    const scrollY = window.scrollY;
+    const parallaxContainerPos = this.parallaxContainer.nativeElement.offsetTop;
+
+    const navbar = document.getElementById("navbar");
+    const navbarHeight = navbar.clientHeight;
+
+    if (scrollY === 0) {
+      this.renderer.setStyle(
+        this.autoScrollArrow.nativeElement,
+        "display",
+        "block"
+      );
+    } else {
+      this.renderer.setStyle(
+        this.autoScrollArrow.nativeElement,
+        "display",
+        "none"
+      );
+    }
+
+    if (scrollY > parallaxContainerPos - navbarHeight) {
+      this.renderer.addClass(this.parallaxContainer.nativeElement, "scrolled");
+      this.typed.stop();
+    } else {
+      this.renderer.removeClass(
+        this.parallaxContainer.nativeElement,
+        "scrolled"
+      );
+      this.typed.start();
+    }
+  }
+
+  autoScroll() {
+    const parallaxContainerPos = this.parallaxContainer.nativeElement.offsetTop;
+
+    window.scrollTo({
+      top: parallaxContainerPos,
+      behavior: "smooth",
+    });
   }
 
   login() {
