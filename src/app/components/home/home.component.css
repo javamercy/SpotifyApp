@@ -1,7 +1,8 @@
 .ek-container-fluid {
-  height: 75dvh;
+  height: 50dvh;
   display: grid;
   place-items: center;
+  align-items: end;
 }
 
 @media (max-width: 767px) {

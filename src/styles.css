@@ -5,6 +5,10 @@
   --forest-green: #228b22;
   --dark-green: #006400;
   --neon-green: #39ff14;
+  --greenery: #88b04b;
+  --emerald: #009b77;
+  --turquoise: #45b8ac;
+  --blue-turquoise: #55b4b0;
 
   /* blue */
   --light-blue: #add8e6;
@@ -365,6 +369,26 @@
   }
 }
 
+.ek-img-cover {
+  object-fit: cover;
+}
+
+.ek-img-contain {
+  object-fit: contain;
+}
+
+.ek-img-square {
+  aspect-ratio: 1/1;
+}
+
+.ek-btn-cross-rounded {
+  border-top-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+
+  border-top-left-radius: 0.5rem !important;
+  border-bottom-right-radius: 0.5rem !important;
+}
+
 html,
 body {
   height: 100%;
@@ -380,8 +404,4 @@ body {
   display: block;
   height: 100%;
   width: 100%;
-}
-
-img {
-  object-fit: cover;
 }

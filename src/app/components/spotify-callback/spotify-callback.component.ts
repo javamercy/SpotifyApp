@@ -32,10 +32,8 @@ export class SpotifyCallbackComponent implements OnInit, OnDestroy {
         const code = params["code"];
         if (code) {
           this.subscription = this.authService.getToken(code).subscribe({
-            next: () => {
-              this.authService.getCurrentUser().subscribe({
-                complete: () => this.router.navigate(["/"]),
-              });
+            complete: () => {
+              this.router.navigate(["/"]);
             },
           });
         } else {
@@ -46,8 +44,7 @@ export class SpotifyCallbackComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscription.unsubscribe();
+    console.log("SpotifyCallbackComponent destroyed");
   }
 }

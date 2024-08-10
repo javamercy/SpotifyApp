@@ -16,3 +16,7 @@
     transform 0.3s ease-in-out,
     opacity 0.3s ease-in-out;
 }
+
+.ek-navbar-login-btn:hover .ek-navbar-spotify-icon {
+  fill: var(--lime-green);
+}

@@ -27,11 +27,7 @@ export const appConfig: ApplicationConfig = {
       ])
     ),
     provideAnimations(),
-    provideToastr({
-      positionClass: "toast-bottom-right",
-      preventDuplicates: true,
-      closeButton: true,
-    }),
+    provideToastr(),
     importProvidersFrom(NgxTypedJsModule, NgxSpinnerModule),
   ],
 };

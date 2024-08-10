@@ -19,6 +19,7 @@ import { TextScrollDirective } from "../../../shared/directives/text-scroll.dire
 import { UserService } from "../../../services/user.service";
 import { LocalStorageService } from "../../../services/local-storage.service";
 import { ToastrService } from "ngx-toastr";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-track-swipe",
@@ -75,34 +76,37 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  // popupSwal() {
-  //   const isAutoplay = this.localStorageService.get<boolean>("autoplay");
+  popupSwal() {
+    const isAutoplay = this.localStorageService.get<boolean>("autoplay");
 
-  //   if (isAutoplay === null) {
-  //     Swal.fire({
-  //       title: "Welcome to the Discover!",
-  //       text: "Swipe to discover new tracks",
-  //       icon: "info",
-  //       confirmButtonText: "Got it!",
-  //     }).then(() => {
-  //       Swal.fire({
-  //         title: "Tip",
-  //         text: "Would you like to enable autoplay? You can always change this setting right above the cards",
-  //         icon: "question",
-  //         showCancelButton: true,
-  //         cancelButtonText: "No",
-  //         confirmButtonText: "Yes",
-  //       }).then((result: { isConfirmed: boolean }) => {
-  //         if (result.isConfirmed) {
-  //           this.autoplay = true;
-  //           this.localStorageService.set("autoplay", this.autoplay);
-  //         }
-  //       });
-  //     });
-  //   }
-  // }
+    if (isAutoplay === null) {
+      Swal.fire({
+        title: "Welcome to the Discover!",
+        text: "Swipe to discover new tracks",
+        icon: "info",
+        confirmButtonText: "Got it!",
+      }).then(() => {
+        Swal.fire({
+          title: "Tip",
+          text: "Would you like to enable autoplay? You can always change this setting right above the cards",
+          icon: "question",
+          showCancelButton: true,
+          cancelButtonText: "No",
+          confirmButtonText: "Yes",
+        }).then((result: { isConfirmed: boolean }) => {
+          if (result.isConfirmed) {
+            this.autoplay = true;
+            this.localStorageService.set("autoplay", this.autoplay);
+          }
+        });
+      });
+    }
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes["genre"].firstChange) {
+      this.popupSwal();
+    }
     if (changes["genre"] && !changes["genre"].firstChange) {
       this.resetSwiper();
     }
@@ -119,14 +123,12 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
       this.unsave(track);
       this.toastrService.info("Track removed from liked tracks", null, {
         positionClass: "toast-top-right",
-        progressBar: true,
       });
     } else {
       this.likedTracks.set(track.id, track);
       this.save(track);
       this.toastrService.success("Track added to liked tracks", null, {
         positionClass: "toast-top-right",
-        progressBar: true,
       });
     }
   }
@@ -182,5 +184,15 @@ export class TrackSwipeComponent implements OnInit, AfterViewInit, OnChanges {
   switchAutoplay() {
     this.autoplay = !this.autoplay;
     this.localStorageService.set("autoplay", this.autoplay);
+
+    this.toastrService.info(
+      `Autoplay is now ${this.autoplay ? "enabled" : "disabled"}`,
+      null,
+      {
+        positionClass: "toast-top-right",
+        closeButton: false,
+        timeOut: 2000,
+      }
+    );
   }
 }

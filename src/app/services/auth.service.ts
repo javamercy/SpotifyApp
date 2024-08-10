@@ -1,4 +1,10 @@
-import { BehaviorSubject, Observable, shareReplay, tap } from "rxjs";
+import {
+  BehaviorSubject,
+  Observable,
+  shareReplay,
+  Subscription,
+  tap,
+} from "rxjs";
 import { environment } from "./../../environments/environment.development";
 import { Injectable } from "@angular/core";
 import { SpotifyToken } from "../models/spotify-token.model";
@@ -12,18 +18,20 @@ import { AccessToken } from "../models/access-token.model";
   providedIn: "root",
 })
 export class AuthService {
-  private userSubject: BehaviorSubject<User | null>;
-  user$: Observable<User | null>;
-
   private apiUrl = environment.spotify.apiUrl;
+
+  private userSubject: BehaviorSubject<User | null> =
+    new BehaviorSubject<User | null>(null);
+  user$: Observable<User | null> = this.userSubject
+    .asObservable()
+    .pipe(shareReplay(1));
+
+  private subscriptions: Subscription = new Subscription();
 
   constructor(
     private http: HttpClient,
     private localStorageService: LocalStorageService
-  ) {
-    this.userSubject = new BehaviorSubject<User | null>(null);
-    this.user$ = this.userSubject.asObservable().pipe(shareReplay(1));
-  }
+  ) {}
 
   login(): void {
     const directUrl = `${environment.spotify.AuthorizeOptions.url}?client_id=${environment.spotify.AuthorizeOptions.clientId}&response_type=${environment.spotify.AuthorizeOptions.responseType}&redirect_uri=${environment.spotify.AuthorizeOptions.redirectUri}&scope=${environment.spotify.AuthorizeOptions.scope}`;
@@ -38,6 +46,8 @@ export class AuthService {
     body.set("redirect_uri", environment.spotify.AuthorizeOptions.redirectUri);
     body.set("client_id", environment.spotify.TokenOptions.clientId);
     body.set("client_secret", environment.spotify.TokenOptions.clientSecret);
+
+    console.log(body.getAll("client_id"));
 
     return this.http
       .post<SpotifyToken>(
@@ -65,6 +75,15 @@ export class AuthService {
               Constants.SPOTIFY_ACCESS_TOKEN,
               accessToken
             );
+
+            this.subscriptions.add(
+              this.getCurrentUser().subscribe({
+                next: user => {
+                  this.userSubject.next(user);
+                },
+                complete: () => this.subscriptions.unsubscribe(),
+              })
+            );
           },
         })
       );
@@ -76,23 +95,9 @@ export class AuthService {
     this.localStorageService.delete(Constants.USER);
   }
 
-  getCurrentUser(): Observable<User> {
-    if (this.userSubject.value) {
-      return this.user$ as Observable<User>;
-    }
-
+  private getCurrentUser(): Observable<User> {
     const newUrl = `${this.apiUrl}/me`;
-
-    return this.http.get<User>(newUrl).pipe(
-      tap(user => {
-        this.userSubject.next(user);
-      }),
-      shareReplay(1)
-    );
-  }
-
-  setCurrentUser(user: User): void {
-    this.userSubject.next(user);
+    return this.http.get<User>(newUrl);
   }
 
   isAuthenticated(): boolean {
@@ -111,7 +116,7 @@ export class AuthService {
       return false;
     }
 
-    return true;
+    return !!this.userSubject.value;
   }
 
   private clearToken(): void {

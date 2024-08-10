@@ -7,44 +7,47 @@ import {
   ElementRef,
 } from "@angular/core";
 import { User } from "../../../models/user.model";
-import { Subscription } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { AuthService } from "../../../services/auth.service";
 import { Router, RouterModule } from "@angular/router";
 import { CommonModule } from "@angular/common";
+import { IconComponent } from "../icon/icon.component";
 
 @Component({
   selector: "app-navbar",
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, IconComponent],
   templateUrl: "./navbar.component.html",
   styleUrl: "./navbar.component.css",
 })
 export class NavbarComponent implements OnInit, OnDestroy {
-  private subscriptions: Subscription;
-  user: User;
+  user: Observable<User>;
   isAuthenticated: boolean;
   navbarVisible = false;
+  iconColor = "currentColor";
+
+  private subscriptions: Subscription = new Subscription();
 
   @ViewChild("navbar") private readonly navbar: ElementRef<HTMLElement>;
 
   constructor(
     private authService: AuthService,
     private router: Router
-  ) {
-    this.subscriptions = new Subscription();
+  ) {}
+
+  onMouseOver(): void {
+    this.iconColor = "var(--forest-green)";
+  }
+
+  onMouseOut(): void {
+    this.iconColor = "currentColor";
   }
 
   ngOnInit(): void {
-    this.subscriptions.add(
-      this.router.events.subscribe({
-        next: () => {
-          this.isAuthenticated = this.checkifUserAuthenticated();
-          if (this.isAuthenticated) {
-            this.getCurrentUser();
-          }
-        },
-      })
-    );
+    this.isAuthenticated = this.authService.isAuthenticated();
+    console.log(this.isAuthenticated);
+
+    this.user = this.authService.user$;
   }
 
   ngOnDestroy(): void {
@@ -75,18 +78,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   logout(): void {
     this.authService.logout();
     this.router.navigate(["/"]);
-  }
-
-  getCurrentUser(): void {
-    this.authService.user$.subscribe({
-      next: user => {
-        this.user = user;
-      },
-    });
-  }
-
-  checkifUserAuthenticated(): boolean {
-    return this.authService.isAuthenticated();
   }
 
   log(value: unknown): boolean {

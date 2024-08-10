@@ -22,6 +22,7 @@ import { SimplifiedPlaylist } from "../../models/simplified.playlist.model";
 import { QuoteService } from "../../services/quote.service";
 import { NgxTypedJsComponent, NgxTypedJsModule } from "ngx-typed-js";
 import { Quote } from "../../models/quote.model";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
   selector: "app-home",
@@ -108,7 +109,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   autoScroll() {
     const parallaxContainerPos = this.parallaxContainer.nativeElement.offsetTop;
-
     window.scrollTo({
       top: parallaxContainerPos,
       behavior: "smooth",
@@ -143,9 +143,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   getCurrentUser(): void {
     this.subscriptions.add(
-      this.authService.getCurrentUser().subscribe({
+      this.authService.user$.subscribe({
         next: user => {
           this.currentUser = user;
+          console.log(AsyncPipe.prototype.transform(this.authService.user$));
+          console.log("aaaa");
         },
         error: error => console.error(error),
       })

@@ -35,7 +35,20 @@
 
   @if (isAuthenticated) {
     @if (currentUser) {
-      <h3 class="text-center">Welcome, {{ currentUser.display_name }}</h3>
+      <div class="ek-blank-h-100"></div>
+      <div class="row align-items-md-center">
+        <div class="col-md-8">
+          <h3 class="text-center font-monospace">
+            Welcome, {{ currentUser.display_name }}
+          </h3>
+        </div>
+        <div class="col-md-4">
+          <img
+            [src]="currentUser.images[0]?.url || 'music_lonely.png'"
+            [alt]="currentUser.display_name"
+            class="img-fluid rounded-circle ek-img-square ek-img-cover" />
+        </div>
+      </div>
     }
     <section>
       @if (trendPlaylists && trendPlaylists.length) {
@@ -64,10 +77,15 @@
       class="ek-parallax-left col-md-7 d-flex flex-column align-items-center gap-3">
       <h1 class="fs-2">Welcome to Magic Spotify</h1>
       <button
-        class="btn btn-lg btn-outline-light d-inline-flex gap-2 align-items-center justify-content-center fw-semibold"
+        class="btn btn-lg btn-outline-light ek-btn-cross-rounded d-inline-flex gap-2 align-items-center justify-content-center fw-semibold"
         (click)="login()">
         Sign in with
-        <img src="spotify.svg" alt="spotify icon" width="30" height="30" />
+        <app-icon
+          path="icons/icons.svg#spotify"
+          color="var(--forest-green)"
+          width="30"
+          height="30">
+        </app-icon>
       </button>
     </div>
     <div class="ek-parallax-right col-md-4 overflow-hidden">
