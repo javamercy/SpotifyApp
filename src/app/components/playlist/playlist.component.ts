@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ViewChild,
-  ElementRef,
-} from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Playlist } from "../../models/playlist.model";
 import { PlaylistService } from "../../services/playlist.service";
 import { ActivatedRoute } from "@angular/router";
@@ -16,6 +10,7 @@ import { MsToTimePipe } from "../../pipes/ms-to-time.pipe";
 import { MusicPlayerService } from "../../services/music-player.service";
 import { PlaylistTrackItem } from "../../models/playlist-track-item.model";
 import { ToastrService } from "ngx-toastr";
+import { Track } from "../../models/track.model";
 
 @Component({
   selector: "app-playlist",
@@ -28,8 +23,9 @@ export class PlaylistComponent implements OnInit, OnDestroy {
   playlist: Playlist;
   owner: User;
   selectedTrack: PlaylistTrackItem;
+  currentlyPlayingTrack: Track;
+  isPlaying: boolean;
 
-  @ViewChild("modal") private readonly modal: ElementRef;
   private readonly subscriptions: Subscription = new Subscription();
 
   constructor(
@@ -45,6 +41,22 @@ export class PlaylistComponent implements OnInit, OnDestroy {
       this.activatedRoute.params.subscribe(params => {
         const id = params["id"];
         this.getPlaylist(id);
+      })
+    );
+
+    this.subscriptions.add(
+      this.musicPlayerService.track$.subscribe({
+        next: track => {
+          this.currentlyPlayingTrack = track;
+        },
+      })
+    );
+
+    this.subscriptions.add(
+      this.musicPlayerService.isPlaying$.subscribe({
+        next: isPlaying => {
+          this.isPlaying = isPlaying;
+        },
       })
     );
   }
