@@ -1,36 +1,7 @@
 .ek-music-player {
   width: 100%;
-  z-index: 1000;
-  animation: gradient-flow 20s infinite;
-  background: linear-gradient(
-    270deg,
-    #000000,
-    /* Black */ #1c1c1c,
-    /* Dark Gray */ #2e2e2e,
-    /* Darker Gray */ #3a3a3a,
-    /* Gray */ #4c4c4c,
-    /* Medium Gray */ #5f5f5f,
-    /* Lighter Gray */ #424242,
-    /* Slightly Darker Gray */ #3a3a3a,
-    /* Gray */ #2e2e2e,
-    /* Darker Gray */ #1c1c1c,
-    /* Dark Gray */ #000000,
-    /* Black */ #333333,
-    /* Dark Gray with Blue Tint */ #000000 /* Black */
-  );
-  background-size: 300% 300%;
-}
-
-@keyframes gradient-flow {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  z-index: 2;
+  background-color: var(--dim-gray);
 }
 
 .ek-progress-container {
@@ -38,18 +9,20 @@
   bottom: 0.5rem;
   left: 0;
   right: 0;
-  height: 5px;
-  background-color: var(--white);
+  height: 4px;
+  background-color: transparent;
   border-radius: 5px;
-  overflow: hidden;
-  width: 80%;
-  margin: 0 auto;
+}
+
+.ek-progress-bar {
+  height: 100%;
+  width: 100%;
 }
 
 .ek-progress {
   height: 100%;
-  width: 0;
-  background-color: var(--dark-violet);
+  width: 100%;
+  background: linear-gradient(90deg, var(--dark-green), var(--neon-green));
 }
 
 .ek-music-player-hider {

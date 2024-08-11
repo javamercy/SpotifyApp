@@ -106,7 +106,7 @@ export class PlaylistComponent implements OnInit, OnDestroy {
       next: () => {
         this.toastrService.success("Track saved to your library", null, {
           tapToDismiss: true,
-          positionClass: "toast-top-right",
+          positionClass: "toast-bottom-full-width",
           timeOut: 2500,
           progressBar: true,
           closeButton: false,
@@ -115,5 +115,16 @@ export class PlaylistComponent implements OnInit, OnDestroy {
       },
       error: error => console.error(error),
     });
+  }
+
+  getListItemBgClass(track: PlaylistTrackItem) {
+    if (!track) return "";
+    if (
+      this.currentlyPlayingTrack &&
+      this.currentlyPlayingTrack.id == track.track.id
+    ) {
+      return "ek-bg-graphite";
+    }
+    return "bg-transparent";
   }
 }

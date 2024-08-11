@@ -7,7 +7,7 @@ import {
   ElementRef,
 } from "@angular/core";
 import { User } from "../../../models/user.model";
-import { Observable, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { AuthService } from "../../../services/auth.service";
 import { Router, RouterModule } from "@angular/router";
 import { CommonModule } from "@angular/common";
@@ -21,10 +21,10 @@ import { IconComponent } from "../icon/icon.component";
   styleUrl: "./navbar.component.css",
 })
 export class NavbarComponent implements OnInit, OnDestroy {
-  user: Observable<User>;
-  isAuthenticated: boolean;
+  user: User | null;
   navbarVisible = false;
   iconColor = "currentColor";
+  isLoaded: boolean;
 
   private subscriptions: Subscription = new Subscription();
 
@@ -44,10 +44,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.isAuthenticated = this.authService.isAuthenticated();
-    console.log(this.isAuthenticated);
-
-    this.user = this.authService.user$;
+    this.isLoaded = false;
+    this.subscriptions.add(
+      this.authService.user$.subscribe({
+        next: user => {
+          if (user) {
+            this.user = user;
+            this.isLoaded = true;
+          }
+        },
+        error: () => (this.isLoaded = true),
+      })
+    );
   }
 
   ngOnDestroy(): void {
@@ -56,7 +64,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   @HostListener("window:scroll", ["$event"])
   onWindowScroll(): void {
-    if (this.isAuthenticated) return;
+    if (this.user) return;
     const scrollY = window.scrollY;
     const parallaxContainer = document.querySelector(
       ".ek-parallax-container"
@@ -80,8 +88,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.router.navigate(["/"]);
   }
 
-  log(value: unknown): boolean {
-    console.log(value);
-    return true;
+  getNavbarClass(): string {
+    if (this.user) return "";
+    return "ek-navbar-fixed " + this.navbarVisible
+      ? "ek-navbar-visible"
+      : "ek-navbar-hidden";
   }
 }

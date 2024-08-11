@@ -9,7 +9,7 @@ import { Component, Input } from "@angular/core";
     [attr.width]="width"
     [attr.height]="height"
     [attr.viewBox]="viewBox"
-    [ngStyle]="{ fill: color }"
+    [attr.fill]="color"
     class="ek-icon">
     <use [attr.xlink:href]="path"></use>
   </svg>`,

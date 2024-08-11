@@ -1,104 +1,99 @@
 <div class="container">
-  @if (!isAuthenticated) {
-    <div class="ek-container-fluid" #containerFluid>
-      <ngx-typed-js
-        [strings]="strings"
-        [typeSpeed]="30"
-        [showCursor]="false"
-        [backDelay]="5000"
-        (stringTyped)="onStringTyped($event)"
-        (preStringTyped)="onPreStringTyped()"
-        (lastStringBackspaced)="onLastStringBackspaced()"
-        [loop]="true">
-        <figure class="text-center px-2">
-          <blockquote class="blockquote fs-3">
-            <p class="typing"></p>
-          </blockquote>
-          @if (isAuthorShown) {
-            <figcaption class="blockquote-footer">
-              <cite title="Source Title">{{ currentAuthor }}</cite>
-            </figcaption>
-          }
-        </figure>
-      </ngx-typed-js>
-      <div
-        class="ek-arrow-down bg-success border border-2 border-success rounded-circle"
-        (click)="autoScroll()"
-        #autoScrollArrow>
-        <app-icon
-          width="30"
-          height="30"
-          path="icons/icons.svg#arrowDownCircleFill"></app-icon>
+  @if (!user) {
+    <section>
+      <div class="ek-container-fluid" #containerFluid>
+        <ngx-typed-js
+          [strings]="strings"
+          [typeSpeed]="30"
+          [showCursor]="false"
+          [backDelay]="5000"
+          (stringTyped)="onStringTyped($event)"
+          (preStringTyped)="onPreStringTyped()"
+          (lastStringBackspaced)="onLastStringBackspaced()"
+          [loop]="true">
+          <figure class="text-center px-2">
+            <blockquote class="blockquote fs-3">
+              <p class="typing"></p>
+            </blockquote>
+            @if (isAuthorShown) {
+              <figcaption class="blockquote-footer">
+                <cite title="Source Title">{{ currentAuthor }}</cite>
+              </figcaption>
+            }
+          </figure>
+        </ngx-typed-js>
+        <div
+          class="ek-arrow-down bg-success border border-2 border-success rounded-circle"
+          (click)="autoScroll()"
+          #autoScrollArrow>
+          <app-icon
+            width="30"
+            height="30"
+            path="icons/icons.svg#arrowDownCircleFill"></app-icon>
+        </div>
       </div>
-    </div>
-  }
-
-  @if (isAuthenticated) {
-    @if (currentUser) {
+    </section>
+    <section>
+      <div
+        class="ek-parallax-container d-flex flex-column flex-md-row align-items-center justify-content-md-between"
+        #parallaxContainer>
+        <div
+          class="ek-parallax-left col-md-5 d-flex flex-column align-items-center gap-3">
+          <h1 class="fs-2">Welcome to Magic Spotify</h1>
+          <button
+            class="btn btn-lg btn-outline-light ek-btn-cross-rounded d-inline-flex gap-2 align-items-center justify-content-center fw-semibold"
+            (click)="login()">
+            Sign in with
+            <app-icon
+              path="icons/icons.svg#spotify"
+              color="var(--forest-green)"
+              width="30"
+              height="30">
+            </app-icon>
+          </button>
+        </div>
+        <div class="ek-parallax-right col-md-6 overflow-hidden">
+          <img
+            src="images/5624628.jpg"
+            class="img-fluid rounded-2"
+            alt="Home Illustration" />
+        </div>
+      </div>
+    </section>
+  } @else {
+    <section>
       <div class="ek-blank-h-100"></div>
       <div class="row align-items-md-center">
         <div class="col-md-8">
           <h3 class="text-center font-monospace">
-            Welcome, {{ currentUser.display_name }}
+            Welcome, {{ user.display_name }}
           </h3>
         </div>
         <div class="col-md-4">
           <img
-            [src]="currentUser.images[0]?.url || 'music_lonely.png'"
-            [alt]="currentUser.display_name"
+            [src]="user.images[0]?.url || 'images/music_lonely.png'"
+            [alt]="user.display_name"
             class="img-fluid rounded-circle ek-img-square ek-img-cover" />
         </div>
       </div>
-    }
-    <section>
-      @if (trendPlaylists && trendPlaylists.length) {
-        <ng-container
-          *ngTemplateOutlet="
-            featuredPlaylistsTemplate;
-            context: {
-              playlists: trendPlaylists,
-              heading: 'Featured Playlists',
-            }
-          "></ng-container>
-      }
-    </section>
-  } @else {
-    <section>
-      <ng-container *ngTemplateOutlet="unauthenticated"></ng-container>
     </section>
   }
+  <section>
+    @if (trendPlaylists && trendPlaylists.length) {
+      <ng-container
+        *ngTemplateOutlet="
+          playlistsCarouselTemplate;
+          context: {
+            playlists: trendPlaylists,
+            heading: 'Featured Playlists',
+          }
+        "></ng-container>
+    }
+  </section>
 </div>
 
-<ng-template #unauthenticated>
-  <div
-    class="ek-parallax-container d-flex flex-column flex-md-row align-items-center justify-content-center"
-    #parallaxContainer>
-    <div
-      class="ek-parallax-left col-md-7 d-flex flex-column align-items-center gap-3">
-      <h1 class="fs-2">Welcome to Magic Spotify</h1>
-      <button
-        class="btn btn-lg btn-outline-light ek-btn-cross-rounded d-inline-flex gap-2 align-items-center justify-content-center fw-semibold"
-        (click)="login()">
-        Sign in with
-        <app-icon
-          path="icons/icons.svg#spotify"
-          color="var(--forest-green)"
-          width="30"
-          height="30">
-        </app-icon>
-      </button>
-    </div>
-    <div class="ek-parallax-right col-md-4 overflow-hidden">
-      <img
-        src="spotify_music.jpg"
-        class="img-fluid rounded-2"
-        alt="Home Icon" />
-    </div>
-  </div>
-</ng-template>
-
 <ng-template
-  #featuredPlaylistsTemplate
+  #playlistsCarouselTemplate
   let-playlists="playlists"
   let-heading="heading">
   <h3

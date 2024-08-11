@@ -1,10 +1,4 @@
-import {
-  BehaviorSubject,
-  Observable,
-  shareReplay,
-  Subscription,
-  tap,
-} from "rxjs";
+import { BehaviorSubject, map, Observable } from "rxjs";
 import { environment } from "./../../environments/environment.development";
 import { Injectable } from "@angular/core";
 import { SpotifyToken } from "../models/spotify-token.model";
@@ -22,16 +16,43 @@ export class AuthService {
 
   private userSubject: BehaviorSubject<User | null> =
     new BehaviorSubject<User | null>(null);
-  user$: Observable<User | null> = this.userSubject
-    .asObservable()
-    .pipe(shareReplay(1));
+  user$: Observable<User | null> = this.userSubject.asObservable();
 
-  private subscriptions: Subscription = new Subscription();
+  private isInitializing = false;
 
   constructor(
     private http: HttpClient,
     private localStorageService: LocalStorageService
-  ) {}
+  ) {
+    this.initializeUser();
+  }
+
+  private initializeUser(): void {
+    if (this.isInitializing) return;
+
+    this.isInitializing = true;
+    const accessToken = this.localStorageService.get<AccessToken>(
+      Constants.SPOTIFY_ACCESS_TOKEN
+    );
+
+    if (accessToken && !this.isTokenExpired(new Date(accessToken.expiration))) {
+      this.getUser().subscribe({
+        next: user => {
+          this.userSubject.next(user);
+          this.localStorageService.set(Constants.USER, user);
+          this.isInitializing = false;
+        },
+
+        error: () => {
+          this.clear();
+          this.isInitializing = false;
+        },
+      });
+    } else {
+      this.clear();
+      this.isInitializing = false;
+    }
+  }
 
   login(): void {
     const directUrl = `${environment.spotify.AuthorizeOptions.url}?client_id=${environment.spotify.AuthorizeOptions.clientId}&response_type=${environment.spotify.AuthorizeOptions.responseType}&redirect_uri=${environment.spotify.AuthorizeOptions.redirectUri}&scope=${environment.spotify.AuthorizeOptions.scope}`;
@@ -47,46 +68,15 @@ export class AuthService {
     body.set("client_id", environment.spotify.TokenOptions.clientId);
     body.set("client_secret", environment.spotify.TokenOptions.clientSecret);
 
-    console.log(body.getAll("client_id"));
-
-    return this.http
-      .post<SpotifyToken>(
-        environment.spotify.TokenOptions.url,
-        body.toString(),
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        }
-      )
-      .pipe(
-        tap({
-          next: data => {
-            const expiresInMilliseconds = data.expires_in * 1000;
-            const currentUtcTime = Date.now();
-            const expirationUtcTime = currentUtcTime + expiresInMilliseconds;
-
-            const accessToken = new AccessToken(
-              data.access_token,
-              new Date(expirationUtcTime)
-            );
-
-            this.localStorageService.set(
-              Constants.SPOTIFY_ACCESS_TOKEN,
-              accessToken
-            );
-
-            this.subscriptions.add(
-              this.getCurrentUser().subscribe({
-                next: user => {
-                  this.userSubject.next(user);
-                },
-                complete: () => this.subscriptions.unsubscribe(),
-              })
-            );
-          },
-        })
-      );
+    return this.http.post<SpotifyToken>(
+      environment.spotify.TokenOptions.url,
+      body.toString(),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
   }
 
   logout(): void {
@@ -95,36 +85,41 @@ export class AuthService {
     this.localStorageService.delete(Constants.USER);
   }
 
-  private getCurrentUser(): Observable<User> {
+  private getUser(): Observable<User> {
     const newUrl = `${this.apiUrl}/me`;
     return this.http.get<User>(newUrl);
   }
 
-  isAuthenticated(): boolean {
-    const accessToken = this.localStorageService.get(
-      Constants.SPOTIFY_ACCESS_TOKEN
-    ) as AccessToken;
-    const token = accessToken?.token;
-    const expiration = accessToken?.expiration as Date;
+  setToken(spotifyToken: SpotifyToken): void {
+    const expiresInMilliseconds = spotifyToken.expires_in * 1000;
+    const currentUtcTime = Date.now();
+    const expirationUtcTime = currentUtcTime + expiresInMilliseconds;
 
-    if (!token || !expiration) {
-      return false;
-    }
+    const accessToken = new AccessToken(
+      spotifyToken.access_token,
+      new Date(expirationUtcTime)
+    );
 
-    if (this.isTokenExpired(new Date(expiration))) {
-      this.clearToken();
-      return false;
-    }
+    this.localStorageService.set(Constants.SPOTIFY_ACCESS_TOKEN, accessToken);
 
-    return !!this.userSubject.value;
+    this.initializeUser();
   }
 
-  private clearToken(): void {
+  isAuthenticated(): Observable<boolean> {
+    return this.user$.pipe(map(user => !!user));
+  }
+
+  private clear(): void {
     this.userSubject.next(null);
     this.localStorageService.delete(Constants.SPOTIFY_ACCESS_TOKEN);
+    this.localStorageService.delete(Constants.USER);
   }
 
   private isTokenExpired(expiration: Date): boolean {
     return expiration < new Date();
+  }
+
+  getMe(): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/me`);
   }
 }

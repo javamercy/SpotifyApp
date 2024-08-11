@@ -22,7 +22,6 @@ import { SimplifiedPlaylist } from "../../models/simplified.playlist.model";
 import { QuoteService } from "../../services/quote.service";
 import { NgxTypedJsComponent, NgxTypedJsModule } from "ngx-typed-js";
 import { Quote } from "../../models/quote.model";
-import { AsyncPipe } from "@angular/common";
 
 @Component({
   selector: "app-home",
@@ -34,8 +33,7 @@ import { AsyncPipe } from "@angular/common";
 })
 export class HomeComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription;
-  currentUser: User;
-  isAuthenticated: boolean;
+  user: User;
   trendPlaylists: Playlist[];
   currentUsersPlaylists: SimplifiedPlaylist[];
   playlistsFilterQuery: string;
@@ -64,8 +62,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.checkIfUserAutenticated();
-    this.getQuotes();
+    this.subscriptions.add(
+      this.authService.user$.subscribe(user => {
+        this.user = user;
+        if (user) {
+          this.getFeaturedPlaylists();
+        } else {
+          this.getQuotes();
+        }
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -74,7 +80,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   @HostListener("window:scroll", ["$event"])
   onScroll() {
-    if (this.isAuthenticated) return;
+    if (this.user) return;
     const scrollY = window.scrollY;
     const parallaxContainerPos = this.parallaxContainer.nativeElement.offsetTop;
 
@@ -119,15 +125,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.authService.login();
   }
 
-  checkIfUserAutenticated(): void {
-    this.isAuthenticated = this.authService.isAuthenticated();
-    if (this.isAuthenticated) {
-      this.getCurrentUser();
-      this.getFeaturedPlaylists();
-      this.getCurrentUserPlaylists();
-    }
-  }
-
   getFeaturedPlaylists(): void {
     this.subscriptions.add(
       this.playlistService
@@ -141,20 +138,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     );
   }
 
-  getCurrentUser(): void {
-    this.subscriptions.add(
-      this.authService.user$.subscribe({
-        next: user => {
-          this.currentUser = user;
-          console.log(AsyncPipe.prototype.transform(this.authService.user$));
-          console.log("aaaa");
-        },
-        error: error => console.error(error),
-      })
-    );
-  }
-
-  getCurrentUserPlaylists(): void {
+  getUserPlaylists(): void {
     this.subscriptions.add(
       this.userService
         .getCurrentUserPlaylists(new PageRequest(20, 0))
@@ -189,10 +173,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   onLastStringBackspaced() {
     this.isAuthorShown = false;
-  }
-
-  log(value: string) {
-    console.log(value);
   }
 
   shuffleQuotes(quotes: Quote[]) {

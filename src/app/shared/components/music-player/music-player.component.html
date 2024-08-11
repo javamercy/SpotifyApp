@@ -6,18 +6,18 @@
       <app-icon
         width="30"
         height="30"
-        color="red"
+        color="var(--flame-scarlet)"
         path="icons/icons.svg#xCircleFill"
         (click)="close()"></app-icon>
       <app-icon
         width="35"
         height="35"
-        color="var(--lime-green)"
+        color="var(--spotify-green)"
         path="icons/icons.svg#arrowRight"
         class="ek-music-player-hider"
         (click)="hide()"></app-icon>
     </div>
-    <div class="ek-music-player p-2 rounded p-1 position-relative">
+    <div class="ek-music-player p-2 rounded">
       <div class="d-flex align-items-center gap-2">
         <img
           [src]="currentlyPlayingTrack.album.images[0].url"
@@ -55,18 +55,24 @@
             path="icons/icons.svg#forward"></app-icon>
         </div>
       </div>
+      <div class="ek-progress-container">
+        <div class="ek-progress-bar w-100">
+          <div class="ek-progress" [style.width.%]="progress"></div>
+        </div>
+      </div>
     </div>
   </div>
 
   @if (!showPlayer) {
     <div
-      class="ek-player-menu-icon"
+      [ngStyle]="{ mixBlendMode: 'difference' }"
+      class="ek-player-menu-icon rounded-circle p-2"
       (click)="show()"
       (contextmenu)="onRightClick($event)">
       <app-icon
         width="50"
         height="50"
-        color="var(--white)"
+        color="var(--spotify-green)"
         path="icons/icons.svg#{{ isPlaying ? 'pauseFill' : 'playFill' }}"
         [appCircularProgressBar]="{
           percentage: progress,
@@ -79,6 +85,7 @@
 
   <audio
     #audioRef
-    (timeupdate)="onTimeUpdate()"
-    (ended)="onTrackEnded()"></audio>
+    (ended)="onTrackEnded()"
+    (pause)="stopTimeUpdateInterval()"
+    (play)="startTimeUpdateInterval()"></audio>
 }

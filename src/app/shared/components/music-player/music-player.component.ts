@@ -53,6 +53,7 @@ export class MusicPlayerComponent implements OnDestroy, OnInit, AfterViewInit {
   isPlaying: boolean;
   showPlayer = true;
   private subscriptions: Subscription = new Subscription();
+  private timeUpdateInterval: any;
 
   constructor(private musicPlayerService: MusicPlayerService) {}
 
@@ -85,6 +86,7 @@ export class MusicPlayerComponent implements OnDestroy, OnInit, AfterViewInit {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+    clearInterval(this.timeUpdateInterval);
   }
 
   get playerState() {
@@ -160,7 +162,22 @@ export class MusicPlayerComponent implements OnDestroy, OnInit, AfterViewInit {
   }
 
   private updateAudio(track: Track) {
+    this.progress = 0;
     this.audioRef.nativeElement.src = track.preview_url;
+    this.audioRef.nativeElement.load();
     this.updatePlayback(this.isPlaying);
+  }
+
+  startTimeUpdateInterval() {
+    if (!this.timeUpdateInterval) {
+      this.timeUpdateInterval = setInterval(() => this.onTimeUpdate(), 1000);
+    }
+  }
+
+  stopTimeUpdateInterval() {
+    if (this.timeUpdateInterval) {
+      clearInterval(this.timeUpdateInterval);
+      this.timeUpdateInterval = null;
+    }
   }
 }

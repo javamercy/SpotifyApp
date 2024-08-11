@@ -1,5 +1,6 @@
 :root {
   /* green */
+  --spotify-green: #1db954;
   --lime-green: #32cd32;
   --spring-green: #00ff7f;
   --forest-green: #228b22;
@@ -9,6 +10,12 @@
   --emerald: #009b77;
   --turquoise: #45b8ac;
   --blue-turquoise: #55b4b0;
+
+  /* Yellow */
+  --illuminating-yellow: #f5df4d;
+
+  /* Red */
+  --flame-scarlet: #cd212a;
 
   /* blue */
   --light-blue: #add8e6;
@@ -26,6 +33,9 @@
   --silver: #c0c0c0;
   --dark-gray: #a9a9a9;
   --dim-gray: #696969;
+
+  /* Black */
+  --graphite: #2c2c2c;
 
   /* white */
   --white: #ffffff;
@@ -119,6 +129,10 @@
   background-color: var(--neon-green) !important;
 }
 
+.ek-bg-emerald {
+  background-color: var(--emerald) !important;
+}
+
 .ek-bg-light-blue {
   background-color: var(--light-blue) !important;
 }
@@ -161,6 +175,10 @@
 
 .ek-bg-dark-violet {
   background-color: var(--dark-violet) !important;
+}
+
+.ek-bg-graphite {
+  background-color: var(--graphite) !important;
 }
 
 /* box shadow */
@@ -292,7 +310,7 @@
 }
 
 .ek-list-group-item:hover {
-  background-color: #232323 !important;
+  background-color: var(--graphite) !important;
 }
 
 .ek-list-group-item:hover .ek-play-circle-icon {

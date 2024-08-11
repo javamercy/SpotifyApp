@@ -1,132 +1,138 @@
 <div class="container-md px-3 px-sm-0">
-  <main>
-    @if (playlist) {
-      <section>
-        <div
-          class="row align-items-center gap-4 gap-md-0 justify-content-center border-bottom border-secondary pb-4">
-          <div class="col-sm-4 text-center">
-            <img class="img-fluid rounded" [src]="playlist.images[0].url" />
-          </div>
-          <div class="col-sm-8 d-flex flex-column gap-4">
-            <h1 class="text-center ek-wavy-underline-light-blue">
-              {{ playlist.name }}
-            </h1>
-            @if (playlist.description) {
-              <p class="text-center font-monospace">
-                {{ playlist.description }}
-              </p>
-            }
-            <div class="d-flex justify-content-center gap-2">
-              <a
-                class="btn btn-outline-light d-inline-flex align-items-center gap-2"
-                [href]="playlist.external_urls.spotify">
-                <img src="spotify.svg" />
-                <span>Play on Spotify</span>
-              </a>
-              <button
-                class="btn btn-outline-light d-inline-flex align-items-center gap-2">
-                <img src="music-note-beamed.svg" alt="" />
-                <span>Play Preview</span>
-              </button>
-            </div>
-            <div class="font-monospace fw-bolder text-center">
-              <span class="d-inline-flex align-items-center">
-                <img src="music-note-beamed.svg" alt="" />
-                <span class="ms-2">{{ playlist.tracks.total }}</span>
-              </span>
-              <span class="ms-4 d-inline-flex align-items-center">
-                <img src="star-fill.svg" alt="" />
-                <span class="ms-2"
-                  >{{ playlist.followers.total | number }}
-                </span>
-              </span>
-            </div>
-            @if (owner) {
-              <div class="text-center">
-                <span class="font-monospace fw-bolder">
-                  by {{ playlist.owner.display_name }}
-                </span>
-                <img
-                  [src]="owner.images[0]?.url || 'person-circle.svg'"
-                  width="30"
-                  height="30"
-                  class="img-fluid rounded-circle" />
-              </div>
-            }
-          </div>
+  <div class="ek-blank-h-50"></div>
+  @if (playlist) {
+    <section>
+      <div
+        class="row align-items-center gap-4 gap-md-0 justify-content-center border-bottom border-secondary pb-4">
+        <div class="col-sm-4 text-center">
+          <img class="img-fluid rounded" [src]="playlist.images[0].url" />
         </div>
-      </section>
-      <div class="py-4"></div>
-      <section>
-        <div class="text-center">
-          <h3 class="fw-bold fs-3 mb-3">Songs</h3>
-          <p class="font-monospace ek-wavy-underline-dark-green">
-            The tracklist for "{{ playlist.name }}"
-          </p>
-        </div>
-        <ul class="list-group list-group-flush bg-transparent">
-          @for (track of playlist.tracks.items; track $index) {
-            <li
-              role="button"
-              (click)="play(track)"
-              class="list-group-item ek-list-group-item bg-transparent text-white border-secondary ps-0 py-3 py-sm-2">
-              <div
-                class="d-flex align-items-center gap-3"
-                [class.ek-text-forest-green]="
-                  currentlyPlayingTrack?.id == track.track.id
-                ">
-                <span class="ek-track-index fw-bold">{{ $index + 1 }}</span>
-                <div class="position-relative flex-shrink-0 ek-album-cover">
-                  <img
-                    class="rounded img-fluid"
-                    [src]="track.track.album.images[0].url"
-                    alt="{{ track.track.name }}" />
-                  <app-icon
-                    path="icons/icons.svg{{
-                      currentlyPlayingTrack?.id === track.track.id && isPlaying
-                        ? '#pauseCircle'
-                        : '#playCircle'
-                    }}"
-                    class="ek-play-circle-icon position-absolute translate-middle top-50 start-50"
-                    [ngClass]="{
-                      'd-block': currentlyPlayingTrack?.id === track.track.id,
-                      'd-none': currentlyPlayingTrack?.id !== track.track.id,
-                    }"></app-icon>
-                </div>
-
-                <div
-                  class="d-flex flex-column flex-md-row gap-sm-2 overflow-hidden">
-                  <div class="fw-bold mb-0">
-                    <div
-                      class="text-truncate"
-                      [class.ek-text-forest-green]="
-                        currentlyPlayingTrack?.id == track.track.id
-                      ">
-                      {{ track.track.name }}
-                    </div>
-                  </div>
-                  <div class="mb-0">
-                    <div class="text-truncate">
-                      {{ getJoinedArtists(track.track.artists) }}
-                    </div>
-                  </div>
-                </div>
-                <div class="ms-auto">
-                  <app-icon
-                    width="25"
-                    height="25"
-                    path="icons/icons.svg#threeDotsVertical"
-                    data-bs-toggle="modal"
-                    data-bs-target="#optionsModal"
-                    (click)="setSelectedTrack(track, $event)"></app-icon>
-                </div>
-              </div>
-            </li>
+        <div class="col-sm-8 d-flex flex-column gap-4">
+          <h1 class="text-center ek-wavy-underline-light-blue">
+            {{ playlist.name }}
+          </h1>
+          @if (playlist.description) {
+            <p class="text-center font-monospace">
+              {{ playlist.description }}
+            </p>
           }
-        </ul>
-      </section>
-    }
-  </main>
+          <div class="d-flex justify-content-center gap-2">
+            <a
+              class="btn btn-outline-light d-inline-flex align-items-center gap-2"
+              [href]="playlist.external_urls.spotify">
+              <app-icon
+                path="icons/icons.svg#spotify"
+                color="var(--spotify-green)"></app-icon>
+              <span>See on Spotify</span>
+            </a>
+            <button
+              class="btn btn-outline-light d-inline-flex align-items-center gap-2">
+              <app-icon
+                path="icons/icons.svg#musicNoteList"
+                color="var(--flame-scarlet)"></app-icon>
+              <span>Play</span>
+            </button>
+          </div>
+          <div class="font-monospace fw-bolder text-center">
+            <span class="d-inline-flex align-items-center">
+              <app-icon
+                path="icons/icons.svg#musicNoteBeamed"
+                color="var(--spotify-green)"></app-icon>
+              <span class="ms-2">{{ playlist.tracks.total }}</span>
+            </span>
+            <span class="ms-4 d-inline-flex align-items-center">
+              <app-icon
+                path="icons/icons.svg#starFill"
+                color="var(--illuminating-yellow)"></app-icon>
+              <span class="ms-2">{{ playlist.followers.total | number }} </span>
+            </span>
+          </div>
+          @if (owner) {
+            <div class="text-center">
+              <span class="font-monospace fw-bolder">
+                by {{ playlist.owner.display_name }}
+              </span>
+              <img
+                [src]="owner.images[0]?.url || 'person-circle.svg'"
+                width="30"
+                height="30"
+                class="img-fluid rounded-circle" />
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+    <div class="py-4"></div>
+    <section>
+      <div class="text-center">
+        <h3 class="fw-bold fs-3 mb-3">Songs</h3>
+        <p class="font-monospace ek-wavy-underline-dark-green">
+          The tracklist for "{{ playlist.name }}"
+        </p>
+      </div>
+      <ul class="list-group list-group-flush bg-transparent">
+        @for (track of playlist.tracks.items; track $index) {
+          <li
+            role="button"
+            (click)="play(track)"
+            class="list-group-item ek-list-group-item text-white border-secondary ps-0 py-3 py-sm-2"
+            [class]="getListItemBgClass(track)">
+            <div
+              class="d-flex align-items-center gap-3"
+              [class.ek-text-forest-green]="
+                currentlyPlayingTrack?.id == track.track.id
+              ">
+              <span class="ek-track-index fw-bold">{{ $index + 1 }}</span>
+              <div class="position-relative flex-shrink-0 ek-album-cover">
+                <img
+                  class="rounded img-fluid"
+                  [src]="track.track.album.images[0].url"
+                  alt="{{ track.track.name }}" />
+                <app-icon
+                  path="icons/icons.svg{{
+                    currentlyPlayingTrack?.id === track.track.id && isPlaying
+                      ? '#pauseCircle'
+                      : '#playCircle'
+                  }}"
+                  class="ek-play-circle-icon position-absolute translate-middle top-50 start-50"
+                  [ngClass]="{
+                    'd-block': currentlyPlayingTrack?.id === track.track.id,
+                    'd-none': currentlyPlayingTrack?.id !== track.track.id,
+                  }"></app-icon>
+              </div>
+
+              <div
+                class="d-flex flex-column flex-md-row gap-sm-2 overflow-hidden">
+                <div class="fw-bold mb-0">
+                  <div
+                    class="text-truncate"
+                    [class.ek-text-forest-green]="
+                      currentlyPlayingTrack?.id == track.track.id
+                    ">
+                    {{ track.track.name }}
+                  </div>
+                </div>
+                <div class="mb-0">
+                  <div class="text-truncate">
+                    {{ getJoinedArtists(track.track.artists) }}
+                  </div>
+                </div>
+              </div>
+              <div class="ms-auto">
+                <app-icon
+                  width="25"
+                  height="25"
+                  path="icons/icons.svg#threeDotsVertical"
+                  data-bs-toggle="modal"
+                  data-bs-target="#optionsModal"
+                  (click)="setSelectedTrack(track, $event)"></app-icon>
+              </div>
+            </div>
+          </li>
+        }
+      </ul>
+    </section>
+  }
 </div>
 
 <!-- Modal -->

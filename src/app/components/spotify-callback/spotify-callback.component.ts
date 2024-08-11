@@ -12,7 +12,7 @@ import { AuthService } from "../../services/auth.service";
   styleUrl: "./spotify-callback.component.css",
 })
 export class SpotifyCallbackComponent implements OnInit, OnDestroy {
-  private subscription: Subscription;
+  private subscriptions: Subscription = new Subscription();
   constructor(
     private authService: AuthService,
     private activatedRoute: ActivatedRoute,
@@ -21,30 +21,41 @@ export class SpotifyCallbackComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams.subscribe(params => {
-      const error = params["error"];
+    this.subscriptions.add(
+      this.activatedRoute.queryParams.subscribe(params => {
+        const error = params["error"];
 
-      if (error) {
-        this.toastr.error(
-          "An error occurred while logging in to Spotify. Please try again."
-        );
-      } else {
-        const code = params["code"];
-        if (code) {
-          this.subscription = this.authService.getToken(code).subscribe({
-            complete: () => {
-              this.router.navigate(["/"]);
-            },
-          });
+        if (error) {
+          this.toastr.error(
+            "An error occurred while logging in to Spotify. Please try again."
+          );
         } else {
-          this.router.navigate(["/"]);
+          const code = params["code"];
+          if (code) {
+            this.subscriptions.add(
+              this.authService.getToken(code).subscribe({
+                next: spotifyToken => {
+                  this.authService.setToken(spotifyToken);
+                },
+                complete: () => {
+                  this.router.navigate(["/"]);
+                },
+                error: () => {
+                  this.toastr.error(
+                    "An error occurred while logging in to Spotify. Please try again."
+                  );
+                },
+              })
+            );
+          } else {
+            this.router.navigate(["/"]);
+          }
         }
-      }
-    });
+      })
+    );
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-    console.log("SpotifyCallbackComponent destroyed");
+    this.subscriptions.unsubscribe();
   }
 }

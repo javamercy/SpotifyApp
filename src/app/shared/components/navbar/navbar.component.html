@@ -1,63 +1,73 @@
 <nav
   #navbar
   id="navbar"
-  class="navbar navbar-expand navbar-dark px-2 py-3"
-  [ngClass]="{
-    'ek-navbar-fixed': !isAuthenticated,
-    'ek-navbar-hidden': !navbarVisible && !isAuthenticated,
-    'ek-navbar-visible': navbarVisible && !isAuthenticated,
-  }"
-  style="background-color: var(--emerald)">
+  class="navbar navbar-expand ek-bg-emerald navbar-dark px-2 py-3"
+  [class]="getNavbarClass()">
   <div class="container-fluid">
     <a class="navbar-brand fw-bolder" routerLink="/">Spotify</a>
-
-    <ul class="navbar-nav">
-      <li class="nav-item dropdown">
-        <a
-          class="nav-link dropdown-toggle"
-          role="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false">
-          My Stats
-        </a>
-        <ul class="dropdown-menu dropdown-menu-dark">
-          <li>
-            <a class="dropdown-item" role="button" routerLink="/me/stats/tracks"
-              >Top Tracks</a
-            >
+    @if (isLoaded) {
+      @if (user) {
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false">
+              My Stats
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li>
+                <a
+                  class="dropdown-item"
+                  role="button"
+                  routerLink="/me/stats/tracks"
+                  >Top Tracks</a
+                >
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  role="button"
+                  routerLink="me/stats/artists"
+                  >Top Artists</a
+                >
+              </li>
+            </ul>
           </li>
-          <li><hr class="dropdown-divider" /></li>
-          <li>
-            <a class="dropdown-item" role="button" routerLink="me/stats/artists"
-              >Top Artists</a
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/me/discover" role="button"
+              >Discover</a
             >
           </li>
         </ul>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/me/discover" role="button">Discover</a>
-      </li>
-    </ul>
-
-    <div>
-      @if (isAuthenticated) {
-        <button class="btn btn-danger" (click)="logout()">Log out</button>
-      } @else {
-        <button
-          class="btn btn-outline-light ek-btn-cross-rounded d-inline-flex gap-2 align-items-center justify-content-center"
-          (click)="login()"
-          (mouseover)="onMouseOver()"
-          (mouseout)="onMouseOut()">
-          Sign in with
-          <app-icon
-            class="ek-navbar-spotify-icon"
-            path="icons/icons.svg#spotify"
-            [color]="iconColor"
-            width="25"
-            height="25">
-          </app-icon>
-        </button>
       }
-    </div>
+      <div>
+        @if (user) {
+          <button
+            class="btn btn-danger"
+            (click)="logout()"
+            [ngStyle]="{ backgroundColor: 'var(--flame-scarlet)' }">
+            Log out
+          </button>
+        } @else {
+          <button
+            class="btn btn-outline-light ek-btn-cross-rounded d-inline-flex gap-2 align-items-center justify-content-center"
+            (click)="login()"
+            (mouseover)="onMouseOver()"
+            (mouseout)="onMouseOut()">
+            Sign in with
+            <app-icon
+              class="ek-navbar-spotify-icon"
+              path="icons/icons.svg#spotify"
+              [color]="iconColor"
+              width="25"
+              height="25">
+            </app-icon>
+          </button>
+        }
+      </div>
+    }
   </div>
 </nav>
