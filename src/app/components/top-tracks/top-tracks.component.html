@@ -1,5 +1,5 @@
 <section>
-  <h4 class="text-center fw-bolder mb-5 ek-wavy-underline-light-blue">
+  <h4 class="text-center fw-bolder mb-5 ek-title-border-bottom">
     Your Top Tracks
   </h4>
   <div class="pb-3">
@@ -17,15 +17,12 @@
             width="40"
             height="40" />
           <div class="fw-bold d-flex flex-column gap-1 gap-sm-0">
-            <a
-              class="text-white link-underline link-light link-underline-opacity-0 link-underline-opacity-100-hover">
+            <span>
               {{ track.name }}
-            </a>
-            <a
-              class="mb-0 link-underline text-secondary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover"
-              role="button">
+            </span>
+            <span class="mb-0 text-muted">
               {{ getJoinedArtists(track.artists) }}
-            </a>
+            </span>
           </div>
         </li>
       }
