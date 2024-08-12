@@ -74,6 +74,13 @@
   }
 }
 
+.ek-welcome-section {
+  min-height: 200px;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
 .card {
   overflow: hidden;
   transition:

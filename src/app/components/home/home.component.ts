@@ -42,8 +42,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   isAuthorShown = false;
   currentAuthor: string;
 
-  @ViewChild("containerFluid")
-  private readonly containerFluid: ElementRef<HTMLElement>;
   @ViewChild("autoScrollArrow")
   private readonly autoScrollArrow: ElementRef<HTMLElement>;
   @ViewChild("parallaxContainer")
@@ -61,7 +59,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.subscriptions = new Subscription();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.subscriptions.add(
       this.authService.user$.subscribe(user => {
         this.user = user;
@@ -74,12 +72,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
   @HostListener("window:scroll", ["$event"])
-  onScroll() {
+  onScroll(): void {
     if (this.user) return;
     const scrollY = window.scrollY;
     const parallaxContainerPos = this.parallaxContainer.nativeElement.offsetTop;
@@ -113,7 +111,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  autoScroll() {
+  autoScroll(): void {
     const parallaxContainerPos = this.parallaxContainer.nativeElement.offsetTop;
     window.scrollTo({
       top: parallaxContainerPos,
@@ -121,7 +119,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  login() {
+  login(): void {
     this.authService.login();
   }
 

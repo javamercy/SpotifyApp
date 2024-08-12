@@ -1,134 +1,144 @@
-<div class="container">
-  @if (!user) {
-    <section>
-      <div class="ek-container-fluid" #containerFluid>
-        <ngx-typed-js
-          [strings]="strings"
-          [typeSpeed]="30"
-          [showCursor]="false"
-          [backDelay]="5000"
-          (stringTyped)="onStringTyped($event)"
-          (preStringTyped)="onPreStringTyped()"
-          (lastStringBackspaced)="onLastStringBackspaced()"
-          [loop]="true">
-          <figure class="text-center px-2">
-            <blockquote class="blockquote fs-3">
-              <p class="typing"></p>
-            </blockquote>
-            @if (isAuthorShown) {
-              <figcaption class="blockquote-footer">
-                <cite title="Source Title">{{ currentAuthor }}</cite>
-              </figcaption>
-            }
-          </figure>
-        </ngx-typed-js>
-        <div
-          class="ek-arrow-down bg-success border border-2 border-success rounded-circle"
-          (click)="autoScroll()"
-          #autoScrollArrow>
-          <app-icon
-            width="30"
-            height="30"
-            path="icons/icons.svg#arrowDownCircleFill"></app-icon>
-        </div>
-      </div>
-    </section>
-    <section>
-      <div
-        class="ek-parallax-container d-flex flex-column flex-md-row align-items-center justify-content-md-between"
-        #parallaxContainer>
-        <div
-          class="ek-parallax-left col-md-5 d-flex flex-column align-items-center gap-3">
-          <h1 class="fs-2">Welcome to Magic Spotify</h1>
-          <button
-            class="btn btn-lg btn-outline-light ek-btn-cross-rounded d-inline-flex gap-2 align-items-center justify-content-center fw-semibold"
-            (click)="login()">
-            Sign in with
-            <app-icon
-              path="icons/icons.svg#spotify"
-              color="var(--forest-green)"
-              width="30"
-              height="30">
-            </app-icon>
-          </button>
-        </div>
-        <div class="ek-parallax-right col-md-6 overflow-hidden">
-          <img
-            src="images/5624628.jpg"
-            class="img-fluid rounded-2"
-            alt="Home Illustration" />
-        </div>
-      </div>
-    </section>
-  } @else {
-    <section>
-      <div class="ek-blank-h-100"></div>
-      <div class="row align-items-md-center">
-        <div class="col-md-8">
-          <h3 class="text-center font-monospace">
-            Welcome, {{ user.display_name }}
-          </h3>
-        </div>
-        <div class="col-md-4">
-          <img
-            [src]="user.images[0]?.url || 'images/music_lonely.png'"
-            [alt]="user.display_name"
-            class="img-fluid rounded-circle ek-img-square ek-img-cover" />
-        </div>
-      </div>
-    </section>
-  }
+@if (!user) {
   <section>
-    @if (trendPlaylists && trendPlaylists.length) {
-      <ng-container
-        *ngTemplateOutlet="
-          playlistsCarouselTemplate;
-          context: {
-            playlists: trendPlaylists,
-            heading: 'Featured Playlists',
+    <div class="ek-container-fluid" #containerFluid>
+      <ngx-typed-js
+        [strings]="strings"
+        [typeSpeed]="30"
+        [showCursor]="false"
+        [backDelay]="5000"
+        (stringTyped)="onStringTyped($event)"
+        (preStringTyped)="onPreStringTyped()"
+        (lastStringBackspaced)="onLastStringBackspaced()"
+        [loop]="true">
+        <figure class="text-center px-2">
+          <blockquote class="blockquote fs-3">
+            <p class="typing"></p>
+          </blockquote>
+          @if (isAuthorShown) {
+            <figcaption class="blockquote-footer">
+              <cite title="Source Title">{{ currentAuthor }}</cite>
+            </figcaption>
           }
-        "></ng-container>
-    }
+        </figure>
+      </ngx-typed-js>
+      <div
+        class="ek-arrow-down bg-success border border-2 border-success rounded-circle"
+        (click)="autoScroll()"
+        #autoScrollArrow>
+        <app-icon
+          width="30"
+          height="30"
+          path="icons/icons.svg#arrowDownCircleFill"></app-icon>
+      </div>
+    </div>
   </section>
-</div>
-
-<ng-template
-  #playlistsCarouselTemplate
-  let-playlists="playlists"
-  let-heading="heading">
-  <h3
-    class="text-center font-monospace fw-semibold fs-5 mb-3 ek-wavy-underline-deep-sky-blue">
-    {{ heading }}
-  </h3>
-  <div class="col-md-12 mx-auto">
-    <swiper-container
-      effect="card"
-      grab-cursor="true"
-      autoplay="true"
-      speed="1000"
-      slides-per-view="4"
-      space-between="20">
-      @for (playlist of playlists; track $index) {
-        <swiper-slide lazy="true" class="p-1">
-          <div class="card mb-3 pb-3 position-relative">
-            <img
-              src="{{ playlist.images[0].url }}"
-              class="card-img-top"
-              alt="{{ playlist.name }}" />
-            <div class="card-body">
-              <h6 class="text-center text-muted text-truncate">
-                {{ playlist.name }}
-              </h6>
+  <section>
+    <div
+      class="ek-parallax-container d-flex flex-column flex-md-row align-items-center justify-content-md-between"
+      #parallaxContainer>
+      <div
+        class="ek-parallax-left col-md-5 d-flex flex-column align-items-center gap-3">
+        <h1 class="fs-2">Welcome to Magic Spotify</h1>
+        <button
+          class="btn btn-lg btn-outline-light ek-btn-cross-rounded d-inline-flex gap-2 align-items-center justify-content-center fw-semibold"
+          (click)="login()">
+          Sign in with
+          <app-icon
+            path="icons/icons.svg#spotify"
+            color="var(--forest-green)"
+            width="30"
+            height="30">
+          </app-icon>
+        </button>
+      </div>
+      <div class="ek-parallax-right col-md-6 overflow-hidden">
+        <img
+          src="images/5624628.jpg"
+          class="img-fluid rounded-2"
+          alt="Home Illustration" />
+      </div>
+    </div>
+  </section>
+} @else {
+  <section>
+    <div>
+      <div class="ek-blank-h-50"></div>
+      <div class="row">
+        <div class="col-md-6 p-0 overflow-hidden">
+          <img
+            loading="lazy"
+            src="images/welcome.png"
+            class="img-fluid ek-image-cover ek-image-square rounded" />
+        </div>
+        <div class="col-md-6 d-flex align-items-center justify-content-centert">
+          <div class="d-flex flex-column gap-3">
+            <h3 class="font-monospace">
+              Welcome back, {{ user.display_name }}
+            </h3>
+            <p class="text-muted">
+              You can now view your stats and discover new music.
+            </p>
+            <div class="text-center">
+              <button
+                class="btn btn-lg btn-outline-success me-2"
+                routerLink="/me/stats/tracks">
+                Top Tracks
+              </button>
+              <button
+                class="btn btn-lg btn-outline-success"
+                routerLink="/me/stats/artists">
+                Top Artists
+              </button>
             </div>
-            <button
-              class="btn btn-outline-success w-75 mx-auto position-relative"
-              routerLink="/playlist/{{ playlist.id }}">
-              See More
-              <i class="bi bi-spotify"></i>
-            </button>
+            <div class="text-center">
+              <button
+                class="btn btn-lg ek-btn-flame-scarlet-outline"
+                routerLink="/me/discover">
+                Discover New Music
+              </button>
+            </div>
           </div>
-        </swiper-slide>
-      }
-    </swiper-container>
-  </div>
-</ng-template>
+        </div>
+      </div>
+    </div>
+  </section>
+}
+<section>
+  @if (trendPlaylists && trendPlaylists.length) {
+    <h4 class="text-center fs-4 mb-4 py-2 ek-playlist-title">
+      Featured Playlists
+    </h4>
+    <div class="ek-swiper-container">
+      <swiper-container
+        effect="card"
+        slides-per-view="2"
+        space-between="20"
+        breakpoints='{ "992": {"slidesPerView": 3}, "1200": {"slidesPerView": 4}}'
+        grab-cursor="true"
+        autoplay="true">
+        @for (playlist of trendPlaylists; track $index) {
+          <swiper-slide lazy="true" class="p-1">
+            <div class="card shadow mb-3 pb-3 position-relative">
+              <img
+                src="{{ playlist.images[0].url }}"
+                class="card-img-top"
+                alt="{{ playlist.name }}" />
+              <div class="card-body">
+                <h6 class="text-center text-muted text-truncate">
+                  {{ playlist.name }}
+                </h6>
+              </div>
+              <button
+                class="btn btn-success w-75 mx-auto position-relative"
+                routerLink="/playlist/{{ playlist.id }}">
+                See More
+                <i class="bi bi-spotify"></i>
+              </button>
+            </div>
+          </swiper-slide>
+        }
+      </swiper-container>
+    </div>
+  }
+</section>
+<div class="ek-blank-h-100"></div>
