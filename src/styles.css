@@ -287,30 +287,42 @@
   flex-shrink: 0;
 }
 
+.ek-btn-flame-scarlet {
+  background-color: var(--flame-scarlet) !important;
+  color: var(--white) !important;
+  border-color: var(--flame-scarlet) !important;
+}
+
+.ek-btn-flame-scarlet:hover {
+  background-color: var(--white) !important;
+  color: var(--flame-scarlet) !important;
+}
+
+.ek-btn-flame-scarlet:focus {
+  background-color: var(--flame-scarlet) !important;
+  color: var(--white) !important;
+}
+
+.ek-btn-flame-scarlet-outline {
+  background-color: var(--white) !important;
+  color: var(--flame-scarlet) !important;
+  border-color: var(--flame-scarlet) !important;
+}
+
+.ek-btn-flame-scarlet-outline:hover {
+  background-color: var(--flame-scarlet) !important;
+  color: var(--white) !important;
+}
+
+.ek-btn-flame-scarlet-outline:focus {
+  background-color: var(--flame-scarlet) !important;
+  color: var(--white) !important;
+}
+
 .ek-album-cover {
   width: 50px;
   height: 50px;
   flex-shrink: 0;
-}
-
-.ek-option {
-  background-color: #16222a;
-  padding-inline: 1rem !important;
-  color: inherit;
-}
-
-.ek-scale-hover:hover {
-  transform: scale(1.1);
-  transition: transform 0.2s;
-}
-
-.ek-option:hover {
-  background-color: #16222a !important;
-  color: var(--lime-green) !important;
-}
-
-.ek-list-group-item:hover {
-  background-color: var(--graphite) !important;
 }
 
 .ek-list-group-item:hover .ek-play-circle-icon {
@@ -375,6 +387,19 @@
   transition: stroke-dasharray 0.3s;
 }
 
+.ek-title-border-bottom {
+  position: relative;
+}
+.ek-title-border-bottom::after {
+  content: "";
+  display: block;
+  width: 75%;
+  margin-inline: auto;
+  height: 2px;
+  background-color: #ddd;
+  margin-top: 1rem;
+}
+
 @keyframes scroll {
   0% {
     transform: translateX(0);
@@ -412,8 +437,8 @@ body {
   height: 100%;
 }
 body {
-  background-color: #121212 !important;
-  color: #ffffff !important;
+  background-color: var(--white);
+  color: var(--graphite);
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
