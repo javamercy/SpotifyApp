@@ -123,8 +123,14 @@ export class PlaylistComponent implements OnInit, OnDestroy {
       this.currentlyPlayingTrack &&
       this.currentlyPlayingTrack.id == track.track.id
     ) {
-      return "ek-bg-graphite";
+      return "bg-body-tertiary";
+    } else {
+      return "";
     }
-    return "bg-transparent";
+  }
+
+  togglePlayback(e: Event) {
+    e.stopPropagation();
+    this.musicPlayerService.toggle();
   }
 }

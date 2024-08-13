@@ -8,7 +8,7 @@
           <img class="img-fluid rounded" [src]="playlist.images[0].url" />
         </div>
         <div class="col-sm-8 d-flex flex-column gap-4">
-          <h1 class="text-center ek-wavy-underline-light-blue">
+          <h1 class="text-center">
             {{ playlist.name }}
           </h1>
           @if (playlist.description) {
@@ -18,18 +18,18 @@
           }
           <div class="d-flex justify-content-center gap-2">
             <a
-              class="btn btn-outline-light d-inline-flex align-items-center gap-2"
+              class="btn ek-btn-spotify-green d-inline-flex align-items-center gap-2"
               [href]="playlist.external_urls.spotify">
               <app-icon
                 path="icons/icons.svg#spotify"
-                color="var(--spotify-green)"></app-icon>
+                color="var(--white)"></app-icon>
               <span>See on Spotify</span>
             </a>
             <button
-              class="btn btn-outline-light d-inline-flex align-items-center gap-2">
+              class="btn ek-btn-flame-scarlet d-inline-flex align-items-center gap-2">
               <app-icon
                 path="icons/icons.svg#musicNoteList"
-                color="var(--flame-scarlet)"></app-icon>
+                color="var(--white)"></app-icon>
               <span>Play</span>
             </button>
           </div>
@@ -66,16 +66,14 @@
     <section>
       <div class="text-center">
         <h3 class="fw-bold fs-3 mb-3">Songs</h3>
-        <p class="font-monospace ek-wavy-underline-dark-green">
-          The tracklist for "{{ playlist.name }}"
-        </p>
+        <p class="font-monospace">The tracklist for "{{ playlist.name }}"</p>
       </div>
-      <ul class="list-group list-group-flush bg-transparent">
+      <ul class="list-group list-group-flush">
         @for (track of playlist.tracks.items; track $index) {
           <li
             role="button"
             (click)="play(track)"
-            class="list-group-item ek-list-group-item text-white border-secondary ps-0 py-3 py-sm-2"
+            class="list-group-item ek-list-group-item border-secondary ps-0 py-3 py-sm-2"
             [class]="getListItemBgClass(track)">
             <div
               class="d-flex align-items-center gap-3"
@@ -89,6 +87,8 @@
                   [src]="track.track.album.images[0].url"
                   alt="{{ track.track.name }}" />
                 <app-icon
+                  (click)="togglePlayback($event)"
+                  color="var(--white)"
                   path="icons/icons.svg{{
                     currentlyPlayingTrack?.id === track.track.id && isPlaying
                       ? '#pauseCircle'
@@ -144,7 +144,7 @@
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     @if (selectedTrack) {
-      <div class="modal-content bg-transparent">
+      <div class="modal-content">
         <div class="modal-body">
           <div class="d-flex gap-3">
             <img
