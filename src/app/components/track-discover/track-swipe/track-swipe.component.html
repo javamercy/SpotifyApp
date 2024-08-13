@@ -1,6 +1,6 @@
 @if (tracks && tracks.length) {
   <div class="d-flex gap-4 justify-content-center align-items-center mb-4">
-    <h2 class="ek-wavy-underline-dodger-blue">{{ genre }}</h2>
+    <h2 class="fs-3">{{ genre }}</h2>
     <div class="form-check form-switch">
       <input
         class="form-check-input ek-switch"
@@ -53,11 +53,6 @@
                   <app-icon
                     width="25"
                     height="25"
-                    [color]="
-                      track.id === currentlyPlayingTrack?.id && isPlaying
-                        ? 'var(--spring-green)'
-                        : 'currentColor'
-                    "
                     path="icons/icons.svg{{
                       currentlyPlayingTrack?.id === track.id && isPlaying
                         ? '#pauseCircle'

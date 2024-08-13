@@ -1,13 +1,19 @@
 .ek-genre-input {
-  color: var(--light-gray) !important;
-  border: 1px solid var(--dim-gray) !important;
+  border: none;
+  box-shadow: 0 0 15px var(--dark-gray);
 }
 
-.ek-genre-input:focus-visible {
+.ek-genre-input:focus {
   box-shadow: 0 0 15px var(--neon-green);
-  border: 1px solid var(--dark-green) !important;
 }
 
-::placeholder {
-  color: var(--dim-gray) !important;
+.ek-genre-btn {
+  box-shadow: 0 0 15px var(--dark-gray);
+}
+
+.ek-genre-btn:hover {
+  box-shadow:
+    0 0 10px var(--neon-green),
+    0 0 20px var(--neon-green),
+    0 0 30px var(--neon-green);
 }

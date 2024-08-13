@@ -15,7 +15,7 @@
           <div class="col-6 col-md-4">
             <input
               type="text"
-              class="form-control bg-transparent ek-genre-input text-center"
+              class="form-control ek-genre-input text-center"
               id="genre"
               placeholder="search for a genre"
               [(ngModel)]="filterText" />
@@ -29,7 +29,7 @@
             track $index
           ) {
             <button
-              class="btn ek-text-silver border-secondary ek-scale-hover ek-shadow-neon-green-300"
+              class="btn ek-genre-btn"
               routerLink="/me/discover/{{ genre }}">
               {{ genre }}
             </button>
