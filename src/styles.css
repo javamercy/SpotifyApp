@@ -196,6 +196,7 @@
     0 0 10px var(--neon-green),
     0 0 20px var(--neon-green),
     0 0 30px var(--neon-green);
+  border-color: var(--neon-green) !important;
 }
 
 .ek-shadow-neon-green-300:focus {
@@ -293,30 +294,26 @@
   border-color: var(--flame-scarlet) !important;
 }
 
-.ek-btn-flame-scarlet:hover {
-  background-color: var(--white) !important;
-  color: var(--flame-scarlet) !important;
-}
-
-.ek-btn-flame-scarlet:focus {
-  background-color: var(--flame-scarlet) !important;
-  color: var(--white) !important;
-}
-
-.ek-btn-flame-scarlet-outline {
+.ek-btn-outline-flame-scarlet {
   background-color: var(--white) !important;
   color: var(--flame-scarlet) !important;
   border-color: var(--flame-scarlet) !important;
 }
 
-.ek-btn-flame-scarlet-outline:hover {
+.ek-btn-outline-flame-scarlet:hover {
   background-color: var(--flame-scarlet) !important;
   color: var(--white) !important;
 }
 
-.ek-btn-flame-scarlet-outline:focus {
+.ek-btn-outline-flame-scarlet:focus {
   background-color: var(--flame-scarlet) !important;
   color: var(--white) !important;
+}
+
+.ek-btn-spotify-green {
+  background-color: var(--spotify-green) !important;
+  color: var(--white) !important;
+  border-color: var(--spotify-green) !important;
 }
 
 .ek-album-cover {
