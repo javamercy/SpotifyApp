@@ -18,17 +18,6 @@ export class PlaylistService {
     return this.http.get(`${this.apiUrl}/me/playlists`);
   }
 
-  getFeaturedPlaylists(
-    pageRequest: PageRequest
-  ): Observable<{ message: string; playlists: ListResponse<Playlist> }> {
-    return this.http.get<{
-      message: string;
-      playlists: ListResponse<Playlist>;
-    }>(
-      `${this.apiUrl}/browse/featured-playlists?limit=${pageRequest.limit}&offset=${pageRequest.offset}`
-    );
-  }
-
   getAllByName(
     name: string
   ): Observable<{ message: string; playlists: ListResponse<Playlist> }> {
