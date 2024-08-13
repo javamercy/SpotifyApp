@@ -1,3 +1,4 @@
+import { BrowseService } from "./../../services/browse.service";
 import {
   Component,
   OnInit,
@@ -14,7 +15,6 @@ import { User } from "../../models/user.model";
 import { AuthService } from "../../services/auth.service";
 import { UserService } from "../../services/user.service";
 import { PageRequest } from "../../models/page-request.model";
-import { PlaylistService } from "../../services/playlist.service";
 import { Playlist } from "../../models/playlist.model";
 import { FormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
@@ -52,7 +52,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private userService: UserService,
     private authService: AuthService,
-    private playlistService: PlaylistService,
+    private browseService: BrowseService,
     private quoteService: QuoteService,
     private renderer: Renderer2
   ) {
@@ -125,7 +125,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   getFeaturedPlaylists(): void {
     this.subscriptions.add(
-      this.playlistService
+      this.browseService
         .getFeaturedPlaylists(new PageRequest(20, 0))
         .subscribe({
           next: playlists => {

@@ -1,12 +1,6 @@
-.ek-music-player {
-  width: 100%;
-  z-index: 2;
-  background-color: var(--dim-gray);
-}
-
 .ek-progress-container {
   position: absolute;
-  bottom: 0.5rem;
+  bottom: 0;
   left: 0;
   right: 0;
   height: 4px;
@@ -17,12 +11,13 @@
 .ek-progress-bar {
   height: 100%;
   width: 100%;
+  background-color: var(--silver);
 }
 
 .ek-progress {
   height: 100%;
   width: 100%;
-  background: linear-gradient(90deg, var(--dark-green), var(--neon-green));
+  background-color: var(--flame-scarlet);
 }
 
 .ek-music-player-hider {

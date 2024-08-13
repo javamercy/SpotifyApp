@@ -74,7 +74,7 @@
             role="button"
             (click)="play(track)"
             class="list-group-item ek-list-group-item border-secondary ps-0 py-3 py-sm-2"
-            [class]="getListItemBgClass(track)">
+            [style.backgroundColor]="getListItemBgClass(track)">
             <div
               class="d-flex align-items-center gap-3"
               [class.ek-text-forest-green]="
@@ -144,7 +144,7 @@
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     @if (selectedTrack) {
-      <div class="modal-content">
+      <div class="modal-content text-light border-0 bg-transparent">
         <div class="modal-body">
           <div class="d-flex gap-3">
             <img

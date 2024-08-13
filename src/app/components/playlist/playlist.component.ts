@@ -123,7 +123,7 @@ export class PlaylistComponent implements OnInit, OnDestroy {
       this.currentlyPlayingTrack &&
       this.currentlyPlayingTrack.id == track.track.id
     ) {
-      return "bg-body-tertiary";
+      return "var(--mint-cream)";
     } else {
       return "";
     }

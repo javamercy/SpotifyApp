@@ -10,6 +10,7 @@
   --emerald: #009b77;
   --turquoise: #45b8ac;
   --blue-turquoise: #55b4b0;
+  --quetzal-green: #006e6d;
 
   /* Yellow */
   --illuminating-yellow: #f5df4d;
@@ -22,6 +23,7 @@
   --sky-blue: #87ceeb;
   --deep-sky-blue: #00bfff;
   --dodger-blue: #1e90ff;
+  --azure: #f0ffff;
 
   /* purple */
   --medium-purple: #9370db;
@@ -39,6 +41,7 @@
 
   /* white */
   --white: #ffffff;
+  --mint-cream: #f5fffa;
 }
 
 /* color  */
@@ -320,6 +323,10 @@
   width: 50px;
   height: 50px;
   flex-shrink: 0;
+}
+
+.ek-list-group-item:hover {
+  background-color: var(--mint-cream);
 }
 
 .ek-list-group-item:hover .ek-play-circle-icon {

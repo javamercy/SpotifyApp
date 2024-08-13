@@ -1,25 +1,15 @@
-<main>
-  <section>
-    <div class="py-5 p-sm-4 p-1">
-      <div class="row justify-content-center">
-        <div class="my-5 col-md-4 col-sm-6 col-8">
-          <select
-            #timeRange
-            class="form-select bg-light text-reset"
-            (change)="onTimeRangeChange(timeRange.value)">
-            <option class="ek-option" value="short_term">Last 4 Weeks</option>
-            <option class="ek-option" value="medium_term">Last 6 Months</option>
-            <option class="ek-option" value="long_term" selected>
-              All Time
-            </option>
-          </select>
-        </div>
-      </div>
+<section>
+  <div class="container-fluid">
+    <div class="col-sm-4 col-md-6 col-8 mx-auto my-5">
+      <select
+        #timeRange
+        class="form-select bg-light"
+        (change)="onTimeRangeChange(timeRange.value)">
+        <option class="ek-option" value="short_term">Last 4 Weeks</option>
+        <option class="ek-option" value="medium_term">Last 6 Months</option>
+        <option class="ek-option" value="long_term" selected>All Time</option>
+      </select>
     </div>
-  </section>
-  <div class="row justify-content-center">
-    <div class="col-11">
-      <router-outlet></router-outlet>
-    </div>
+    <router-outlet></router-outlet>
   </div>
-</main>
+</section>

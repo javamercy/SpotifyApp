@@ -1,8 +1,8 @@
 @if (currentlyPlayingTrack) {
   <div
-    class="fixed-bottom bottom-0 start-0 pb-2 mx-3"
+    class="fixed-bottom bottom-0 start-0 text-light mx-2"
     [@slideInOut]="playerState">
-    <div class="d-flex justify-content-between px-2">
+    <div class="d-flex justify-content-between">
       <app-icon
         width="30"
         height="30"
@@ -17,47 +17,48 @@
         class="ek-music-player-hider"
         (click)="hide()"></app-icon>
     </div>
-    <div class="ek-music-player p-2 rounded">
-      <div class="d-flex align-items-center gap-2">
-        <img
-          [src]="currentlyPlayingTrack.album.images[0].url"
-          class="img-fluid rounded-circle"
-          width="45" />
-
-        <div class="d-flex flex-column overflow-hidden m-2">
-          <div class="ek-scroll-container" appTextScroll>
-            <div class="ek-scroll-item fw-bold">
-              {{ currentlyPlayingTrack.name }}
+    <div style="background-color: var(--quetzal-green)" class="rounded-2">
+      <div class="px-3">
+        <div class="d-flex align-items-center gap-2 position-relative py-2">
+          <img
+            [src]="currentlyPlayingTrack.album.images[0].url"
+            class="img-fluid rounded-circle ek-img-square ek-img-cover"
+            width="45" />
+          <div class="d-flex flex-column overflow-hidden m-2">
+            <div class="ek-scroll-container" appTextScroll>
+              <div class="ek-scroll-item fw-bold">
+                {{ currentlyPlayingTrack.name }}
+              </div>
+            </div>
+            <div class="ek-scroll-container" appTextScroll>
+              <div class="ek-scroll-item">
+                {{ getJoinedArtists(currentlyPlayingTrack.artists) }}
+              </div>
             </div>
           </div>
-          <div class="ek-scroll-container" appTextScroll>
-            <div class="ek-text-silver ek-scroll-item">
-              {{ getJoinedArtists(currentlyPlayingTrack.artists) }}
+
+          <div class="d-flex gap-2 ms-auto me-2">
+            <app-icon
+              width="25"
+              height="25"
+              path="icons/icons.svg#backward"></app-icon>
+            <app-icon
+              width="30"
+              height="30"
+              path="icons/icons.svg{{
+                isPlaying ? '#pauseCircleFill' : '#playCircleFill'
+              }}"
+              (click)="toggle()"></app-icon>
+            <app-icon
+              width="25"
+              height="25"
+              path="icons/icons.svg#forward"></app-icon>
+          </div>
+          <div class="ek-progress-container">
+            <div class="ek-progress-bar w-100">
+              <div class="ek-progress" [style.width.%]="progress"></div>
             </div>
           </div>
-        </div>
-
-        <div class="d-flex gap-2 ms-auto me-2">
-          <app-icon
-            width="25"
-            height="25"
-            path="icons/icons.svg#backward"></app-icon>
-          <app-icon
-            width="30"
-            height="30"
-            path="icons/icons.svg{{
-              isPlaying ? '#pauseCircleFill' : '#playCircleFill'
-            }}"
-            (click)="toggle()"></app-icon>
-          <app-icon
-            width="25"
-            height="25"
-            path="icons/icons.svg#forward"></app-icon>
-        </div>
-      </div>
-      <div class="ek-progress-container">
-        <div class="ek-progress-bar w-100">
-          <div class="ek-progress" [style.width.%]="progress"></div>
         </div>
       </div>
     </div>
