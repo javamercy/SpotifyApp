@@ -1,0 +1,118 @@
+<section>
+  <div class="container-fluid">
+    <div class="ek-blank-h-50"></div>
+    <div class="row">
+      <div class="col-md-6 p-0">
+        <img
+          loading="lazy"
+          src="images/welcome.png"
+          class="img-fluid ek-image-cover ek-image-square rounded" />
+      </div>
+      <div class="col-md-6 d-flex align-items-center justify-content-center">
+        <div class="d-flex flex-column gap-3">
+          <h3 class="font-monospace">Welcome back, {{ user.display_name }}</h3>
+          <p class="text-muted">
+            You can now view your stats and discover new music.
+          </p>
+          <div class="text-center">
+            <button
+              class="btn btn-lg btn-outline-success me-2"
+              routerLink="/me/stats/tracks">
+              Top Tracks
+            </button>
+            <button
+              class="btn btn-lg btn-outline-success"
+              routerLink="/me/stats/artists">
+              Top Artists
+            </button>
+          </div>
+          <div class="text-center">
+            <button
+              class="btn btn-lg ek-btn-outline-flame-scarlet"
+              routerLink="/me/discover">
+              Discover New Music
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section>
+  @if (featuredPlaylists && featuredPlaylists.length) {
+    <div class="text-center">
+      <h4 class="ek-vintage-title p-2 mx-auto my-5 rounded-2">
+        Featured Playlists
+      </h4>
+    </div>
+
+    <div class="ek-swiper-container">
+      <swiper-container
+        effect="card"
+        slides-per-view="2"
+        space-between="20"
+        breakpoints='{ "992": {"slidesPerView": 3}, "1200": {"slidesPerView": 4}}'
+        grab-cursor="true"
+        autoplay="true">
+        @for (playlist of featuredPlaylists; track $index) {
+          <swiper-slide lazy="true" class="p-1">
+            <div class="card shadow mb-3 pb-3 position-relative">
+              <img
+                src="{{ playlist.images[0].url }}"
+                class="card-img-top"
+                alt="{{ playlist.name }}" />
+              <div class="card-body">
+                <h6 class="text-center text-muted text-truncate">
+                  {{ playlist.name }}
+                </h6>
+              </div>
+              <button
+                class="btn btn-success w-75 mx-auto position-relative"
+                routerLink="/playlist/{{ playlist.id }}">
+                See More
+                <i class="bi bi-spotify"></i>
+              </button>
+            </div>
+          </swiper-slide>
+        }
+      </swiper-container>
+    </div>
+  }
+</section>
+<section>
+  @if (madeForYouPlaylists && madeForYouPlaylists.length) {
+    <div class="text-center my-5">
+      <h4 class="ek-vintage-title p-2 mx-auto rounded-2">Made For You</h4>
+    </div>
+    <div class="ek-swiper-container">
+      <swiper-container
+        effect="card"
+        slides-per-view="2"
+        space-between="20"
+        breakpoints='{ "992": {"slidesPerView": 3}, "1200": {"slidesPerView": 4}}'
+        grab-cursor="true"
+        autoplay="true">
+        @for (playlist of madeForYouPlaylists; track $index) {
+          <swiper-slide lazy="true" class="p-1">
+            <div class="card shadow mb-3 position-relative">
+              <img
+                src="{{ playlist.images[0].url }}"
+                class="card-img-top"
+                alt="{{ playlist.name }}" />
+              <div class="card-body" [appAverageColor]="playlist.images[0].url">
+                <div class="text-center mb-3">
+                  {{ playlist.name }}
+                </div>
+                <button
+                  class="btn d-inline-block w-100 btn-success"
+                  routerLink="/playlist/{{ playlist.id }}">
+                  See More
+                </button>
+              </div>
+            </div>
+          </swiper-slide>
+        }
+      </swiper-container>
+    </div>
+  }
+</section>
