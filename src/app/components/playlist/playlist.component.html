@@ -13,7 +13,7 @@
           </h1>
           @if (playlist.description) {
             <p class="text-center font-monospace">
-              {{ playlist.description }}
+              {{ playlist.description | stripHtml }}
             </p>
           }
           <div class="d-flex justify-content-center gap-2">

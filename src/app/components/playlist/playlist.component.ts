@@ -11,11 +11,12 @@ import { MusicPlayerService } from "../../services/music-player.service";
 import { PlaylistTrackItem } from "../../models/playlist-track-item.model";
 import { ToastrService } from "ngx-toastr";
 import { Track } from "../../models/track.model";
+import { StripHtmlPipe } from "../../pipes/strip-html.pipe";
 
 @Component({
   selector: "app-playlist",
   standalone: true,
-  imports: [SharedModule, MsToTimePipe],
+  imports: [SharedModule, MsToTimePipe, StripHtmlPipe],
   templateUrl: "./playlist.component.html",
   styleUrl: "./playlist.component.css",
 })
@@ -71,6 +72,7 @@ export class PlaylistComponent implements OnInit, OnDestroy {
         next: playlist => {
           this.playlist = playlist;
           this.getOwner(playlist.owner.id);
+          console.log(this.playlist);
         },
       })
     );
