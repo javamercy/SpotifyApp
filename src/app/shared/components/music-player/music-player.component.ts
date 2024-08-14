@@ -53,6 +53,7 @@ export class MusicPlayerComponent implements OnDestroy, OnInit, AfterViewInit {
   isPlaying: boolean;
   showPlayer = true;
   private subscriptions: Subscription = new Subscription();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private timeUpdateInterval: any;
 
   constructor(private musicPlayerService: MusicPlayerService) {}

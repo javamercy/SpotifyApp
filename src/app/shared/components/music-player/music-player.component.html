@@ -1,6 +1,6 @@
 @if (currentlyPlayingTrack) {
   <div
-    class="fixed-bottom bottom-0 start-0 text-light mx-2"
+    class="fixed-bottom bottom-0 start-0 text-light mx-2 mb-2"
     [@slideInOut]="playerState">
     <div class="d-flex justify-content-between">
       <app-icon
@@ -24,7 +24,7 @@
             [src]="currentlyPlayingTrack.album.images[0].url"
             class="img-fluid rounded-circle ek-img-square ek-img-cover"
             width="45" />
-          <div class="d-flex flex-column overflow-hidden m-2">
+          <div class="d-flex flex-column overflow-hidden m-2 mb-3">
             <div class="ek-scroll-container" appTextScroll>
               <div class="ek-scroll-item fw-bold">
                 {{ currentlyPlayingTrack.name }}
