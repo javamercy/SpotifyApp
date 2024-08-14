@@ -1,6 +1,4 @@
-<app-navbar></app-navbar>
+<app-navbar *ngIf="user"></app-navbar>
 <router-outlet></router-outlet>
-<app-footer></app-footer>
-@if (isTrack | async) {
-  <app-music-player></app-music-player>
-}
+<app-footer *ngIf="user"></app-footer>
+<app-music-player *ngIf="isTrack | async"></app-music-player>

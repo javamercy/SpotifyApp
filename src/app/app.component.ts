@@ -1,3 +1,4 @@
+import { AuthService } from "./services/auth.service";
 import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { NavbarComponent } from "./shared/components/navbar/navbar.component";
@@ -6,6 +7,7 @@ import { FooterComponent } from "./shared/components/footer/footer.component";
 import { MusicPlayerService } from "./services/music-player.service";
 import { map, Observable } from "rxjs";
 import { CommonModule } from "@angular/common";
+import { User } from "./models/user.model";
 
 @Component({
   selector: "app-root",
@@ -23,10 +25,18 @@ import { CommonModule } from "@angular/common";
 })
 export class AppComponent implements OnInit {
   isTrack: Observable<boolean>;
+  user: User;
 
-  constructor(private musicPlayerService: MusicPlayerService) {}
+  constructor(
+    private authService: AuthService,
+    private musicPlayerService: MusicPlayerService
+  ) {}
 
   ngOnInit() {
     this.isTrack = this.musicPlayerService.track$.pipe(map(track => !!track));
+
+    this.authService.user$.subscribe(user => {
+      this.user = user;
+    });
   }
 }
