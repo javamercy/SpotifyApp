@@ -36,7 +36,6 @@
                 <div class="ek-scroll-container mb" appTextScroll>
                   <span
                     class="ek-scroll-item fw-bold"
-                    #scrollItem
                     [class.animate]="track.id === currentlyPlayingTrack?.id">
                     {{ track.name }}
                   </span>
@@ -44,7 +43,6 @@
                 <div class="ek-scroll-container" appTextScroll>
                   <span
                     class="ek-scroll-item"
-                    #scrollItem
                     [class.animate]="track.id === currentlyPlayingTrack?.id">
                     {{ track.artists[0].name }}
                   </span>
