@@ -54,7 +54,7 @@ export class AuthService {
     }
   }
 
-  login(): void {
+  signIn(): void {
     const directUrl = `${environment.spotify.AuthorizeOptions.url}?client_id=${environment.spotify.AuthorizeOptions.clientId}&response_type=${environment.spotify.AuthorizeOptions.responseType}&redirect_uri=${environment.spotify.AuthorizeOptions.redirectUri}&scope=${environment.spotify.AuthorizeOptions.scope}`;
 
     window.location.href = directUrl;
@@ -79,7 +79,7 @@ export class AuthService {
     );
   }
 
-  logout(): void {
+  signOut(): void {
     this.userSubject.next(null);
     this.localStorageService.delete(Constants.SPOTIFY_ACCESS_TOKEN);
     this.localStorageService.delete(Constants.USER);
