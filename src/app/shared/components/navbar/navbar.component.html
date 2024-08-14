@@ -47,14 +47,14 @@
         @if (user) {
           <button
             class="btn btn-danger"
-            (click)="logout()"
+            (click)="signOut()"
             [ngStyle]="{ backgroundColor: 'var(--flame-scarlet)' }">
             Log out
           </button>
         } @else {
           <button
             class="btn btn-outline-light ek-btn-cross-rounded d-inline-flex gap-2 align-items-center justify-content-center"
-            (click)="login()"
+            (click)="signIn()"
             (mouseover)="onMouseOver()"
             (mouseout)="onMouseOut()">
             Sign in with
