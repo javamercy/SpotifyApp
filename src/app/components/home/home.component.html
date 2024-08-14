@@ -61,10 +61,10 @@
   </section>
 } @else {
   <section>
-    <div class="overflow-hidden">
+    <div class="container-fluid">
       <div class="ek-blank-h-50"></div>
       <div class="row">
-        <div class="col-md-6 p-0 overflow-hidden">
+        <div class="col-md-6 p-0">
           <img
             loading="lazy"
             src="images/welcome.png"
@@ -104,7 +104,7 @@
   </section>
 }
 <section>
-  @if (trendPlaylists && trendPlaylists.length) {
+  @if (featuredPlaylists && featuredPlaylists.length) {
     <h4 class="text-center fs-4 mb-4 py-2 ek-playlist-title">
       Featured Playlists
     </h4>
@@ -116,7 +116,7 @@
         breakpoints='{ "992": {"slidesPerView": 3}, "1200": {"slidesPerView": 4}}'
         grab-cursor="true"
         autoplay="true">
-        @for (playlist of trendPlaylists; track $index) {
+        @for (playlist of featuredPlaylists; track $index) {
           <swiper-slide lazy="true" class="p-1">
             <div class="card shadow mb-3 pb-3 position-relative">
               <img
@@ -141,4 +141,43 @@
     </div>
   }
 </section>
+<section>
+  @if (madeForYouPlaylists && madeForYouPlaylists.length) {
+    <h4 class="text-center fs-4 mb-4 py-2 ek-playlist-title">
+      Playlists Made For You
+    </h4>
+    <div class="ek-swiper-container">
+      <swiper-container
+        effect="card"
+        slides-per-view="2"
+        space-between="20"
+        breakpoints='{ "992": {"slidesPerView": 3}, "1200": {"slidesPerView": 4}}'
+        grab-cursor="true"
+        autoplay="true">
+        @for (playlist of madeForYouPlaylists; track $index) {
+          <swiper-slide lazy="true" class="p-1">
+            <div class="card shadow mb-3 pb-3 position-relative">
+              <img
+                src="{{ playlist.images[0].url }}"
+                class="card-img-top"
+                alt="{{ playlist.name }}" />
+              <div class="card-body">
+                <h6 class="text-center text-muted text-truncate">
+                  {{ playlist.name }}
+                </h6>
+              </div>
+              <button
+                class="btn btn-success w-75 mx-auto position-relative"
+                routerLink="/playlist/{{ playlist.id }}">
+                See More
+                <i class="bi bi-spotify"></i>
+              </button>
+            </div>
+          </swiper-slide>
+        }
+      </swiper-container>
+    </div>
+  }
+</section>
+
 <div class="ek-blank-h-100"></div>

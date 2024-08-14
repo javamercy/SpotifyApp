@@ -22,6 +22,7 @@ import { SimplifiedPlaylist } from "../../models/simplified.playlist.model";
 import { QuoteService } from "../../services/quote.service";
 import { NgxTypedJsComponent, NgxTypedJsModule } from "ngx-typed-js";
 import { Quote } from "../../models/quote.model";
+import { BrowseCategory } from "../../models/browse-category.model";
 
 @Component({
   selector: "app-home",
@@ -34,8 +35,12 @@ import { Quote } from "../../models/quote.model";
 export class HomeComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription;
   user: User;
-  trendPlaylists: Playlist[];
+  featuredPlaylists: Playlist[];
+  madeForYouPlaylists: Playlist[];
+  newReleasedPlaylists: Playlist[];
   currentUsersPlaylists: SimplifiedPlaylist[];
+  browseCategories: BrowseCategory[];
+  madeForYouId: string;
   playlistsFilterQuery: string;
   quotes: Quote[];
   strings: string[];
@@ -63,13 +68,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.authService.user$.subscribe(user => {
         this.user = user;
-        if (user) {
-          this.getFeaturedPlaylists();
-        } else {
-          this.getQuotes();
-        }
+        this.getQuotes();
       })
     );
+    this.getFeaturedPlaylists();
+    this.getBrowseCategories();
+    this.getMadeForYouPlaylists();
   }
 
   ngOnDestroy(): void {
@@ -129,10 +133,35 @@ export class HomeComponent implements OnInit, OnDestroy {
         .getFeaturedPlaylists(new PageRequest(20, 0))
         .subscribe({
           next: playlists => {
-            this.trendPlaylists = playlists.playlists.items;
+            this.featuredPlaylists = playlists.playlists.items;
           },
           error: error => console.error(error),
         })
+    );
+  }
+
+  getMadeForYouPlaylists(): void {
+    const categoryId = "0JQ5DAt0tbjZptfcdMSKl3";
+    this.subscriptions.add(
+      this.browseService
+        .getPlaylistsByCategoryId(categoryId, new PageRequest(20, 0))
+        .subscribe({
+          next: playlists => {
+            this.madeForYouPlaylists = playlists.playlists.items;
+          },
+          error: error => console.error(error),
+        })
+    );
+  }
+
+  getBrowseCategories(): void {
+    this.subscriptions.add(
+      this.browseService.getBrowseCategories(new PageRequest(20, 0)).subscribe({
+        next: categories => {
+          this.browseCategories = categories.categories.items;
+        },
+        error: error => console.error(error),
+      })
     );
   }
 
