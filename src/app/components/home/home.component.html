@@ -105,9 +105,12 @@
 }
 <section>
   @if (featuredPlaylists && featuredPlaylists.length) {
-    <h4 class="text-center fs-4 mb-4 py-2 ek-playlist-title">
-      Featured Playlists
-    </h4>
+    <div class="text-center">
+      <h4 class="ek-vintage-title p-2 mx-auto my-5 rounded-2">
+        Featured Playlists
+      </h4>
+    </div>
+
     <div class="ek-swiper-container">
       <swiper-container
         effect="card"
@@ -143,9 +146,9 @@
 </section>
 <section>
   @if (madeForYouPlaylists && madeForYouPlaylists.length) {
-    <h4 class="text-center fs-4 mb-4 py-2 ek-playlist-title">
-      Playlists Made For You
-    </h4>
+    <div class="text-center my-5">
+      <h4 class="ek-vintage-title p-2 mx-auto rounded-2">Made For You</h4>
+    </div>
     <div class="ek-swiper-container">
       <swiper-container
         effect="card"
@@ -156,22 +159,21 @@
         autoplay="true">
         @for (playlist of madeForYouPlaylists; track $index) {
           <swiper-slide lazy="true" class="p-1">
-            <div class="card shadow mb-3 pb-3 position-relative">
+            <div class="card shadow mb-3 position-relative">
               <img
                 src="{{ playlist.images[0].url }}"
                 class="card-img-top"
                 alt="{{ playlist.name }}" />
-              <div class="card-body">
-                <h6 class="text-center text-muted text-truncate">
+              <div class="card-body" [appAverageColor]="playlist.images[0].url">
+                <div class="text-center mb-3">
                   {{ playlist.name }}
-                </h6>
+                </div>
+                <button
+                  class="btn d-inline-block w-100 btn-success"
+                  routerLink="/playlist/{{ playlist.id }}">
+                  See More
+                </button>
               </div>
-              <button
-                class="btn btn-success w-75 mx-auto position-relative"
-                routerLink="/playlist/{{ playlist.id }}">
-                See More
-                <i class="bi bi-spotify"></i>
-              </button>
             </div>
           </swiper-slide>
         }

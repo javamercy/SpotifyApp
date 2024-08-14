@@ -23,11 +23,18 @@ import { QuoteService } from "../../services/quote.service";
 import { NgxTypedJsComponent, NgxTypedJsModule } from "ngx-typed-js";
 import { Quote } from "../../models/quote.model";
 import { BrowseCategory } from "../../models/browse-category.model";
+import { AverageColorDirective } from "../../shared/directives/average-color.directive";
 
 @Component({
   selector: "app-home",
   standalone: true,
-  imports: [SharedModule, FormsModule, RouterModule, NgxTypedJsModule],
+  imports: [
+    SharedModule,
+    FormsModule,
+    RouterModule,
+    NgxTypedJsModule,
+    AverageColorDirective,
+  ],
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.css",
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
