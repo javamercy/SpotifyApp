@@ -44,6 +44,11 @@
   --mint-cream: #f5fffa;
 }
 
+::selection {
+  background-color: var(--flame-scarlet);
+  color: var(--white);
+}
+
 /* color  */
 
 .ek-text-lime-green {
@@ -419,8 +424,8 @@
   border-top-right-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 
-  border-top-left-radius: 0.5rem !important;
-  border-bottom-right-radius: 0.5rem !important;
+  border-top-left-radius: 14px !important;
+  border-bottom-right-radius: 14px !important;
 }
 
 .ek-vintage-title {

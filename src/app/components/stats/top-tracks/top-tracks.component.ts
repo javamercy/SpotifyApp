@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Track } from "../../models/track.model";
-import { MsToTimePipe } from "../../pipes/ms-to-time.pipe";
-import { SharedModule } from "../../shared/modules/shared.module";
-import { UserService } from "../../services/user.service";
-import { PageRequest } from "../../models/page-request.model";
-import { TimeRange } from "../../enums/time-range";
 import { Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
+import { SharedModule } from "../../../shared/modules/shared.module";
+import { TimeRange } from "../../../enums/time-range";
+import { PageRequest } from "../../../models/page-request.model";
+import { Track } from "../../../models/track.model";
+import { MsToTimePipe } from "../../../pipes/ms-to-time.pipe";
+import { UserService } from "../../../services/user.service";
 
 @Component({
   selector: "app-top-tracks",

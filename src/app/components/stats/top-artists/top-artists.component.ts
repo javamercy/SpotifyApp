@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Artist } from "../../models/artist.model";
-import { TimeRange } from "../../enums/time-range";
-import { UserService } from "../../services/user.service";
-import { PageRequest } from "../../models/page-request.model";
 import { ActivatedRoute } from "@angular/router";
 import { Subscription } from "rxjs";
+import { TimeRange } from "../../../enums/time-range";
+import { Artist } from "../../../models/artist.model";
+import { PageRequest } from "../../../models/page-request.model";
+import { UserService } from "../../../services/user.service";
 
 @Component({
   selector: "app-top-artists",

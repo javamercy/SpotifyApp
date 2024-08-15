@@ -1,75 +1,9 @@
-.ek-container-fluid {
-  height: 50dvh;
-  display: grid;
-  place-items: center;
-  align-items: end;
+.ek-hero-container {
+  max-height: 100dvh;
 }
 
-@media (max-width: 767px) {
-  .ek-container-fluid {
-    height: 50dvh;
-    align-items: end;
-  }
-}
-
-.ek-arrow-down {
-  position: absolute;
-  bottom: 3rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-  cursor: pointer;
-  animation: arrow-down 1.5s infinite linear;
-}
-.ek-arrow-down:hover {
-  animation-play-state: paused;
-}
-
-.ek-parallax-container {
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-  height: 100dvh;
-}
-
-.ek-parallax-left {
-  opacity: 0;
-  transform: translateX(-100%);
-  transition:
-    transform 0.3s ease-in-out,
-    opacity 0.3s ease-in-out;
-}
-
-.ek-parallax-right {
-  opacity: 0;
-  transform: translateX(100%);
-  transition:
-    transform 0.3s ease-in-out,
-    opacity 0.3s ease-in-out;
-}
-
-.ek-parallax-container.scrolled .ek-parallax-left {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.ek-parallax-container.scrolled .ek-parallax-right {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-@keyframes arrow-down {
-  0%,
-  20%,
-  50%,
-  80%,
-  100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(1rem);
-  }
-  60% {
-    transform: translateY(0.5rem);
-  }
+.ek-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

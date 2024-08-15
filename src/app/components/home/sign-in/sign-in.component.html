@@ -1,58 +1,28 @@
-<div class="ek-container-fluid" #containerFluid>
-  <ngx-typed-js
-    [strings]="strings"
-    [typeSpeed]="30"
-    [showCursor]="false"
-    [backDelay]="5000"
-    (stringTyped)="onStringTyped($event)"
-    (preStringTyped)="onPreStringTyped()"
-    (lastStringBackspaced)="onLastStringBackspaced()"
-    [loop]="true">
-    <figure class="text-center px-2">
-      <blockquote class="blockquote fs-3">
-        <p class="typing"></p>
-      </blockquote>
-      @if (isAuthorShown) {
-        <figcaption class="blockquote-footer">
-          <cite title="Source Title">{{ currentAuthor }}</cite>
-        </figcaption>
-      }
-    </figure>
-  </ngx-typed-js>
-  <div
-    class="ek-arrow-down bg-success border border-2 border-success rounded-circle"
-    (click)="onArrowDown()"
-    #arrowDown>
-    <app-icon
-      width="30"
-      height="30"
-      path="icons/icons.svg#arrowDownCircleFill"></app-icon>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-7 ek-hero-container">
+      <img src="/images/spotify_music.jpg" class="ek-hero-img" />
+    </div>
+    <div class="col-md-5">
+      <section>
+        <div
+          class="d-flex flex-column flex-md-row align-items-center justify-content-md-between">
+          <div class="col-md-5 d-flex flex-column align-items-center gap-3">
+            <h1 class="fs-2">Welcome to Magic Spotify</h1>
+            <button
+              class="ek-btn-cross-rounded btn btn-lg btn-outline-success d-inline-flex gap-2 align-items-center justify-content-center fw-semibold"
+              (click)="signIn()">
+              Sign in with
+              <app-icon
+                path="icons/icons.svg#spotify"
+                color="var(--forest-green)"
+                width="30"
+                height="30">
+              </app-icon>
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 </div>
-<section>
-  <div
-    class="ek-parallax-container d-flex flex-column flex-md-row align-items-center justify-content-md-between"
-    #parallaxContainer>
-    <div
-      class="ek-parallax-left col-md-5 d-flex flex-column align-items-center gap-3">
-      <h1 class="fs-2">Welcome to Magic Spotify</h1>
-      <button
-        class="btn btn-lg btn-outline-light ek-btn-cross-rounded d-inline-flex gap-2 align-items-center justify-content-center fw-semibold"
-        (click)="signIn()">
-        Sign in with
-        <app-icon
-          path="icons/icons.svg#spotify"
-          color="var(--forest-green)"
-          width="30"
-          height="30">
-        </app-icon>
-      </button>
-    </div>
-    <div class="ek-parallax-right col-md-6 overflow-hidden">
-      <img
-        src="images/5624628.jpg"
-        class="img-fluid rounded-2"
-        alt="Home Illustration" />
-    </div>
-  </div>
-</section>

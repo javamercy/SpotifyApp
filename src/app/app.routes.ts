@@ -34,16 +34,16 @@ export const routes: Routes = [
           {
             path: "tracks",
             loadComponent: () =>
-              import("./components/top-tracks/top-tracks.component").then(
+              import("./components/stats/top-tracks/top-tracks.component").then(
                 m => m.TopTracksComponent
               ),
           },
           {
             path: "artists",
             loadComponent: () =>
-              import("./components/top-artists/top-artists.component").then(
-                m => m.TopArtistsComponent
-              ),
+              import(
+                "./components/stats/top-artists/top-artists.component"
+              ).then(m => m.TopArtistsComponent),
           },
         ],
       },
