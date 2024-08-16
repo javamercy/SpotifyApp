@@ -435,12 +435,10 @@
 
   display: inline-block;
   background-color: var(--vintage-cream);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
   box-shadow:
     5px 5px 0px var(--vintage-orange),
     -5px -5px 0px var(--vintage-brown);
-  position: relative;
 }
 
 html,
