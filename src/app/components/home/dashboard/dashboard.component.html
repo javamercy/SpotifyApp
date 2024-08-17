@@ -4,9 +4,8 @@
     <div class="row">
       <div class="col-md-6 p-0">
         <img
-          loading="lazy"
-          src="images/welcome.png"
-          class="img-fluid ek-image-cover rounded" />
+          src="images/hand-drawn-guitar.png"
+          class="img-fluid ek-image-cover" />
       </div>
       <div class="col-md-6 d-flex align-items-center justify-content-center">
         <div class="d-flex flex-column gap-3">
@@ -40,8 +39,8 @@
 </section>
 <section>
   @if (featuredPlaylists && featuredPlaylists.length) {
-    <div class="text-center">
-      <h4 class="ek-vintage-title p-2 my-5">Featured Playlists</h4>
+    <div class="text-center mt-5 mb-3">
+      <h4 class="ek-vintage-title">Featured Playlists</h4>
     </div>
 
     <div class="ek-swiper-container">
@@ -79,8 +78,8 @@
 </section>
 <section>
   @if (madeForYouPlaylists && madeForYouPlaylists.length) {
-    <div class="text-center my-5">
-      <h4 class="ek-vintage-title p-2">Made For You</h4>
+    <div class="text-center mt-5 mb-2">
+      <h4 class="ek-vintage-title">Made For You</h4>
     </div>
     <div class="ek-swiper-container">
       <swiper-container
@@ -97,7 +96,7 @@
                 src="{{ playlist.images[0].url }}"
                 class="card-img-top"
                 alt="{{ playlist.name }}" />
-              <div class="card-body" [appAverageColor]="playlist.images[0].url">
+              <div class="card-body">
                 <div class="text-center mb-3">
                   {{ playlist.name }}
                 </div>
