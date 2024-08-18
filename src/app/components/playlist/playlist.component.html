@@ -1,86 +1,42 @@
-<div class="container-md px-3 px-sm-0">
-  <div class="ek-blank-h-50"></div>
-  @if (playlist) {
-    <section>
+<section>
+  <div class="container-md px-3 px-sm-0">
+    <div class="ek-blank-h-50"></div>
+    @if (playlist) {
       <div
-        class="row align-items-center gap-4 gap-md-0 justify-content-center border-bottom border-secondary pb-4">
+        class="row align-items-center gap-4 gap-md-0 justify-content-center pb-4">
         <div class="col-sm-4 text-center">
           <img class="img-fluid rounded" [src]="playlist.images[0].url" />
         </div>
         <div class="col-sm-8 d-flex flex-column gap-4">
-          <h1 class="text-center">
-            {{ playlist.name }}
+          <h1 class="text-center fs-3">
+            <span class="ek-vintage-title me-3">{{ playlist.name }}</span>
+            <app-icon
+              width="30"
+              height="30"
+              path="icons/icons.svg#threeDotsVertical"
+              data-bs-toggle="modal"
+              data-bs-target="#playlistOptionsModal"></app-icon>
           </h1>
           @if (playlist.description) {
-            <p class="text-center font-monospace">
+            <p class="text-center font-monospace mb-0">
               {{ playlist.description | stripHtml }}
             </p>
           }
-          <div class="d-flex justify-content-center gap-2">
-            <a
-              class="btn ek-btn-spotify-green d-inline-flex align-items-center gap-2"
-              [href]="playlist.external_urls.spotify">
-              <app-icon
-                path="icons/icons.svg#spotify"
-                color="var(--white)"></app-icon>
-              <span>See on Spotify</span>
-            </a>
-            <button
-              class="btn ek-btn-flame-scarlet d-inline-flex align-items-center gap-2">
-              <app-icon
-                path="icons/icons.svg#musicNoteList"
-                color="var(--white)"></app-icon>
-              <span>Play</span>
-            </button>
-          </div>
-          <div class="font-monospace fw-bolder text-center">
-            <span class="d-inline-flex align-items-center">
-              <app-icon
-                path="icons/icons.svg#musicNoteBeamed"
-                color="var(--spotify-green)"></app-icon>
-              <span class="ms-2">{{ playlist.tracks.total }}</span>
-            </span>
-            <span class="ms-4 d-inline-flex align-items-center">
-              <app-icon
-                path="icons/icons.svg#starFill"
-                color="var(--illuminating-yellow)"></app-icon>
-              <span class="ms-2">{{ playlist.followers.total | number }} </span>
-            </span>
-          </div>
-          @if (owner) {
-            <div class="text-center">
-              <span class="font-monospace fw-bolder">
-                by {{ playlist.owner.display_name }}
-              </span>
-              <img
-                [src]="owner.images[0]?.url || 'person-circle.svg'"
-                width="30"
-                height="30"
-                class="img-fluid rounded-circle" />
-            </div>
-          }
         </div>
       </div>
-    </section>
-    <div class="py-4"></div>
-    <section>
-      <div class="text-center">
-        <h3 class="fw-bold fs-3 mb-3">Songs</h3>
-        <p class="font-monospace">The tracklist for "{{ playlist.name }}"</p>
-      </div>
+
       <ul class="list-group list-group-flush">
         @for (track of playlist.tracks.items; track $index) {
           <li
             role="button"
             (click)="play(track)"
-            class="list-group-item ek-list-group-item border-secondary ps-0 py-3 py-sm-2"
+            class="list-group-item ek-list-group-item border-secondary px-0 py-3 py-sm-2"
             [style.backgroundColor]="getListItemBgClass(track)">
             <div
               class="d-flex align-items-center gap-3"
               [class.ek-text-forest-green]="
                 currentlyPlayingTrack?.id == track.track.id
               ">
-              <span class="ek-track-index fw-bold">{{ $index + 1 }}</span>
               <div class="position-relative flex-shrink-0 ek-album-cover">
                 <img
                   class="rounded img-fluid"
@@ -118,29 +74,38 @@
                   </div>
                 </div>
               </div>
-              <div class="ms-auto">
+              <div class="ms-auto flex-shrink-0">
+                @if (isTrackSaved(track)) {
+                  <app-icon
+                    width="25"
+                    height="25"
+                    color="var(--dark-green)"
+                    path="/icons/icons.svg#suitHeartFill"
+                    (click)="onHeartClick(track, $event)">
+                  </app-icon>
+                }
                 <app-icon
+                  class="ms-2"
                   width="25"
                   height="25"
                   path="icons/icons.svg#threeDotsVertical"
                   data-bs-toggle="modal"
-                  data-bs-target="#optionsModal"
+                  data-bs-target="#trackOptionsModal"
                   (click)="setSelectedTrack(track, $event)"></app-icon>
               </div>
             </div>
           </li>
         }
       </ul>
-    </section>
-  }
-</div>
-
+    }
+  </div>
+</section>
 <!-- Modal -->
 <div
   class="modal"
-  id="optionsModal"
+  id="trackOptionsModal"
   tabindex="-1"
-  aria-labelledby="optionsModal"
+  aria-labelledby="trackOptionsModal"
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     @if (selectedTrack) {
@@ -166,7 +131,7 @@
             class="d-flex align-items-start flex-column gap-4 mt-5 fw-bold ek-options-list-group">
             <div
               class="d-inline-flex align-items-center gap-3"
-              (click)="like(selectedTrack)"
+              (click)="save(selectedTrack)"
               data-bs-dismiss="modal">
               <app-icon path="icons/icons.svg#heart"></app-icon>
               <span>Like</span>
@@ -180,4 +145,65 @@
       </div>
     }
   </div>
+</div>
+
+<div
+  class="modal"
+  id="playlistOptionsModal"
+  tabindex="-1"
+  aria-labelledby="playlistOptionsModal"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    @if (playlist) {
+      <div class="modal-content text-light border-0 bg-transparent">
+        <div class="modal-body">
+          <div class="d-flex gap-3 align-items-start">
+            <img
+              [src]="playlist.images[0].url"
+              class="rounded img-fluid ek-img-cover"
+              alt="Playlist image"
+              width="75"
+              height="75" />
+            <div class="fw-bold mb-0">
+              {{ playlist.name }}
+            </div>
+          </div>
+          <div
+            class="d-flex align-items-start flex-column gap-4 mt-5 fw-bold ek-options-list-group">
+            <div
+              class="d-inline-flex align-items-center gap-3"
+              (click)="redirecToSpotify()">
+              <app-icon
+                path="icons/icons.svg#spotify"
+                color="var(--spotify-green)"></app-icon>
+              <span>See on Spotify</span>
+            </div>
+            <div
+              class="d-inline-flex align-items-center gap-3"
+              (click)="likePlaylist()"
+              data-bs-dismiss="modal">
+              <app-icon path="icons/icons.svg#heart"></app-icon>
+              <span>Like</span>
+            </div>
+            <div class="d-inline-flex align-items-center gap-3">
+              <app-icon path="icons/icons.svg#share"></app-icon>
+              <span>Share</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+  @if (owner) {
+    <div class="ek-owner-container">
+      <span class="font-monospace ek-text-silver">
+        by {{ playlist.owner.display_name }}
+      </span>
+      <img
+        [src]="owner.images[0]?.url || 'person-circle.svg'"
+        width="30"
+        height="30"
+        class="img-fluid rounded-circle" />
+    </div>
+  }
 </div>

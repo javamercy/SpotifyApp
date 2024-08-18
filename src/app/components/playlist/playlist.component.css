@@ -11,3 +11,10 @@
 .ek-options-list-group > *:hover {
   transform: scale(1.1);
 }
+
+.ek-owner-container {
+  position: absolute;
+  left: 50%;
+  bottom: 2rem;
+  transform: translate(-50%);
+}

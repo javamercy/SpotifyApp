@@ -12,11 +12,12 @@ import { PlaylistTrackItem } from "../../models/playlist-track-item.model";
 import { ToastrService } from "ngx-toastr";
 import { Track } from "../../models/track.model";
 import { StripHtmlPipe } from "../../pipes/strip-html.pipe";
+import { MusicPlayerComponent } from "../../shared/components/music-player/music-player.component";
 
 @Component({
   selector: "app-playlist",
   standalone: true,
-  imports: [SharedModule, MsToTimePipe, StripHtmlPipe],
+  imports: [SharedModule, MsToTimePipe, StripHtmlPipe, MusicPlayerComponent],
   templateUrl: "./playlist.component.html",
   styleUrl: "./playlist.component.css",
 })
@@ -26,6 +27,8 @@ export class PlaylistComponent implements OnInit, OnDestroy {
   selectedTrack: PlaylistTrackItem;
   currentlyPlayingTrack: Track;
   isPlaying: boolean;
+  isPlaylistLoaded: boolean;
+  savedTracks: Map<string, boolean> = new Map<string, boolean>();
 
   private readonly subscriptions: Subscription = new Subscription();
 
@@ -72,7 +75,8 @@ export class PlaylistComponent implements OnInit, OnDestroy {
         next: playlist => {
           this.playlist = playlist;
           this.getOwner(playlist.owner.id);
-          console.log(this.playlist);
+          this.isPlaylistLoaded = true;
+          this.getSavedTracks(playlist.tracks.items.map(item => item.track.id));
         },
       })
     );
@@ -103,20 +107,41 @@ export class PlaylistComponent implements OnInit, OnDestroy {
     this.selectedTrack = track;
   }
 
-  like(track: PlaylistTrackItem) {
+  save(track: PlaylistTrackItem) {
     this.userService.saveTrack(track.track.id).subscribe({
       next: () => {
-        this.toastrService.success("Track saved to your library", null, {
-          tapToDismiss: true,
-          positionClass: "toast-bottom-full-width",
-          timeOut: 2500,
-          progressBar: true,
-          closeButton: false,
-        });
         this.selectedTrack = null;
+        this.savedTracks.set(track.track.id, true);
       },
       error: error => console.error(error),
     });
+  }
+
+  unsave(track: PlaylistTrackItem) {
+    this.userService.unsaveTrack(track.track.id).subscribe({
+      next: () => {
+        this.selectedTrack = null;
+        this.savedTracks.set(track.track.id, false);
+      },
+      error: error => console.error(error),
+    });
+  }
+
+  getSavedTracks(trackIds: string[]) {
+    this.subscriptions.add(
+      this.userService.getSavedTracks(trackIds).subscribe({
+        next: likedTracks => {
+          trackIds.forEach((id, index) => {
+            this.savedTracks.set(id, likedTracks[index]);
+          });
+        },
+        error: error => console.error(error),
+      })
+    );
+  }
+
+  isTrackSaved(track: PlaylistTrackItem) {
+    return this.savedTracks.get(track.track.id);
   }
 
   getListItemBgClass(track: PlaylistTrackItem) {
@@ -134,5 +159,22 @@ export class PlaylistComponent implements OnInit, OnDestroy {
   togglePlayback(e: Event) {
     e.stopPropagation();
     this.musicPlayerService.toggle();
+  }
+
+  likePlaylist() {
+    throw new Error("Method not implemented.");
+  }
+
+  redirecToSpotify() {
+    window.open(
+      this.playlist.external_urls.spotify,
+      "_blank",
+      "noopener noreferrer"
+    );
+  }
+
+  onHeartClick(track: PlaylistTrackItem, e: Event) {
+    e.stopPropagation();
+    this.unsave(track);
   }
 }

@@ -55,7 +55,7 @@ export class DashboardComponent implements OnDestroy, OnInit {
   getFeaturedPlaylists(): void {
     this.subscriptions.add(
       this.browseService
-        .getFeaturedPlaylists(new PageRequest(20, 0))
+        .getFeaturedPlaylists(new PageRequest(30, 0))
         .subscribe({
           next: playlists => {
             this.featuredPlaylists = playlists.playlists.items;
@@ -69,7 +69,7 @@ export class DashboardComponent implements OnDestroy, OnInit {
     const categoryId = "0JQ5DAt0tbjZptfcdMSKl3";
     this.subscriptions.add(
       this.browseService
-        .getPlaylistsByCategoryId(categoryId, new PageRequest(20, 0))
+        .getPlaylistsByCategoryId(categoryId, new PageRequest(30, 0))
         .subscribe({
           next: playlists => {
             this.madeForYouPlaylists = playlists.playlists.items;
@@ -81,9 +81,10 @@ export class DashboardComponent implements OnDestroy, OnInit {
 
   getBrowseCategories(): void {
     this.subscriptions.add(
-      this.browseService.getBrowseCategories(new PageRequest(20, 0)).subscribe({
+      this.browseService.getBrowseCategories(new PageRequest(50, 0)).subscribe({
         next: categories => {
           this.browseCategories = categories.categories.items;
+          console.log(this.browseCategories.map(c => c.name));
         },
         error: error => console.error(error),
       })
