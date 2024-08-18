@@ -71,4 +71,11 @@ export class UserService {
   unsaveTrack(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/me/tracks?ids=${id}`);
   }
+
+  getSavedTracks(trackIds: string[]): Observable<boolean[]> {
+    const url = `${this.apiUrl}/me/tracks/contains`;
+    const params = { ids: trackIds.join(",") };
+
+    return this.http.get<boolean[]>(url, { params });
+  }
 }
