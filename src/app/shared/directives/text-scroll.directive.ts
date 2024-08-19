@@ -1,5 +1,8 @@
 import { Directive, ElementRef, Renderer2, AfterViewInit } from "@angular/core";
 
+/**
+ * Directive to add scroll animation to text that overflows its container.
+ */
 @Directive({
   selector: "[appTextScroll]",
   standalone: true,
@@ -14,32 +17,41 @@ export class TextScrollDirective implements AfterViewInit {
     this.setScrollAnimationProperty();
   }
 
-  setScrollAnimationProperty() {
-    const container = this.el.nativeElement;
-    const scrollItem = this.el.nativeElement
-      .firstElementChild as HTMLDivElement;
+  updateScrollAnimationProperty() {
+    this.setScrollAnimationProperty();
+  }
 
-    if (scrollItem) {
-      const containerWidth = container.scrollWidth;
-      const scrollItemWidth = container.clientWidth;
-      const overflowWidth = containerWidth - scrollItemWidth;
+  private setScrollAnimationProperty() {
+    const container = this.el.nativeElement as HTMLElement;
+    const items = this.el.nativeElement.querySelectorAll(
+      ".ek-scroll-item"
+    ) as NodeListOf<HTMLElement>;
 
-      if (overflowWidth > 0) {
-        const animationDuration = Math.ceil(overflowWidth * 0.15);
+    items.forEach(item => {
+      this.setStyles(item, container);
+    });
+  }
 
-        container.style.setProperty(
-          "--overflow-width",
-          `${overflowWidth * -1}px`
-        );
-        container.style.setProperty(
-          "--animation-duration",
-          `${animationDuration}s`
-        );
+  private setStyles(item: HTMLElement, container: HTMLElement) {
+    const containerWidth = container.scrollWidth;
+    const itemWidth = container.clientWidth;
 
-        container.classList.add("animate");
-      } else {
-        container.classList.remove("animate");
-      }
+    const overflowWidth = containerWidth - itemWidth;
+
+    if (overflowWidth > 0) {
+      const duration = (overflowWidth / 50) * 1000;
+
+      this.renderer.setStyle(
+        container,
+        "--animation-duration",
+        `${duration}ms`
+      );
+      this.renderer.setStyle(
+        container,
+        "--overflow-width",
+        `${overflowWidth}px`
+      );
+      this.renderer.addClass(item, "animate");
     }
   }
 }

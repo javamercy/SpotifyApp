@@ -6,6 +6,8 @@ import {
   HostListener,
   OnInit,
   AfterViewInit,
+  ViewChildren,
+  QueryList,
 } from "@angular/core";
 import { MusicPlayerService } from "../../../services/music-player.service";
 import { Track } from "../../../models/track.model";
@@ -47,12 +49,18 @@ import { CircularProgressBarDirective } from "../../directives/circular-progress
   ],
 })
 export class MusicPlayerComponent implements OnDestroy, OnInit, AfterViewInit {
-  @ViewChild("audioRef") public readonly audioRef: ElementRef<HTMLAudioElement>;
+  @ViewChild("audioRef")
+  private readonly audioRef: ElementRef<HTMLAudioElement>;
+
   currentlyPlayingTrack: Track | null;
   progress = 0;
   isPlaying: boolean;
   showPlayer = true;
-  private subscriptions: Subscription = new Subscription();
+  private readonly subscriptions: Subscription = new Subscription();
+
+  @ViewChildren(TextScrollDirective)
+  private readonly textScrollDirectives: QueryList<TextScrollDirective>;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private timeUpdateInterval: any;
 
@@ -65,6 +73,9 @@ export class MusicPlayerComponent implements OnDestroy, OnInit, AfterViewInit {
 
         if (this.audioRef && track) {
           this.updateAudio(track);
+          this.textScrollDirectives.forEach(directive =>
+            directive.updateScrollAnimationProperty()
+          );
         }
       })
     );
