@@ -21,6 +21,16 @@ export class TextScrollDirective implements AfterViewInit {
     this.setScrollAnimationProperty();
   }
 
+  resetScrollAnimationProperty() {
+    const items = this.el.nativeElement.querySelectorAll(
+      ".ek-scroll-item"
+    ) as NodeListOf<HTMLElement>;
+
+    items.forEach(item => {
+      this.renderer.removeClass(item, "animate");
+    });
+  }
+
   private setScrollAnimationProperty() {
     const container = this.el.nativeElement as HTMLElement;
     const items = this.el.nativeElement.querySelectorAll(
@@ -33,24 +43,12 @@ export class TextScrollDirective implements AfterViewInit {
   }
 
   private setStyles(item: HTMLElement, container: HTMLElement) {
-    const containerWidth = container.scrollWidth;
-    const itemWidth = container.clientWidth;
+    const containerWidth = container.clientWidth;
+    const itemWidth = item.scrollWidth;
 
-    const overflowWidth = containerWidth - itemWidth;
-
-    if (overflowWidth > 0) {
-      const duration = (overflowWidth / 50) * 1000;
-
-      this.renderer.setStyle(
-        container,
-        "--animation-duration",
-        `${duration}ms`
-      );
-      this.renderer.setStyle(
-        container,
-        "--overflow-width",
-        `${overflowWidth}px`
-      );
+    if (itemWidth > containerWidth) {
+      item.style.setProperty("--item-width", `${itemWidth}px`);
+      item.style.setProperty("--container-width", `${containerWidth}px`);
       this.renderer.addClass(item, "animate");
     }
   }

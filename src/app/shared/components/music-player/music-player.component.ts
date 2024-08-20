@@ -73,9 +73,12 @@ export class MusicPlayerComponent implements OnDestroy, OnInit, AfterViewInit {
 
         if (this.audioRef && track) {
           this.updateAudio(track);
-          this.textScrollDirectives.forEach(directive =>
-            directive.updateScrollAnimationProperty()
-          );
+          this.textScrollDirectives.forEach(directive => {
+            console.log(directive);
+
+            directive.resetScrollAnimationProperty();
+            directive.updateScrollAnimationProperty();
+          });
         }
       })
     );

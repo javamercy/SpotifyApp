@@ -28,7 +28,6 @@
       <ul class="list-group list-group-flush">
         @for (track of playlist.tracks.items; track $index) {
           <li
-            role="button"
             (click)="play(track)"
             class="list-group-item ek-list-group-item border-secondary px-0 py-3 py-sm-2"
             [style.backgroundColor]="getListItemBgClass(track)">

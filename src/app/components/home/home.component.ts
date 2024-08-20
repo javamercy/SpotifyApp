@@ -4,11 +4,12 @@ import { User } from "../../models/user.model";
 import { AuthService } from "../../services/auth.service";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { SignInComponent } from "./sign-in/sign-in.component";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: "app-home",
   standalone: true,
-  imports: [DashboardComponent, SignInComponent],
+  imports: [DashboardComponent, SignInComponent, CommonModule],
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.css",
   schemas: [],
@@ -16,6 +17,7 @@ import { SignInComponent } from "./sign-in/sign-in.component";
 export class HomeComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription = new Subscription();
   user: User;
+  isUserLoaded = false;
 
   constructor(private authService: AuthService) {}
 
@@ -23,6 +25,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.authService.user$.subscribe(user => {
         this.user = user;
+        this.isUserLoaded = true;
       })
     );
   }

@@ -399,18 +399,27 @@ body {
 }
 
 .ek-scroll-item.animate {
-  animation: scroll var(--animation-duration) linear infinite;
+  animation: scroll 10s linear infinite;
+  animation-delay: 1s;
 }
 
 @keyframes scroll {
   0% {
-    transform: translateX(0);
+    transform: translateX(0); /* Start at the original position */
   }
-  50% {
-    transform: translateX(var(--overflow-width));
+  10% {
+    transform: translateX(0); /* Start at the original position */
+  }
+  67% {
+    transform: translateX(calc(var(--item-width) * -1));
+  }
+  67.0000001% {
+    transform: translateX(
+      var(--container-width)
+    ); /* Jump to off-screen to the right */
   }
   100% {
-    transform: translateX(0);
+    transform: translateX(0); /* Move back to the original position */
   }
 }
 .ek-circle-bg {

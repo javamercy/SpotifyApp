@@ -1,6 +1,5 @@
 import { Router, RouterOutlet } from "@angular/router";
 import { Component } from "@angular/core";
-import { PageRequest } from "../../models/page-request.model";
 import { SharedModule } from "../../shared/modules/shared.module";
 import { MsToTimePipe } from "../../pipes/ms-to-time.pipe";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -13,8 +12,6 @@ import { ReactiveFormsModule } from "@angular/forms";
   styleUrl: "./stats.component.css",
 })
 export class StatsComponent {
-  pageRequest: PageRequest = new PageRequest(50, 0);
-
   constructor(private router: Router) {}
 
   onTimeRangeChange(value: string) {
