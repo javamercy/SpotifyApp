@@ -390,16 +390,18 @@ body {
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: flex-start;
 }
 
 .ek-scroll-item {
-  display: inline-block;
   white-space: nowrap;
-  position: relative;
 }
 
 .ek-scroll-item.animate {
-  animation: scroll 10s linear infinite;
+  animation: scroll var(--scroll-duration) linear infinite;
   animation-delay: 1s;
 }
 
@@ -407,13 +409,15 @@ body {
   0% {
     transform: translateX(0); /* Start at the original position */
   }
-  10% {
-    transform: translateX(0); /* Start at the original position */
+  15% {
+    transform: translateX(0); /* Stay at the original position for a while */
   }
-  67% {
-    transform: translateX(calc(var(--item-width) * -1));
+  80% {
+    transform: translateX(
+      calc(-1 * var(--item-width) - var(--container-width))
+    );
   }
-  67.0000001% {
+  80.000001% {
     transform: translateX(
       var(--container-width)
     ); /* Jump to off-screen to the right */

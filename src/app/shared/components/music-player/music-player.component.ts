@@ -8,6 +8,7 @@ import {
   AfterViewInit,
   ViewChildren,
   QueryList,
+  Renderer2,
 } from "@angular/core";
 import { MusicPlayerService } from "../../../services/music-player.service";
 import { Track } from "../../../models/track.model";
@@ -52,19 +53,25 @@ export class MusicPlayerComponent implements OnDestroy, OnInit, AfterViewInit {
   @ViewChild("audioRef")
   private readonly audioRef: ElementRef<HTMLAudioElement>;
 
+  @ViewChild("ekScrollContainer")
+  private readonly scrollContainer: ElementRef<HTMLDivElement>;
+
+  @ViewChildren("ekScrollItem")
+  private readonly scrollItems: QueryList<ElementRef<HTMLDivElement>>;
+
   currentlyPlayingTrack: Track | null;
   progress = 0;
   isPlaying: boolean;
   showPlayer = true;
   private readonly subscriptions: Subscription = new Subscription();
 
-  @ViewChildren(TextScrollDirective)
-  private readonly textScrollDirectives: QueryList<TextScrollDirective>;
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private timeUpdateInterval: any;
 
-  constructor(private musicPlayerService: MusicPlayerService) {}
+  constructor(
+    private musicPlayerService: MusicPlayerService,
+    private renderer: Renderer2
+  ) {}
 
   ngOnInit(): void {
     this.subscriptions.add(
@@ -73,12 +80,8 @@ export class MusicPlayerComponent implements OnDestroy, OnInit, AfterViewInit {
 
         if (this.audioRef && track) {
           this.updateAudio(track);
-          this.textScrollDirectives.forEach(directive => {
-            console.log(directive);
 
-            directive.resetScrollAnimationProperty();
-            directive.updateScrollAnimationProperty();
-          });
+          setTimeout(() => this.setScrollAnimationProperty(), 0);
         }
       })
     );
@@ -96,6 +99,7 @@ export class MusicPlayerComponent implements OnDestroy, OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     if (this.audioRef && this.currentlyPlayingTrack) {
       this.updateAudio(this.currentlyPlayingTrack);
+      this.setScrollAnimationProperty();
     }
   }
 
@@ -194,5 +198,31 @@ export class MusicPlayerComponent implements OnDestroy, OnInit, AfterViewInit {
       clearInterval(this.timeUpdateInterval);
       this.timeUpdateInterval = null;
     }
+  }
+
+  private setScrollAnimationProperty() {
+    const containerWidth = this.scrollContainer.nativeElement.clientWidth;
+
+    this.scrollItems.forEach(item => {
+      const itemElement = item.nativeElement;
+      const itemWidth = itemElement.scrollWidth;
+      const speed = 20;
+      this.renderer.removeClass(itemElement, "animate");
+
+      if (itemWidth > containerWidth) {
+        const duration = Math.round(itemWidth / speed);
+
+        itemElement.style.setProperty("--item-width", `${itemWidth}px`);
+        itemElement.style.setProperty(
+          "--container-width",
+          `${containerWidth}px`
+        );
+        itemElement.style.setProperty("--scroll-duration", `${duration}s`);
+
+        requestAnimationFrame(() =>
+          this.renderer.addClass(itemElement, "animate")
+        );
+      }
+    });
   }
 }

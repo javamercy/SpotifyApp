@@ -1,4 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  Input,
+  OnDestroy,
+  OnInit,
+} from "@angular/core";
 import { Subscription } from "rxjs";
 import { BrowseCategory } from "../../../models/browse-category.model";
 import { PageRequest } from "../../../models/page-request.model";
@@ -17,7 +23,7 @@ import { RouterModule } from "@angular/router";
   imports: [CommonModule, AverageColorDirective, RouterModule],
   templateUrl: "./dashboard.component.html",
   styleUrl: "./dashboard.component.css",
-  schemas: [],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DashboardComponent implements OnDestroy, OnInit {
   private subscriptions: Subscription;

@@ -1,7 +1,7 @@
 import { Directive, ElementRef, Renderer2, AfterViewInit } from "@angular/core";
 
 /**
- * Directive to add scroll animation to text that overflows its container.
+  Directive to add scroll animation to text that overflows its container.
  */
 @Directive({
   selector: "[appTextScroll]",
@@ -17,20 +17,6 @@ export class TextScrollDirective implements AfterViewInit {
     this.setScrollAnimationProperty();
   }
 
-  updateScrollAnimationProperty() {
-    this.setScrollAnimationProperty();
-  }
-
-  resetScrollAnimationProperty() {
-    const items = this.el.nativeElement.querySelectorAll(
-      ".ek-scroll-item"
-    ) as NodeListOf<HTMLElement>;
-
-    items.forEach(item => {
-      this.renderer.removeClass(item, "animate");
-    });
-  }
-
   private setScrollAnimationProperty() {
     const container = this.el.nativeElement as HTMLElement;
     const items = this.el.nativeElement.querySelectorAll(
@@ -38,18 +24,21 @@ export class TextScrollDirective implements AfterViewInit {
     ) as NodeListOf<HTMLElement>;
 
     items.forEach(item => {
-      this.setStyles(item, container);
+      const containerWidth = container.clientWidth;
+      const itemWidth = item.scrollWidth;
+      if (itemWidth > containerWidth) {
+        this.setStyles(item, containerWidth, itemWidth);
+      }
     });
   }
 
-  private setStyles(item: HTMLElement, container: HTMLElement) {
-    const containerWidth = container.clientWidth;
-    const itemWidth = item.scrollWidth;
-
-    if (itemWidth > containerWidth) {
-      item.style.setProperty("--item-width", `${itemWidth}px`);
-      item.style.setProperty("--container-width", `${containerWidth}px`);
-      this.renderer.addClass(item, "animate");
-    }
+  private setStyles(
+    item: HTMLElement,
+    containerWidth: number,
+    itemWidth: number
+  ) {
+    item.style.setProperty("--item-width", `${itemWidth}px`);
+    item.style.setProperty("--container-width", `${containerWidth}px`);
+    this.renderer.addClass(item, "animate");
   }
 }
