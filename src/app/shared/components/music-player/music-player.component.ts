@@ -21,8 +21,8 @@ import {
   transition,
   trigger,
 } from "@angular/animations";
-import { TextScrollDirective } from "../../directives/text-scroll.directive";
-import { CircularProgressBarDirective } from "../../directives/circular-progress-bar.directive";
+import { TextScrollDirective } from "../../../directives/text-scroll.directive";
+import { CircularProgressBarDirective } from "../../../directives/circular-progress-bar.directive";
 
 @Component({
   selector: "app-music-player",

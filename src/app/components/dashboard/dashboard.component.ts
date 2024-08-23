@@ -1,21 +1,22 @@
 import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
-  Input,
   OnDestroy,
   OnInit,
 } from "@angular/core";
 import { Subscription } from "rxjs";
-import { BrowseCategory } from "../../../models/browse-category.model";
-import { PageRequest } from "../../../models/page-request.model";
-import { Playlist } from "../../../models/playlist.model";
-import { SimplifiedPlaylist } from "../../../models/simplified.playlist.model";
-import { User } from "../../../models/user.model";
-import { BrowseService } from "../../../services/browse.service";
-import { UserService } from "../../../services/user.service";
+
 import { CommonModule } from "@angular/common";
-import { AverageColorDirective } from "../../../shared/directives/average-color.directive";
 import { RouterModule } from "@angular/router";
+import { BrowseCategory } from "../../models/browse-category.model";
+import { PageRequest } from "../../models/page-request.model";
+import { Playlist } from "../../models/playlist.model";
+import { SimplifiedPlaylist } from "../../models/simplified.playlist.model";
+import { User } from "../../models/user.model";
+import { BrowseService } from "../../services/browse.service";
+import { UserService } from "../../services/user.service";
+import { AverageColorDirective } from "../../directives/average-color.directive";
+import { AuthService } from "../../services/auth.service";
 
 @Component({
   selector: "app-dashboard",
@@ -28,8 +29,7 @@ import { RouterModule } from "@angular/router";
 export class DashboardComponent implements OnDestroy, OnInit {
   private subscriptions: Subscription;
 
-  @Input()
-  user: User;
+  user: User | null;
 
   featuredPlaylists: Playlist[];
   madeForYouPlaylists: Playlist[];
@@ -39,6 +39,7 @@ export class DashboardComponent implements OnDestroy, OnInit {
 
   constructor(
     private userService: UserService,
+    private authService: AuthService,
     private browseService: BrowseService
   ) {
     this.subscriptions = new Subscription();
@@ -48,6 +49,15 @@ export class DashboardComponent implements OnDestroy, OnInit {
     this.getFeaturedPlaylists();
     this.getBrowseCategories();
     this.getMadeForYouPlaylists();
+
+    this.subscriptions.add(
+      this.authService.user$.subscribe(user => {
+        this.user = user;
+        if (user) {
+          this.getUserPlaylists();
+        }
+      })
+    );
   }
 
   ngOnDestroy(): void {

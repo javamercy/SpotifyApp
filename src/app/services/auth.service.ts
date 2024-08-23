@@ -36,7 +36,7 @@ export class AuthService {
     );
 
     if (accessToken && !this.isTokenExpired(new Date(accessToken.expiration))) {
-      this.getUser().subscribe({
+      this.getMe().subscribe({
         next: user => {
           this.userSubject.next(user);
           this.localStorageService.set(Constants.USER, user);
@@ -52,6 +52,10 @@ export class AuthService {
       this.clear();
       this.isInitializing = false;
     }
+  }
+
+  getMe(): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/me`);
   }
 
   signIn(): void {
@@ -85,11 +89,6 @@ export class AuthService {
     this.localStorageService.delete(Constants.USER);
   }
 
-  private getUser(): Observable<User> {
-    const newUrl = `${this.apiUrl}/me`;
-    return this.http.get<User>(newUrl);
-  }
-
   setToken(spotifyToken: SpotifyToken): void {
     const expiresInMilliseconds = spotifyToken.expires_in * 1000;
     const currentUtcTime = Date.now();
@@ -117,9 +116,5 @@ export class AuthService {
 
   private isTokenExpired(expiration: Date): boolean {
     return expiration < new Date();
-  }
-
-  getMe(): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/me`);
   }
 }

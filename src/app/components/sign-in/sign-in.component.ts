@@ -1,9 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { IconComponent } from "../../../shared/components/icon/icon.component";
-import { AuthService } from "../../../services/auth.service";
-import { Quote } from "../../../models/quote.model";
-import { QuoteService } from "../../../services/quote.service";
+
 import { Subscription } from "rxjs";
+import { Quote } from "../../models/quote.model";
+import { IconComponent } from "../../shared/components/icon/icon.component";
+import { AuthService } from "../../services/auth.service";
+import { QuoteService } from "../../services/quote.service";
 
 @Component({
   selector: "app-sign-in",
